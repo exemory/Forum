@@ -1,0 +1,48 @@
+<div class="center-wrapper">
+  <mat-card class="sign-up-form">
+    <mat-card-content>
+      <mat-card-header>
+        <mat-card-title>Sign Up</mat-card-title>
+      </mat-card-header>
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+        <mat-form-field appearance="outline">
+          <mat-label>Username</mat-label>
+          <input matInput formControlName="username" autofocus required minlength="3" maxlength="15">
+          <mat-icon matSuffix>login</mat-icon>
+          <mat-error *ngIf="form.controls['username'].hasError('required')">This field is required</mat-error>
+          <mat-error *ngIf="form.controls['username'].hasError('minlength')">Username must be at least 3 characters long</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <input matInput placeholder="mail@example.com" formControlName="email" required email>
+          <mat-icon matSuffix>alternate_email</mat-icon>
+          <mat-error *ngIf="form.controls['email'].hasError('required')">This field is required</mat-error>
+          <mat-error *ngIf="form.controls['email'].hasError('email')">Email address is invalid</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Name (optional)</mat-label>
+          <input matInput formControlName="name" maxlength="20">
+          <mat-icon matSuffix>face</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Password</mat-label>
+          <input matInput [type]="hidePassword ? 'password' : 'text'"
+                 formControlName="password" required minlength="8">
+          <button type="button" mat-icon-button matSuffix (click)="hidePassword = !hidePassword">
+            <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+          <mat-error *ngIf="form.controls['password'].hasError('required')">This field is required</mat-error>
+          <mat-error *ngIf="form.controls['password'].hasError('minlength')">Passord must be at least 8 characters long</mat-error>
+        </mat-form-field>
+
+        <button [disabled]="inProgress" mat-raised-button color="primary">Sign Up</button>
+      </form>
+
+    </mat-card-content>
+  </mat-card>
+</div>

@@ -1,0 +1,22 @@
+.sign-in-form {
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+
+  mat-card-header {
+    justify-content: center;
+    margin-top: 10px;
+  }
+
+  mat-card-title {
+    font-size: 22px;
+  }
+
+  mat-form-field {
+    display: block;
+  }
+
+  button {
+    margin-top: 15px;
+  }
+}

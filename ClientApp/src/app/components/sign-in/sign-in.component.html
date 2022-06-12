@@ -1,0 +1,30 @@
+<div class="center-wrapper">
+  <mat-card class="sign-in-form">
+    <mat-card-content>
+      <mat-card-header>
+        <mat-card-title>Sign In</mat-card-title>
+      </mat-card-header>
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+        <mat-form-field appearance="standard" class="full-width-input">
+          <input matInput class="login" placeholder="Username or email" formControlName="login" autofocus required>
+          <mat-icon matSuffix>login</mat-icon>
+          <mat-error>The field is required</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="standard" class="full-width-input">
+          <input matInput class="password" [type]="hidePassword ? 'password' : 'text'" placeholder="Password"
+                 formControlName="password" required>
+          <button type="button" mat-icon-button matSuffix (click)="hidePassword = !hidePassword">
+            <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+          <mat-error>The field is required</mat-error>
+        </mat-form-field>
+
+        <button [disabled]="inProgress" mat-raised-button color="primary">Sign In</button>
+      </form>
+
+    </mat-card-content>
+  </mat-card>
+</div>
