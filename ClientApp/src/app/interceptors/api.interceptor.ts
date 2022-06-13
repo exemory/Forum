@@ -35,7 +35,7 @@ export class ApiInterceptor implements HttpInterceptor {
       tap({
           error: err => {
             if (err.status === HttpStatusCode.Unauthorized) {
-              this.auth.logout();
+              this.auth.signOut();
               this.ns.notifyError("Session expired, please sign in again");
               this.router.navigate(['/sign-in']);
             }

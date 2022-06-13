@@ -15,26 +15,30 @@ import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {SignInComponent} from "./components/sign-in/sign-in.component";
 import {SignUpComponent} from "./components/sign-up/sign-up.component";
 import {ApiInterceptor} from "./interceptors/api.interceptor";
+import { NavbarComponent } from './components/navbar/navbar.component';
+import {MatMenuModule} from "@angular/material/menu";
 
 @NgModule({
   declarations: [
     AppComponent,
     SignInComponent,
     SignUpComponent,
+    NavbarComponent,
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    HttpClientModule,
-    ReactiveFormsModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatButtonModule,
-    MatInputModule,
-    MatSnackBarModule
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        HttpClientModule,
+        ReactiveFormsModule,
+        MatCardModule,
+        MatFormFieldModule,
+        MatIconModule,
+        MatButtonModule,
+        MatInputModule,
+        MatSnackBarModule,
+        MatMenuModule
+    ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: ApiInterceptor, multi: true}
   ],

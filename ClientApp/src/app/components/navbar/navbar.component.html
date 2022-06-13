@@ -1,0 +1,37 @@
+<div class="navbar">
+  <div class="container">
+    <div class="logo">
+      <p>Forum</p>
+    </div>
+    <nav class="navigation">
+      <ul>
+        <li>
+          <a routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">
+            Threads
+          </a>
+        </li>
+        <li *ngIf="isLoggedIn && (isUserModerator || isUserAdmin)">
+          <a routerLink="/users" routerLinkActive="active-link">
+            Users
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <div *ngIf="!isLoggedIn" class="unauthorized-panel">
+      <a routerLink="/sign-in" class="sign-in" mat-stroked-button>Sign In</a>
+      <a routerLink="/sign-up" class="sign-up" mat-raised-button>Sign Up</a>
+    </div>
+    <div *ngIf="isLoggedIn" class="authorized-panel">
+      <button mat-icon-button [matMenuTriggerFor]="menu">
+        <mat-icon>account_circle</mat-icon>
+      </button>
+      <mat-menu class="user-menu" backdropClass="custom" #menu="matMenu">
+        <p class="logged-in-info">Logged in as <span class="user-name">{{userName}}</span></p>
+        <button mat-menu-item (click)="signOut()">
+          <mat-icon>logout</mat-icon>
+          <span>Sign out</span>
+        </button>
+      </mat-menu>
+    </div>
+  </div>
+</div>

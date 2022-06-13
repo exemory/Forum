@@ -36,7 +36,7 @@ export class SignInComponent implements OnInit {
 
     this.inProgress = true;
 
-    this.auth.login(this.form.value.login, this.form.value.password)
+    this.auth.signIn(this.form.value.login, this.form.value.password)
       .subscribe({
         next: () => {
           this.router.navigate(['/']);

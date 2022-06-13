@@ -17,19 +17,18 @@ export class AuthService {
   constructor(private api: HttpClient, private ns: NotificationService) {
     if (this.isLoggedIn && this.jwtHelper.isTokenExpired(this.token!)) {
       ns.notifyError("Session expired, please sign in again");
-      this.logout();
+      this.signOut();
     }
-    console.log(this.sessionInfo)
   }
 
-  public login(login: string, password: string) {
+  public signIn(login: string, password: string) {
     return this.api.post<SessionDto>('auth/sign-in', <SignInDto>{login, password})
       .pipe(
         tap(this.setSession)
       );
   }
 
-  public logout() {
+  public signOut() {
     if (!this.isLoggedIn) return;
     localStorage.removeItem('token');
   }
