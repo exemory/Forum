@@ -1,11 +1,10 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {tap} from "rxjs";
-import {SessionDto} from "../interfaces/sessionDto";
-import {SessionInfo} from "../interfaces/session-info";
+import {Session} from "../interfaces/session";
 import {JwtHelperService} from "@auth0/angular-jwt";
-import {SignInDto} from "../interfaces/singInDto";
 import {NotificationService} from "./notification.service";
+import {SignInData} from "../interfaces/singInData";
 
 @Injectable({
   providedIn: 'root'
@@ -15,52 +14,37 @@ export class AuthService {
   private jwtHelper = new JwtHelperService();
 
   constructor(private api: HttpClient, private ns: NotificationService) {
-    if (this.isLoggedIn && this.jwtHelper.isTokenExpired(this.token!)) {
-      ns.notifyError("Session expired, please sign in again");
+    if (this.isLoggedIn && this.jwtHelper.isTokenExpired(this.session?.token)) {
       this.signOut();
     }
   }
 
   public signIn(login: string, password: string) {
-    return this.api.post<SessionDto>('auth/sign-in', <SignInDto>{login, password})
+    return this.api.post<Session>('auth/sign-in', <SignInData>{login, password})
       .pipe(
         tap(this.setSession)
       );
   }
 
   public signOut() {
-    if (!this.isLoggedIn) return;
-    localStorage.removeItem('token');
+    localStorage.removeItem('session');
   }
 
-  private setSession(token: SessionDto) {
-    localStorage.setItem('token', token.token);
+  private setSession(session: Session) {
+    localStorage.setItem('session', JSON.stringify(session));
   }
 
   get isLoggedIn(): boolean {
-    return this.token !== null;
+    return this.session !== undefined;
   }
 
-  get token(): string | null {
-    return localStorage.getItem('token');
-  }
+  get session(): Session | undefined {
+    const session = localStorage.getItem('session');
 
-  get sessionInfo(): SessionInfo | undefined {
-    if (!this.isLoggedIn) {
+    if (session == null) {
       return;
     }
 
-    const decodedToken = this.jwtHelper.decodeToken(this.token!);
-
-    let roles = decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']
-    if (typeof roles === 'string') {
-      roles = [roles];
-    }
-
-    return {
-      expires: decodedToken['exp'],
-      username: decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'],
-      userRoles: roles
-    };
+    return JSON.parse(session);
   }
 }

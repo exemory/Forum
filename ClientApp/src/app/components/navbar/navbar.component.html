@@ -22,11 +22,11 @@
       <a routerLink="/sign-up" class="sign-up" mat-raised-button>Sign Up</a>
     </div>
     <div *ngIf="isLoggedIn" class="authorized-panel">
-      <button mat-icon-button [matMenuTriggerFor]="menu">
+      <button class="user-menu-button" mat-button [matMenuTriggerFor]="menu">
         <mat-icon>account_circle</mat-icon>
+        <span>{{userName}}</span>
       </button>
       <mat-menu class="user-menu" backdropClass="custom" #menu="matMenu">
-        <p class="logged-in-info">Logged in as <span class="user-name">{{userName}}</span></p>
         <button mat-menu-item (click)="signOut()">
           <mat-icon>logout</mat-icon>
           <span>Sign out</span>

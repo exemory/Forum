@@ -3,7 +3,7 @@ import {FormBuilder} from "@angular/forms";
 import {NotificationService} from "../../services/notification.service";
 import {HttpClient} from "@angular/common/http";
 import {Router} from "@angular/router";
-import {SignUpDto} from "../../interfaces/signUpDto";
+import {SignUpData} from "../../interfaces/signUpData";
 
 @Component({
   selector: 'app-sign-up',
@@ -38,7 +38,7 @@ export class SignUpComponent implements OnInit {
 
     this.inProgress = true;
 
-    let data: SignUpDto = {
+    let data: SignUpData = {
       username: this.form.get('username')?.value,
       email: this.form.get('email')?.value,
       name: this.form.get('name')?.value,

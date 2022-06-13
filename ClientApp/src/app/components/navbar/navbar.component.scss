@@ -78,22 +78,15 @@
   }
 
   .authorized-panel {
-    display: flex;
-    gap: 10px;
     margin-left: auto;
 
-    mat-icon {
+    .user-menu-button {
+      border-radius: 16px;
       color: #1d3557;
-    }
-  }
-}
 
-.user-menu {
-  .logged-in-info {
-    margin: 0 10px 10px;
-
-    .user-name {
-      font-weight: 500;
+      mat-icon {
+        margin-right: 6px;
+      }
     }
   }
 }

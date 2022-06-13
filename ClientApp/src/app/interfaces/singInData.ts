@@ -1,4 +1,4 @@
-export interface SignInDto {
+export interface SignInData {
   login: string,
   password: string
 }

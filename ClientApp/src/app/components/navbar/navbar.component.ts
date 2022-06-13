@@ -20,23 +20,23 @@ export class NavbarComponent implements OnInit {
   }
 
   get userName(): string {
-    return this.auth.sessionInfo?.username!;
+    return this.auth.session?.username!;
   }
 
   get isUserAdmin(): boolean | undefined {
-    if (!this.isLoggedIn) return undefined;
+    if (!this.auth.isLoggedIn) {
+      return undefined;
+    }
 
-    const userRoles = this.auth.sessionInfo?.userRoles;
-
-    return userRoles?.includes("Administrator");
+    return this.auth.session?.roles.includes("Administrator");
   }
 
   get isUserModerator(): boolean | undefined {
-    if (!this.isLoggedIn) return undefined;
+    if (!this.auth.isLoggedIn) {
+      return undefined;
+    }
 
-    const userRoles = this.auth.sessionInfo?.userRoles;
-
-    return userRoles?.includes("Moderator");
+    return this.auth.session?.roles.includes("Moderator");
   }
 
   signOut() {

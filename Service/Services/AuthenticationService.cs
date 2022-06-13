@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -60,7 +61,9 @@ namespace Service.Services
             
             var sessionDto = new SessionDto
             {
-                Token = token
+                Token = token,
+                Username = user.UserName,
+                Roles = claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToList()
             };
 
             return sessionDto;
