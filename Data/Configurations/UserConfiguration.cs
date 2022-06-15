@@ -1,4 +1,5 @@
-﻿using Data.Entities;
+﻿using System;
+using Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -9,6 +10,7 @@ namespace Data.Configurations
         public void Configure(EntityTypeBuilder<User> builder)
         {
             builder.Property(p => p.RegisterDate)
+                .HasConversion(d => d,d => DateTime.SpecifyKind(d, DateTimeKind.Utc))
                 .HasDefaultValueSql("GETUTCDATE()");
         }
     }

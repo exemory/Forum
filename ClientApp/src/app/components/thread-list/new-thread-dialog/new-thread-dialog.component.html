@@ -1,0 +1,13 @@
+<h2 mat-dialog-title>New thread</h2>
+<div mat-dialog-content>
+  <mat-form-field class="name-field" appearance="outline">
+    <mat-label>Topic</mat-label>
+    <textarea [formControl]="topic" matInput placeholder="Ex. How can I ..." required minlength="10" maxlength="200"></textarea>
+    <mat-error *ngIf="topic.hasError('required')">Topic is required</mat-error>
+    <mat-error *ngIf="topic.hasError('minlength')">Topic must be at least 10 characters long</mat-error>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-stroked-button [mat-dialog-close]="undefined">Cancel</button>
+  <button mat-raised-button color="primary" (click)="create()">Create</button>
+</div>

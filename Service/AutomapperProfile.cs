@@ -9,6 +9,10 @@ namespace Service
         public AutomapperProfile()
         {
             CreateMap<SignUpDto, User>();
+
+            CreateMap<Thread, ThreadWithDetailsDto>();
+            CreateMap<ThreadCreationDto, Thread>();
+            CreateMap<ThreadUpdateDto, Thread>();
         }
     }
 }

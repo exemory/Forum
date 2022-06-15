@@ -1,0 +1,46 @@
+<div class="wrapper">
+  <div *ngIf="!loaded" class="loading-wrapper">
+    <mat-spinner></mat-spinner>
+  </div>
+  <div *ngIf="loaded">
+    <div class="actions">
+      <button *ngIf="isLoggedIn" mat-raised-button color="primary" class="create-thread"
+              (click)="openNewThreadDialog()">
+        New thread
+      </button>
+    </div>
+    <div class="thread-list">
+      <div *ngFor="let thread of threads" class="thread">
+        <div class="topic">
+          <h3 class="header">
+            <a [routerLink]="['/threads', thread.id]">{{thread.topic}}</a>
+          </h3>
+          <div *ngIf="isUserModeratorOrAdmin" class="action-panel">
+            <button class="open-menu-button" mat-icon-button [matMenuTriggerFor]="menu">
+              <mat-icon>settings</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu" class="thread-action-menu">
+              <button mat-menu-item *ngIf="!thread.closed" (click)="closeThread(thread)">
+                <mat-icon>lock</mat-icon>
+                <span>Close</span>
+              </button>
+              <button mat-menu-item *ngIf="thread.closed" (click)="openThread(thread)">
+                <mat-icon>lock_open</mat-icon>
+                <span>Open</span>
+              </button>
+              <button mat-menu-item class="delete-menu-option" (click)="deleteThread(thread)">
+                <mat-icon>delete_forever</mat-icon>
+                <span>Delete</span>
+              </button>
+            </mat-menu>
+          </div>
+        </div>
+        <p class="description">
+          <span *ngIf="thread.authorUsername"> by <span class="username">{{thread.authorUsername}}</span> • </span>
+          <span class="datetime">{{thread.creationDate | date:'MMM d, y, H:mm'}}</span>
+          <span *ngIf="thread.closed"> • Closed</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

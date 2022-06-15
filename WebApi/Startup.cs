@@ -37,6 +37,7 @@ namespace WebApi
             services.AddScoped<IDbInitializer, DbInitializer>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
+            services.AddScoped<IThreadService, ThreadService>();
 
             services.AddControllers();
 

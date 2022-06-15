@@ -7,6 +7,7 @@ namespace Data.Entities
     public class Thread : EntityBase
     {
         [Required]
+        [StringLength(200, MinimumLength = 10)]
         public string Topic { get; set; }
 
         public bool Closed { get; set; }

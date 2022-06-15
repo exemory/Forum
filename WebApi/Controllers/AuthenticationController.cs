@@ -18,7 +18,7 @@ namespace WebApi.Controllers
         {
             _authService = authService;
         }
-
+        
         [HttpPost("sign-up")]
         public async Task<ActionResult> SignUp([FromBody] SignUpDto signUpDto)
         {
