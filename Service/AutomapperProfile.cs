@@ -10,9 +10,15 @@ namespace Service
         {
             CreateMap<SignUpDto, User>();
 
+            CreateMap<User, UserDto>();
+            
             CreateMap<Thread, ThreadWithDetailsDto>();
             CreateMap<ThreadCreationDto, Thread>();
             CreateMap<ThreadUpdateDto, Thread>();
+
+            CreateMap<Post, PostWithDetailsDto>();
+            CreateMap<PostCreationDto, Post>();
+            CreateMap<PostUpdateDto, Post>();
         }
     }
 }

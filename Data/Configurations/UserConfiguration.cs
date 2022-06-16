@@ -9,7 +9,7 @@ namespace Data.Configurations
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
-            builder.Property(p => p.RegisterDate)
+            builder.Property(p => p.RegistrationDate)
                 .HasConversion(d => d,d => DateTime.SpecifyKind(d, DateTimeKind.Utc))
                 .HasDefaultValueSql("GETUTCDATE()");
         }

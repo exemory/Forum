@@ -1,0 +1,149 @@
+.wrapper {
+  max-width: 1200px;
+  margin: auto;
+  padding: 0 16px;
+}
+
+.loading-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.thread {
+  .thread-info {
+    margin-bottom: 40px;
+
+    .topic {
+      h1 {
+        margin-bottom: 8px;
+      }
+    }
+
+    .description {
+      color: #6e6563;
+
+      .thread-author-username {
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+.post {
+  position: relative;
+  border-radius: 5px;
+  border: 1px solid #457b9d;
+  display: flex;
+  margin-bottom: 12px;
+  background-color: #fff;
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+
+  .user-section {
+    padding: 10px;
+    min-width: 150px;
+    border-right: 1px solid #457b9d;
+    text-align: center;
+
+    .post-author-username {
+      font-size: 16px;
+      color: #2b2d42;
+      margin-bottom: 8px;
+    }
+
+    .post-author-name {
+      margin-bottom: 0;
+    }
+
+    .joined {
+      color: #8a817c;
+      margin-bottom: 0;
+    }
+
+    .deleted-user {
+      p {
+        font-size: 16px;
+        margin: 0;
+        color: #C03221;
+      }
+    }
+  }
+
+  .content-section {
+    padding: 10px;
+    flex-grow: 1;
+
+    .post-info {
+      display: flex;
+      color: #8a817c;
+      border-bottom: 1px solid #8a817c;
+      margin-bottom: 12px;
+      font-size: 12px;
+
+      p {
+        margin-bottom: 0;
+      }
+
+      .post-number {
+        margin-left: auto;
+      }
+    }
+
+    .post-content {
+      font-size: 15px;
+      white-space: pre-wrap;
+      margin-bottom: 0;
+      padding-right: 40px;
+    }
+  }
+
+  .action-panel {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+
+    .open-menu-button {
+      mat-icon {
+        color: #2d4f85;
+      }
+    }
+  }
+}
+
+.new-post {
+  display: flex;
+  background-color: #fff;
+  flex-direction: column;
+  border-radius: 5px;
+  border: 1px solid #457b9d;
+  margin: 56px 0 24px;
+  padding: 18px;
+  text-align: center;
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+
+  .header {
+    font-size: 22px;
+  }
+
+  .post-text-field {
+    width: 100%;
+    margin-bottom: 8px;
+  }
+}
+
+.bottom-message-block {
+  display: flex;
+  justify-content: center;
+  margin: 56px 0 24px;
+  color: #6b6260;
+
+  .message {
+    font-size: 18px;
+    font-style: italic;
+  }
+}
+
+.delete-menu-option {
+  &, mat-icon {
+    color: #C03221;
+  }
+}

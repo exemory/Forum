@@ -40,7 +40,7 @@
           <mat-error *ngIf="form.controls['password'].hasError('minlength')">Passord must be at least 8 characters long</mat-error>
         </mat-form-field>
 
-        <button [disabled]="inProgress" mat-raised-button color="primary">Sign Up</button>
+        <button type="submit" [disabled]="inProgress" mat-raised-button color="primary">Sign Up</button>
       </form>
 
     </mat-card-content>

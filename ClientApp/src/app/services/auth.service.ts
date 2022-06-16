@@ -4,7 +4,7 @@ import {tap} from "rxjs";
 import {Session} from "../interfaces/session";
 import {JwtHelperService} from "@auth0/angular-jwt";
 import {NotificationService} from "./notification.service";
-import {SignInData} from "../interfaces/singInData";
+import {SignInData} from "../interfaces/sing-in-data";
 
 @Injectable({
   providedIn: 'root'

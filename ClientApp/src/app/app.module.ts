@@ -21,6 +21,7 @@ import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {MatDialogModule} from "@angular/material/dialog";
 import {ThreadListComponent} from "./components/thread-list/thread-list.component";
 import {NewThreadDialogComponent} from "./components/thread-list/new-thread-dialog/new-thread-dialog.component";
+import { PostListComponent } from './components/post-list/post-list.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import {NewThreadDialogComponent} from "./components/thread-list/new-thread-dial
     SignUpComponent,
     NavbarComponent,
     ThreadListComponent,
-    NewThreadDialogComponent
+    NewThreadDialogComponent,
+    PostListComponent
   ],
   imports: [
     BrowserModule,

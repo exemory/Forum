@@ -12,7 +12,7 @@
 .actions {
   display: flex;
   align-items: flex-end;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
 
   .create-thread {
     margin-left: auto;
@@ -21,7 +21,9 @@
 
 .thread-list {
   border: 1px solid #457b9d;
+  border-radius: 4px;
   background-color: #fff;
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
 
   .thread {
     position: relative;
@@ -70,6 +72,18 @@
         }
       }
     }
+  }
+}
+
+.bottom-message-block {
+  display: flex;
+  justify-content: center;
+  margin: 56px 0 24px;
+  color: #6b6260;
+
+  .message {
+    font-size: 18px;
+    font-style: italic;
   }
 }
 

@@ -27,6 +27,11 @@ namespace Service.Services
         public async Task<ThreadWithDetailsDto> GetByIdAsync(Guid id)
         {
             var thread = await _unitOfWork.ThreadRepository.GetByIdWithDetailsAsync(id);
+            if (thread == null)
+            {
+                throw new NotFoundException();
+            }
+
             return _mapper.Map<ThreadWithDetailsDto>(thread);
         }
 
@@ -43,13 +48,13 @@ namespace Service.Services
             {
                 throw new ForumException($"User with id '{userId}' does not exist");
             }
-            
+
             var thread = _mapper.Map<Thread>(threadDto);
             thread.Author = user;
-            
+
             _unitOfWork.ThreadRepository.Add(thread);
             await _unitOfWork.SaveAsync();
-            
+
             return _mapper.Map<ThreadWithDetailsDto>(thread);
         }
 
@@ -62,7 +67,7 @@ namespace Service.Services
             }
 
             _mapper.Map(threadDto, thread);
-            
+
             _unitOfWork.ThreadRepository.Update(thread);
             await _unitOfWork.SaveAsync();
         }
@@ -74,7 +79,7 @@ namespace Service.Services
             {
                 throw new NotFoundException();
             }
-            
+
             _unitOfWork.ThreadRepository.Delete(thread);
             await _unitOfWork.SaveAsync();
         }
@@ -93,7 +98,7 @@ namespace Service.Services
             }
 
             thread.Closed = true;
-            
+
             _unitOfWork.ThreadRepository.Update(thread);
             await _unitOfWork.SaveAsync();
         }
@@ -112,7 +117,7 @@ namespace Service.Services
             }
 
             thread.Closed = false;
-            
+
             _unitOfWork.ThreadRepository.Update(thread);
             await _unitOfWork.SaveAsync();
         }

@@ -15,7 +15,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 })
 export class ThreadListComponent implements OnInit {
 
-  loaded = false;
+  loading = true;
   threads!: ThreadWithDetails[];
 
   constructor(private api: HttpClient,
@@ -31,7 +31,10 @@ export class ThreadListComponent implements OnInit {
       .subscribe({
         next: threads => {
           this.threads = threads;
-          this.loaded = true;
+          this.loading = false;
+        },
+        error: err => {
+          this.ns.notifyError(`Loading data failed. Error ${err.status}`, true);
         }
       })
   }

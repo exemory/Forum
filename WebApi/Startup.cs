@@ -38,6 +38,7 @@ namespace WebApi
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IThreadService, ThreadService>();
+            services.AddScoped<IPostService, PostService>();
 
             services.AddControllers();
 

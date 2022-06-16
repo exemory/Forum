@@ -6,6 +6,7 @@ namespace Data.Entities
     public class Post : EntityBase
     {
         [Required]
+        [StringLength(10000)]
         public string Content { get; set; }
 
         [Required]
@@ -14,7 +15,7 @@ namespace Data.Entities
         public Guid ThreadId { get; set; }
         public Thread Thread { get; set; }
         
-        public Guid? UserId { get; set; }
-        public User User { get; set; }
+        public Guid? AuthorId { get; set; }
+        public User Author { get; set; }
     }
 }

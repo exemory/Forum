@@ -1,0 +1,72 @@
+<div class="wrapper">
+  <div *ngIf="loading" class="loading-wrapper">
+    <mat-spinner></mat-spinner>
+  </div>
+  <div *ngIf="!loading">
+    <div class="thread">
+      <div class="thread-info">
+        <div class="topic">
+          <h1>{{thread.topic}}</h1>
+        </div>
+        <div class="description">
+          <span *ngIf="thread.author"> by <span class="thread-author-username">{{thread.author.username}}</span> • </span>
+          <span>{{thread.creationDate | date:'MMM d, y, H:mm'}}</span>
+          <span *ngIf="thread.closed"> • Closed</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="post-list">
+      <div *ngFor="let post of posts; let i = index" class="post">
+        <div class="user-section">
+          <div *ngIf="post.author">
+            <p class="post-author-username">{{post.author.username}}</p>
+            <p class="post-author-name">{{post.author.name}}</p>
+            <p class="joined">joined: {{post.author.registrationDate | date: 'mediumDate'}}</p>
+          </div>
+          <div *ngIf="!post.author" class="deleted-user">
+            <p>user deleted</p>
+          </div>
+        </div>
+        <div class="content-section">
+          <div class="post-info">
+            <p class="post-publish-date">{{post.publishDate | date:'MMM d, y, h:mm a'}}</p>
+            <p class="post-number">#{{i + 1}}</p>
+          </div>
+          <p class="post-content">{{post.content}}</p>
+        </div>
+        <div *ngIf="isUserModeratorOrAdmin" class="action-panel">
+          <button class="open-menu-button" mat-icon-button [matMenuTriggerFor]="menu">
+            <mat-icon>settings</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu" class="thread-action-menu">
+            <button mat-menu-item class="delete-menu-option" (click)="deletePost(post)">
+              <mat-icon>delete_forever</mat-icon>
+              <span>Delete</span>
+            </button>
+          </mat-menu>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="isLoggedIn && !thread.closed" class="new-post">
+      <h3 class="header">Create a post</h3>
+
+      <form [formGroup]="postForm" id="new-post" (ngSubmit)="onPostSubmit()">
+        <mat-form-field class="post-text-field" appearance="outline">
+          <mat-label>Post content</mat-label>
+          <textarea formControlName="postText" matInput maxlength="10000"></textarea>
+        </mat-form-field>
+
+        <button type="submit" [disabled]="inProgress" mat-raised-button color="primary">Post</button>
+      </form>
+    </div>
+    <div class="bottom-message-block">
+      <div *ngIf="thread.closed" class="thread-closed">
+        <p class="message">This thread is closed for posting</p>
+      </div>
+      <div *ngIf="!thread.closed && !isLoggedIn">
+        <p class="message">Sign in to post</p>
+      </div>
+    </div>
+  </div>
+</div>

@@ -11,7 +11,7 @@ namespace Data.Entities
         public string Name { get; set; }
 
         [Required]
-        public DateTime RegisterDate { get; set; }
+        public DateTime RegistrationDate { get; set; }
 
         public IEnumerable<Post> Posts { get; set; }
         public IEnumerable<Thread> Threads { get; set; }

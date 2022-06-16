@@ -3,7 +3,7 @@ import {FormBuilder} from "@angular/forms";
 import {NotificationService} from "../../services/notification.service";
 import {HttpClient} from "@angular/common/http";
 import {Router} from "@angular/router";
-import {SignUpData} from "../../interfaces/signUpData";
+import {SignUpData} from "../../interfaces/sign-up-data";
 
 @Component({
   selector: 'app-sign-up',

@@ -8,6 +8,6 @@ namespace Service.DataTransferObjects
         public string Topic { get; set; }
         public bool Closed { get; set; }
         public DateTime CreationDate { get; set; }
-        public string AuthorUsername { get; set; }
+        public UserDto Author { get; set; }
     }
 }

@@ -16,9 +16,9 @@ namespace Data.Configurations
                 .HasForeignKey(t => t.ThreadId)
                 .OnDelete(DeleteBehavior.Cascade);
             
-            builder.HasOne(p => p.User)
+            builder.HasOne(p => p.Author)
                 .WithMany(u => u.Posts)
-                .HasForeignKey(p => p.UserId)
+                .HasForeignKey(p => p.AuthorId)
                 .OnDelete(DeleteBehavior.SetNull);
 
             builder.Property(p => p.PublishDate)

@@ -9,10 +9,10 @@ export class NotificationService {
   constructor(private snackBar: MatSnackBar) {
   }
 
-  notify(message: string, messageType: 'success' | 'error') {
+  notify(message: string, messageType: 'success' | 'error', duration: number) {
 
     let config: MatSnackBarConfig = {
-      duration: 2500,
+      duration,
       horizontalPosition: "right",
       verticalPosition: "top",
       panelClass: messageType
@@ -22,10 +22,10 @@ export class NotificationService {
   }
 
   notifySuccess(message: string) {
-    return this.notify(message, 'success');
+    return this.notify(message, 'success', 2500);
   }
 
-  notifyError(message: string) {
-    return this.notify(message, 'error');
+  notifyError(message: string, critical = false) {
+    return this.notify(message, 'error', critical ? Infinity : 2500);
   }
 }
