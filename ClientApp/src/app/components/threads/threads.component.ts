@@ -9,11 +9,11 @@ import {NotificationService} from "../../services/notification.service";
 import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
-  selector: 'app-thread-list',
-  templateUrl: './thread-list.component.html',
-  styleUrls: ['./thread-list.component.scss']
+  selector: 'app-threads',
+  templateUrl: './threads.component.html',
+  styleUrls: ['./threads.component.scss']
 })
-export class ThreadListComponent implements OnInit {
+export class ThreadsComponent implements OnInit {
 
   loading = true;
   threads!: ThreadWithDetails[];

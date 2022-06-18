@@ -19,15 +19,13 @@ import {NavbarComponent} from './components/navbar/navbar.component';
 import {MatMenuModule} from "@angular/material/menu";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {MatDialogModule} from "@angular/material/dialog";
-import {ThreadListComponent} from "./components/thread-list/thread-list.component";
-import {NewThreadDialogComponent} from "./components/thread-list/new-thread-dialog/new-thread-dialog.component";
-import {PostListComponent} from './components/post-list/post-list.component';
+import {ThreadsComponent} from "./components/threads/threads.component";
+import {NewThreadDialogComponent} from "./components/threads/new-thread-dialog/new-thread-dialog.component";
+import {PostsComponent} from './components/posts/posts.component';
 import {UsersComponent} from './components/users/users.component';
 import {MatTableModule} from "@angular/material/table";
 import {MatPaginatorModule} from "@angular/material/paginator";
 import {MatSortModule} from "@angular/material/sort";
-import {MatDatepickerModule} from "@angular/material/datepicker";
-import {MatNativeDateModule} from "@angular/material/core";
 
 @NgModule({
   declarations: [
@@ -35,9 +33,9 @@ import {MatNativeDateModule} from "@angular/material/core";
     SignInComponent,
     SignUpComponent,
     NavbarComponent,
-    ThreadListComponent,
+    ThreadsComponent,
     NewThreadDialogComponent,
-    PostListComponent,
+    PostsComponent,
     UsersComponent
   ],
   imports: [
