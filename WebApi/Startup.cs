@@ -39,6 +39,7 @@ namespace WebApi
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IThreadService, ThreadService>();
             services.AddScoped<IPostService, PostService>();
+            services.AddScoped<IUserService, UserService>();
 
             services.AddControllers();
 

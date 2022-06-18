@@ -11,6 +11,7 @@ namespace Service
             CreateMap<SignUpDto, User>();
 
             CreateMap<User, UserDto>();
+            CreateMap<User, UserWithDetailsDto>();
             
             CreateMap<Thread, ThreadWithDetailsDto>();
             CreateMap<ThreadCreationDto, Thread>();

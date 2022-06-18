@@ -15,13 +15,19 @@ import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {SignInComponent} from "./components/sign-in/sign-in.component";
 import {SignUpComponent} from "./components/sign-up/sign-up.component";
 import {ApiInterceptor} from "./interceptors/api.interceptor";
-import { NavbarComponent } from './components/navbar/navbar.component';
+import {NavbarComponent} from './components/navbar/navbar.component';
 import {MatMenuModule} from "@angular/material/menu";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {MatDialogModule} from "@angular/material/dialog";
 import {ThreadListComponent} from "./components/thread-list/thread-list.component";
 import {NewThreadDialogComponent} from "./components/thread-list/new-thread-dialog/new-thread-dialog.component";
-import { PostListComponent } from './components/post-list/post-list.component';
+import {PostListComponent} from './components/post-list/post-list.component';
+import {UsersComponent} from './components/users/users.component';
+import {MatTableModule} from "@angular/material/table";
+import {MatPaginatorModule} from "@angular/material/paginator";
+import {MatSortModule} from "@angular/material/sort";
+import {MatDatepickerModule} from "@angular/material/datepicker";
+import {MatNativeDateModule} from "@angular/material/core";
 
 @NgModule({
   declarations: [
@@ -31,7 +37,8 @@ import { PostListComponent } from './components/post-list/post-list.component';
     NavbarComponent,
     ThreadListComponent,
     NewThreadDialogComponent,
-    PostListComponent
+    PostListComponent,
+    UsersComponent
   ],
   imports: [
     BrowserModule,
@@ -48,7 +55,10 @@ import { PostListComponent } from './components/post-list/post-list.component';
     MatMenuModule,
     MatProgressSpinnerModule,
     MatDialogModule,
-    FormsModule
+    FormsModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: ApiInterceptor, multi: true}

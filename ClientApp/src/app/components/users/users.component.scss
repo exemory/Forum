@@ -1,0 +1,34 @@
+.wrapper {
+  max-width: 1200px;
+  margin: auto;
+  padding: 0 16px;
+}
+
+.loading-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.tools {
+  display: flex;
+  gap: 20px;
+
+  mat-form-field {
+    max-width: 240px;
+    width: 100%;
+  }
+}
+
+.user-table {
+  width: 100%;
+
+  .options-header {
+    width: 40px;
+  }
+}
+
+.delete-menu-option {
+  &, mat-icon {
+    color: #C03221;
+  }
+}

@@ -9,7 +9,6 @@ namespace Data.Entities
         [StringLength(10000)]
         public string Content { get; set; }
 
-        [Required]
         public DateTime PublishDate { get; set; }
         
         public Guid ThreadId { get; set; }

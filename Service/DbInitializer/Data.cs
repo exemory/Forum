@@ -13,7 +13,7 @@ namespace Service.DbInitializer
             UserName = "admin",
             Email = "ivanmail@gmail.com",
             Name = "Ivan",
-            RegistrationDate = new DateTime(2005, 7, 2)
+            RegistrationDate = new DateTime(2005, 7, 2, 3, 19, 34)
         };
 
         public const string AdminPassword = "adminpass";
