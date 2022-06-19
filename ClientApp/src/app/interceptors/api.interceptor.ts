@@ -5,7 +5,7 @@ import {
   HttpEvent,
   HttpInterceptor, HttpStatusCode
 } from '@angular/common/http';
-import {Observable, tap} from 'rxjs';
+import {catchError, EMPTY, Observable, throwError} from 'rxjs';
 import {AuthService} from "../services/auth.service";
 import {environment as env} from "../../environments/environment";
 import {Router} from "@angular/router";
@@ -32,15 +32,16 @@ export class ApiInterceptor implements HttpInterceptor {
     }
 
     return next.handle(request).pipe(
-      tap({
-          error: err => {
-            if (err.status === HttpStatusCode.Unauthorized) {
-              this.auth.signOut();
-              this.ns.notifyError("Session expired, please sign in again");
-              this.router.navigate(['/sign-in']);
-            }
-          }
+      catchError(err => {
+        if (err.status === HttpStatusCode.Unauthorized && this.auth.isLoggedIn) {
+          this.auth.signOut();
+          this.router.navigate(['/sign-in']);
+          this.ns.notifyError("Session expired, please sign in again");
+          return EMPTY;
         }
-      ));
+
+        return throwError(err);
+      })
+    );
   }
 }

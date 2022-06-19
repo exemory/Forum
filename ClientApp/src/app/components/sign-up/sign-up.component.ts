@@ -1,9 +1,17 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder} from "@angular/forms";
+import {
+  AbstractControl,
+  FormBuilder,
+  FormControl,
+  FormGroupDirective, NgForm,
+  ValidationErrors,
+  ValidatorFn
+} from "@angular/forms";
 import {NotificationService} from "../../services/notification.service";
 import {HttpClient} from "@angular/common/http";
 import {Router} from "@angular/router";
 import {SignUpData} from "../../interfaces/sign-up-data";
+import {ErrorStateMatcher} from "@angular/material/core";
 
 @Component({
   selector: 'app-sign-up',
@@ -12,14 +20,24 @@ import {SignUpData} from "../../interfaces/sign-up-data";
 })
 export class SignUpComponent implements OnInit {
 
+  passwordsValidator: ValidatorFn = (group: AbstractControl): ValidationErrors | null => {
+    const password = group.get('password')?.value;
+    const confirmPassword = group.get('confirmPassword')?.value;
+    return password === confirmPassword ? null : {passwordMismatch: true};
+  }
+
   form = this.fb.group({
     username: [''],
     email: [''],
     name: [''],
-    password: ['']
-  });
+    password: [''],
+    confirmPassword: ['']
+  }, {validators: this.passwordsValidator});
+
+  confirmPasswordStateMatcher = new ConfirmPasswordStateMatcher();
 
   hidePassword = true;
+  hideConfirmPassword = true;
   inProgress = false;
 
   constructor(private fb: FormBuilder,
@@ -42,8 +60,8 @@ export class SignUpComponent implements OnInit {
       username: this.form.get('username')?.value,
       email: this.form.get('email')?.value,
       name: this.form.get('name')?.value,
-      password: this.form.get('password')?.value,
-    }
+      password: this.form.get('password')?.value
+    };
 
     this.api.post('auth/sign-up', data)
       .subscribe({
@@ -55,6 +73,12 @@ export class SignUpComponent implements OnInit {
           this.ns.notifyError(`Registration failed. Error ${err.status}`);
           this.inProgress = false;
         }
-      })
+      });
+  }
+}
+
+export class ConfirmPasswordStateMatcher implements ErrorStateMatcher {
+  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+    return (!!control?.touched || !!form?.submitted) && !!form?.hasError('passwordMismatch');
   }
 }

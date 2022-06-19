@@ -23,20 +23,8 @@ export class NavbarComponent implements OnInit {
     return this.auth.session?.username!;
   }
 
-  get isUserAdmin(): boolean | undefined {
-    if (!this.auth.isLoggedIn) {
-      return undefined;
-    }
-
+  get isAdmin(): boolean | undefined {
     return this.auth.session?.roles.includes("Administrator");
-  }
-
-  get isUserModerator(): boolean | undefined {
-    if (!this.auth.isLoggedIn) {
-      return undefined;
-    }
-
-    return this.auth.session?.roles.includes("Moderator");
   }
 
   signOut() {

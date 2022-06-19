@@ -47,7 +47,7 @@ export class PostsComponent implements OnInit {
         },
         error: err => {
           if (err.status === HttpStatusCode.NotFound) {
-            this.ns.notifyError('Thread does not exist anymore');
+            this.ns.notifyError('Thread does not exist');
             this.router.navigate(['../']);
             return;
           }

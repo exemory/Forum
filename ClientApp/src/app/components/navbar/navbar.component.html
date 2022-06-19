@@ -10,7 +10,7 @@
             Threads
           </a>
         </li>
-        <li *ngIf="isLoggedIn && (isUserModerator || isUserAdmin)">
+        <li *ngIf="isAdmin">
           <a routerLink="/users" routerLinkActive="active-link">
             Users
           </a>

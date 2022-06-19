@@ -5,13 +5,15 @@ import {SignUpComponent} from "./components/sign-up/sign-up.component";
 import {ThreadsComponent} from "./components/threads/threads.component";
 import {PostsComponent} from "./components/posts/posts.component";
 import {UsersComponent} from "./components/users/users.component";
+import {OnlyAdminsGuard} from "./guards/only-admins-guard.service";
+import {OnlyGuestsGuard} from "./guards/only-guests-guard.service";
 
 const routes: Routes = [
   {path: 'threads', component: ThreadsComponent},
   {path: 'threads/:id', component: PostsComponent},
-  {path: 'sign-in', component: SignInComponent},
-  {path: 'sign-up', component: SignUpComponent},
-  {path: 'users', component: UsersComponent},
+  {path: 'sign-in', component: SignInComponent, canActivate: [OnlyGuestsGuard]},
+  {path: 'sign-up', component: SignUpComponent, canActivate: [OnlyGuestsGuard]},
+  {path: 'users', component: UsersComponent, canActivate: [OnlyAdminsGuard]},
   {path: '**', redirectTo: 'threads'}
 ];
 
