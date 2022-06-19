@@ -61,11 +61,8 @@
       </form>
     </div>
     <div class="bottom-message-block">
-      <div *ngIf="thread.closed" class="thread-closed">
+      <div *ngIf="thread.closed && isLoggedIn" class="thread-closed">
         <p class="message">This thread is closed for posting</p>
-      </div>
-      <div *ngIf="!thread.closed && !isLoggedIn">
-        <p class="message">Sign in to post</p>
       </div>
     </div>
   </div>

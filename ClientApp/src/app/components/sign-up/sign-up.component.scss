@@ -20,6 +20,10 @@
   mat-form-field {
     display: block;
     margin-bottom: 12px;
+
+    .show-hide-password {
+      margin: 0 -5.5px 0 0;
+    }
   }
 
   button {
