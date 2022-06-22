@@ -26,11 +26,11 @@
             <mat-icon>more_vert</mat-icon>
           </button>
           <mat-menu #menu="matMenu" class="thread-action-menu">
-            <button mat-menu-item *ngIf="!thread.closed" (click)="closeThread(thread)">
+            <button mat-menu-item *ngIf="!thread.closed" (click)="updateThreadStatus(thread, true)">
               <mat-icon>lock</mat-icon>
               <span>Close</span>
             </button>
-            <button mat-menu-item *ngIf="thread.closed" (click)="openThread(thread)">
+            <button mat-menu-item *ngIf="thread.closed" (click)="updateThreadStatus(thread, false)">
               <mat-icon>lock_open</mat-icon>
               <span>Open</span>
             </button>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Data.Entities;
@@ -11,12 +12,19 @@ using Service.Interfaces;
 
 namespace Service.Services
 {
+    /// <inheritdoc />
     public class UserService : IUserService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly UserManager<User> _userManager;
 
+        /// <summary>
+        /// Constructor for initializing a <see cref="UserService"/> class instance
+        /// </summary>
+        /// <param name="unitOfWork">Unit of work</param>
+        /// <param name="mapper">Mapper</param>
+        /// <param name="userManager">Identity user manager</param>
         public UserService(IUnitOfWork unitOfWork, IMapper mapper, UserManager<User> userManager)
         {
             _unitOfWork = unitOfWork;
@@ -24,7 +32,7 @@ namespace Service.Services
             _userManager = userManager;
         }
 
-        public async Task<IEnumerable<UserWithDetailsDto>> GetWithDetailsAsync()
+        public async Task<IEnumerable<UserWithDetailsDto>> GetAllAsync()
         {
             var users = await _unitOfWork.UserRepository.GetAllAsync();
             var result = new List<UserWithDetailsDto>();
@@ -35,11 +43,11 @@ namespace Service.Services
                 userDto.Roles = await _userManager.GetRolesAsync(user);
                 result.Add(userDto);
             }
-            
+
             return result;
         }
 
-        public async Task PromoteToModerator(Guid id)
+        public async Task UpdateRoleAsync(Guid id, UserRoleUpdateDto roleDto)
         {
             var user = await _userManager.FindByIdAsync(id.ToString());
             if (user == null)
@@ -47,52 +55,33 @@ namespace Service.Services
                 throw new NotFoundException();
             }
 
-            var roles = await _userManager.GetRolesAsync(user);
+            var userRoles = await _userManager.GetRolesAsync(user);
 
-            if (roles.Contains("Moderator"))
+            if (userRoles.Contains("Administrator", StringComparer.OrdinalIgnoreCase))
             {
-                throw new ForumException("The user is already a moderator");
-            }
-            
-            if (roles.Contains("Administrator"))
-            {
-                throw new ForumException("The administrator cannot be a moderator");
+                throw new ForumException("Impossible to change role of administrator");
             }
 
-            await _userManager.RemoveFromRoleAsync(user, "User");
-            await _userManager.AddToRoleAsync(user, "Moderator");
+            if (userRoles.Contains(roleDto.Role, StringComparer.OrdinalIgnoreCase))
+            {
+                throw new ForumException($"User '{user.UserName}' already in role '{roleDto.Role}'");
+            }
+
+            await _userManager.RemoveFromRolesAsync(user, userRoles);
+            await _userManager.AddToRoleAsync(user, roleDto.Role);
         }
 
-        public async Task DemoteToUser(Guid id)
+        public async Task DeleteAsync(Guid id)
         {
             var user = await _userManager.FindByIdAsync(id.ToString());
             if (user == null)
             {
                 throw new NotFoundException();
             }
-            
-            var roles = await _userManager.GetRolesAsync(user);
-            
-            if (!roles.Contains("Moderator"))
-            {
-                throw new ForumException("The user is not already a moderator");
-            }
-            
-            await _userManager.RemoveFromRoleAsync(user, "Moderator");
-            await _userManager.AddToRoleAsync(user, "User");
-        }
 
-        public async Task DeleteAsync(Guid id, Guid requestUserId)
-        {
-            if (id == requestUserId)
+            if (await _userManager.IsInRoleAsync(user, "Administrator"))
             {
-                throw new ForumException("Unable to delete current user");
-            }
-
-            var user = await _userManager.FindByIdAsync(id.ToString());
-            if (user == null)
-            {
-                throw new NotFoundException();
+                throw new ForumException("Unable to delete administrator");
             }
 
             await _userManager.DeleteAsync(user);

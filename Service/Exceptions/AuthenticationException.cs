@@ -3,6 +3,9 @@ using System.Runtime.Serialization;
 
 namespace Service.Exceptions
 {
+    /// <summary>
+    /// The exception that is thrown when authentication failed
+    /// </summary>
     [Serializable]
     public class AuthenticationException : ForumException
     {

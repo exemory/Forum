@@ -7,11 +7,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Data.Repositories
 {
+    /// <inheritdoc />
     public class Repository<T> : IRepository<T> where T : EntityBase, new()
     {
         protected readonly ForumContext Context;
         protected readonly DbSet<T> Set;
 
+        /// <summary>
+        /// Constructor for initializing a <see cref="Repository{T}"/> class instance
+        /// </summary>
+        /// <param name="context">Context of the database</param>
         public Repository(ForumContext context)
         {
             Context = context;
@@ -20,7 +25,8 @@ namespace Data.Repositories
 
         public async Task<IEnumerable<T>> GetAllAsync()
         {
-            return await Set.ToListAsync();
+            return await Set.AsNoTracking()
+                .ToListAsync();
         }
 
         public async Task<T> GetByIdAsync(Guid id)

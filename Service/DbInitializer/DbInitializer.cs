@@ -9,6 +9,7 @@ using Service.Interfaces;
 
 namespace Service.DbInitializer
 {
+    /// <inheritdoc />
     public class DbInitializer : IDbInitializer
     {
         private readonly IHostEnvironment _env;
@@ -16,6 +17,13 @@ namespace Service.DbInitializer
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<IdentityRole<Guid>> _roleManager;
 
+        /// <summary>
+        /// Constructor for initializing a <see cref="DbInitializer"/> class instance/>
+        /// </summary>
+        /// <param name="env">Application environment</param>
+        /// <param name="context">Database context</param>
+        /// <param name="userManager">Identity user manager</param>
+        /// <param name="roleManager">Identity role manager</param>
         public DbInitializer(IHostEnvironment env, ForumContext context, UserManager<User> userManager, RoleManager<IdentityRole<Guid>> roleManager)
         {
             _env = env;
@@ -38,6 +46,9 @@ namespace Service.DbInitializer
             await _context.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Seeds database
+        /// </summary>
         private async Task SeedData()
         {
             foreach (var role in Data.Roles)
@@ -56,6 +67,9 @@ namespace Service.DbInitializer
             }
         }
         
+        /// <summary>
+        /// Seeds database when application running in development environment
+        /// </summary>
         private async Task SeedTestData()
         {
             foreach (var user in TestData.Users)

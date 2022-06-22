@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Service.DataTransferObjects;
 using Service.Interfaces;
 
 namespace WebApi.Controllers
 {
+    /// <summary>
+    /// Users controller
+    /// </summary>
     [ApiController]
     [Route("api/[controller]")]
     [Authorize(Roles = "Administrator")]
@@ -17,37 +19,61 @@ namespace WebApi.Controllers
     {
         private readonly IUserService _userService;
 
+        /// <summary>
+        /// Constructor for initializing a <see cref="UsersController"/> class instance
+        /// </summary>
+        /// <param name="userService">User service</param>
         public UsersController(IUserService userService)
         {
             _userService = userService;
         }
 
+        /// <summary>
+        /// Gets all users
+        /// </summary>
+        /// <returns>Array of users</returns>
+        /// <response code="200">Returns the array of users</response>
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<UserWithDetailsDto>>> GetAll()
         {
-            var result = await _userService.GetWithDetailsAsync();
-            return result.ToList();
+            return Ok(await _userService.GetAllAsync());
         }
 
-        [HttpPut("{id:guid}/promote-to-moderator")]
-        public async Task<ActionResult> PromoteToModerator(Guid id)
+        /// <summary>
+        /// Updates user role
+        /// </summary>
+        /// <param name="id">Guid of the user whose role is to be updated</param>
+        /// <param name="roleDto">Role update data</param>
+        /// <remarks>Unable to update role of administrators</remarks>
+        /// <response code="204">User role has been updated</response>
+        /// <response code="400">Failed to update user role, error returned</response>
+        /// <response code="404">User specified by <paramref name="id"/> not found</response>
+        [HttpPut("{id:guid}/role")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> UpdateRole(Guid id, [FromBody] UserRoleUpdateDto roleDto)
         {
-            await _userService.PromoteToModerator(id);
-            return NoContent();
-        }
-        
-        [HttpPut("{id:guid}/demote-to-user")]
-        public async Task<ActionResult> DemoteToUser(Guid id)
-        {
-            await _userService.DemoteToUser(id);
+            await _userService.UpdateRoleAsync(id, roleDto);
             return NoContent();
         }
 
+        /// <summary>
+        /// Deletes the user
+        /// </summary>
+        /// <param name="id">Guid of the user to be deleted</param>
+        /// <remarks>Unable to delete administrators</remarks>
+        /// <response code="204">User has been deleted</response>
+        /// <response code="400">Unable to delete administrator</response>
+        /// <response code="404">User specified by <paramref name="id"/> not found</response>
         [HttpDelete("{id:guid}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult> Delete(Guid id)
         {
-            var requestUserId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            await _userService.DeleteAsync(id, requestUserId);
+            await _userService.DeleteAsync(id);
             return NoContent();
         }
     }

@@ -16,6 +16,7 @@ namespace Service
             CreateMap<Thread, ThreadWithDetailsDto>();
             CreateMap<ThreadCreationDto, Thread>();
             CreateMap<ThreadUpdateDto, Thread>();
+            CreateMap<ThreadStatusUpdateDto, Thread>();
 
             CreateMap<Post, PostWithDetailsDto>();
             CreateMap<PostCreationDto, Post>();

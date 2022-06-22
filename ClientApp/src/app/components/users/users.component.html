@@ -47,11 +47,11 @@
               <mat-icon>more_vert</mat-icon>
             </button>
             <mat-menu #menu="matMenu" class="thread-action-menu">
-              <button mat-menu-item *ngIf="!isModerator(user) && !isAdmin(user)" (click)="promoteToModerator(user)">
+              <button mat-menu-item *ngIf="!isModerator(user) && !isAdmin(user)" (click)="updateUserRole(user, 'Moderator')">
                 <mat-icon>group_add</mat-icon>
                 <span>Promote to Moderator</span>
               </button>
-              <button mat-menu-item *ngIf="isModerator(user)" (click)="demoteToUser(user)">
+              <button mat-menu-item *ngIf="isModerator(user)" (click)="updateUserRole(user, 'User')">
                 <mat-icon>group_remove</mat-icon>
                 <span>Demote to User</span>
               </button>

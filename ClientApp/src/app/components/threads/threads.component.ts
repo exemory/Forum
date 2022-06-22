@@ -7,6 +7,7 @@ import {ThreadWithDetails} from "../../interfaces/thread-with-details";
 import {ThreadCreationData} from "../../interfaces/thread-creation-data";
 import {NotificationService} from "../../services/notification.service";
 import {ActivatedRoute, Router} from "@angular/router";
+import {ThreadStatusUpdateData} from "../../interfaces/thread-status-update-data";
 
 @Component({
   selector: 'app-threads',
@@ -85,31 +86,16 @@ export class ThreadsComponent implements OnInit {
       });
   }
 
-  closeThread(thread: ThreadWithDetails) {
-    this.api.put(`threads/${thread.id}/close`, undefined)
+  updateThreadStatus(thread: ThreadWithDetails, closed: boolean) {
+    this.api.put(`threads/${thread.id}/status`, <ThreadStatusUpdateData>{closed})
       .subscribe(
         {
           next: () => {
-            thread.closed = true;
-            this.ns.notifySuccess("Thread has been closed");
+            thread.closed = closed;
+            this.ns.notifySuccess(`Thread has been ${closed ? 'closed' : 'opened'}`);
           },
           error: err => {
-            this.ns.notifyError(`Thread closing failed. Error ${err.status}`);
-          }
-        }
-      );
-  }
-
-  openThread(thread: ThreadWithDetails) {
-    this.api.put(`threads/${thread.id}/open`, undefined)
-      .subscribe(
-        {
-          next: () => {
-            thread.closed = false;
-            this.ns.notifySuccess("Thread has been opened");
-          },
-          error: err => {
-            this.ns.notifyError(`Thread opening failed. Error ${err.status}`);
+            this.ns.notifyError(`Operation failed. Error ${err.status}`);
           }
         }
       );

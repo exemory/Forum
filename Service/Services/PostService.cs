@@ -11,12 +11,19 @@ using Service.Interfaces;
 
 namespace Service.Services
 {
+    /// <inheritdoc />
     public class PostService : IPostService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
 
+        /// <summary>
+        /// Constructor for initializing a <see cref="PostService"/> class instance
+        /// </summary>
+        /// <param name="unitOfWork">Unit of work</param>
+        /// <param name="userManager">Identity user manager</param>
+        /// <param name="mapper">Mapper</param>
         public PostService(IUnitOfWork unitOfWork, UserManager<User> userManager, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
@@ -47,7 +54,7 @@ namespace Service.Services
             return _mapper.Map<IEnumerable<PostWithDetailsDto>>(posts);
         }
 
-        public async Task<PostWithDetailsDto> CreateAsync(PostCreationDto postDto, Guid userId)
+        public async Task<PostWithDetailsDto> CreateAsync(PostCreationDto postDto, Guid authorId)
         {
             var thread = await _unitOfWork.ThreadRepository.GetByIdAsync(postDto.ThreadId);
             if (thread == null)
@@ -55,17 +62,17 @@ namespace Service.Services
                 throw new NotFoundException();
             }
 
+            var user = await _userManager.FindByIdAsync(authorId.ToString());
+            if (user == null)
+            {
+                throw new ForumException($"User with id '{authorId}' does not exist");
+            }
+            
             if (thread.Closed)
             {
                 throw new ForumException("Thread is closed for posting");
             }
-            
-            var user = await _userManager.FindByIdAsync(userId.ToString());
-            if (user == null)
-            {
-                throw new ForumException($"User with id '{userId}' does not exist");
-            }
-            
+
             var post = _mapper.Map<Post>(postDto);
             post.Author = user;
             
@@ -75,9 +82,9 @@ namespace Service.Services
             return _mapper.Map<PostWithDetailsDto>(post);
         }
 
-        public async Task UpdateAsync(PostUpdateDto postDto)
+        public async Task UpdateAsync(Guid id, PostUpdateDto postDto)
         {
-            var post = await _unitOfWork.PostRepository.GetByIdAsync(postDto.Id);
+            var post = await _unitOfWork.PostRepository.GetByIdAsync(id);
             if (post == null)
             {
                 throw new NotFoundException();

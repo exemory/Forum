@@ -3,6 +3,9 @@ using System.Runtime.Serialization;
 
 namespace Service.Exceptions
 {
+    /// <summary>
+    /// Represents the general application error
+    /// </summary>
     [Serializable]
     public class ForumException : Exception
     {

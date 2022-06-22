@@ -16,12 +16,19 @@ using Service.Interfaces;
 
 namespace Service.Services
 {
+    /// <inheritdoc />
     public class AuthenticationService : IAuthenticationService
     {
         private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
         private readonly IConfiguration _config;
 
+        /// <summary>
+        /// Constructor for initializing a <see cref="AuthenticationService"/> class instance
+        /// </summary>
+        /// <param name="userManager">Identity user manager</param>
+        /// <param name="mapper">Mapper</param>
+        /// <param name="config">Application configuration</param>
         public AuthenticationService(UserManager<User> userManager, IMapper mapper, IConfiguration config)
         {
             _userManager = userManager;
@@ -69,6 +76,10 @@ namespace Service.Services
             return sessionDto;
         }
 
+        /// <summary>
+        /// Gets signing credentials for token signing
+        /// </summary>
+        /// <returns>Signing credentials</returns>
         private SigningCredentials GetSigningCredentials()
         {
             var secret = Encoding.UTF8.GetBytes(_config["Jwt:Secret"]);
@@ -76,6 +87,11 @@ namespace Service.Services
             return new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
         }
 
+        /// <summary>
+        /// Gets user claims
+        /// </summary>
+        /// <param name="user">User for obtaining claims</param>
+        /// <returns>User claims</returns>
         private async Task<List<Claim>> GetClaims(User user)
         {
             var claims = new List<Claim>
@@ -88,10 +104,16 @@ namespace Service.Services
             {
                 claims.Add(new Claim(ClaimTypes.Role, role));
             }
-
+            
             return claims;
         }
 
+        /// <summary>
+        /// Generates token options for jwt token
+        /// </summary>
+        /// <param name="signingCredentials">Signing credentials</param>
+        /// <param name="claims">User claims</param>
+        /// <returns>Jwt token options</returns>
         private JwtSecurityToken GenerateTokenOptions(SigningCredentials signingCredentials, IEnumerable<Claim> claims)
         {
             var tokenOptions = new JwtSecurityToken

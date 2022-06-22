@@ -6,6 +6,7 @@ import {HttpClient} from "@angular/common/http";
 import {NotificationService} from "../../services/notification.service";
 import {MatSort} from "@angular/material/sort";
 import {AuthService} from "../../services/auth.service";
+import {UserRoleUpdateData} from "../../interfaces/user-role-update-data";
 
 @Component({
   selector: 'app-users',
@@ -70,25 +71,12 @@ export class UsersComponent implements OnInit, AfterViewInit {
     return this.auth.session?.username === user.username;
   }
 
-  promoteToModerator(user: UserWithDetails) {
-    this.api.put(`users/${user.id}/promote-to-moderator`, undefined)
+  updateUserRole(user: UserWithDetails, role: 'User' | 'Moderator') {
+    this.api.put(`users/${user.id}/role`, <UserRoleUpdateData>{role})
       .subscribe({
         next: () => {
-          user.roles = ['Moderator'];
-          this.ns.notifySuccess(`User '${user.username}' has been promoted to Moderator`);
-        },
-        error: err => {
-          this.ns.notifyError(`Operation failed. Error ${err.status}`);
-        }
-      });
-  }
-
-  demoteToUser(user: UserWithDetails) {
-    this.api.put(`users/${user.id}/demote-to-user`, undefined)
-      .subscribe({
-        next: () => {
-          user.roles = ['User'];
-          this.ns.notifySuccess(`User '${user.username}' has been demoted to User`);
+          user.roles = [role];
+          this.ns.notifySuccess(`${user.username}'s role has been updated`);
         },
         error: err => {
           this.ns.notifyError(`Operation failed. Error ${err.status}`);

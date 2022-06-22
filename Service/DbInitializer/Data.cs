@@ -3,6 +3,9 @@ using Data.Entities;
 
 namespace Service.DbInitializer
 {
+    /// <summary>
+    /// Static class that holds initial data to be seeded
+    /// </summary>
     public static class Data
     {
         public static readonly string[] Roles = {"User", "Moderator", "Administrator"};

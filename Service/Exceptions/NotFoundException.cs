@@ -3,6 +3,9 @@ using System.Runtime.Serialization;
 
 namespace Service.Exceptions
 {
+    /// <summary>
+    /// The exception that is thrown when something not found
+    /// </summary>
     [Serializable]
     public class NotFoundException : ForumException
     {

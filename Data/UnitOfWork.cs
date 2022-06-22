@@ -4,6 +4,7 @@ using Data.Repositories;
 
 namespace Data
 {
+    /// <inheritdoc />
     public class UnitOfWork : IUnitOfWork
     {
         private readonly ForumContext _context;
@@ -12,6 +13,10 @@ namespace Data
         private IThreadRepository _threadRepository;
         private IUserRepository _userRepository;
 
+        /// <summary>
+        /// Constructor for initializing a <see cref="UnitOfWork"/> class instance
+        /// </summary>
+        /// <param name="context">Context of the database</param>
         public UnitOfWork(ForumContext context)
         {
             _context = context;

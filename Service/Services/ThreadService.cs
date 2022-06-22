@@ -11,12 +11,19 @@ using Service.Interfaces;
 
 namespace Service.Services
 {
+    /// <inheritdoc />
     public class ThreadService : IThreadService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
 
+        /// <summary>
+        /// Constructor for initializing a <see cref="ThreadService"/> class instance
+        /// </summary>
+        /// <param name="unitOfWork">Unit of work</param>
+        /// <param name="userManager">Identity user manager</param>
+        /// <param name="mapper">Mapper</param>
         public ThreadService(IUnitOfWork unitOfWork, UserManager<User> userManager, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
@@ -41,12 +48,12 @@ namespace Service.Services
             return _mapper.Map<IEnumerable<ThreadWithDetailsDto>>(threads);
         }
 
-        public async Task<ThreadWithDetailsDto> CreateAsync(ThreadCreationDto threadDto, Guid userId)
+        public async Task<ThreadWithDetailsDto> CreateAsync(ThreadCreationDto threadDto, Guid authorId)
         {
-            var user = await _userManager.FindByIdAsync(userId.ToString());
+            var user = await _userManager.FindByIdAsync(authorId.ToString());
             if (user == null)
             {
-                throw new ForumException($"User with id '{userId}' does not exist");
+                throw new NotFoundException($"User with id '{authorId}' does not exist");
             }
 
             var thread = _mapper.Map<Thread>(threadDto);
@@ -58,9 +65,9 @@ namespace Service.Services
             return _mapper.Map<ThreadWithDetailsDto>(thread);
         }
 
-        public async Task UpdateAsync(ThreadUpdateDto threadDto)
+        public async Task UpdateAsync(Guid id, ThreadUpdateDto threadDto)
         {
-            var thread = await _unitOfWork.ThreadRepository.GetByIdAsync(threadDto.Id);
+            var thread = await _unitOfWork.ThreadRepository.GetByIdAsync(id);
             if (thread == null)
             {
                 throw new NotFoundException();
@@ -84,7 +91,7 @@ namespace Service.Services
             await _unitOfWork.SaveAsync();
         }
 
-        public async Task CloseAsync(Guid id)
+        public async Task UpdateStatusAsync(Guid id, ThreadStatusUpdateDto statusDto)
         {
             var thread = await _unitOfWork.ThreadRepository.GetByIdAsync(id);
             if (thread == null)
@@ -92,31 +99,7 @@ namespace Service.Services
                 throw new NotFoundException();
             }
 
-            if (thread.Closed)
-            {
-                throw new ForumException("Thread already closed");
-            }
-
-            thread.Closed = true;
-
-            _unitOfWork.ThreadRepository.Update(thread);
-            await _unitOfWork.SaveAsync();
-        }
-
-        public async Task OpenAsync(Guid id)
-        {
-            var thread = await _unitOfWork.ThreadRepository.GetByIdAsync(id);
-            if (thread == null)
-            {
-                throw new NotFoundException();
-            }
-
-            if (!thread.Closed)
-            {
-                throw new ForumException("Thread already opened");
-            }
-
-            thread.Closed = false;
+            _mapper.Map(statusDto, thread);
 
             _unitOfWork.ThreadRepository.Update(thread);
             await _unitOfWork.SaveAsync();
