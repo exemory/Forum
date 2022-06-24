@@ -49,7 +49,7 @@ export class ThreadsComponent implements OnInit {
       return;
     }
 
-    const roles = this.auth.session?.roles;
+    const roles = this.auth.session?.userRoles;
 
     return roles?.includes('Moderator') ||
       roles?.includes('Administrator');

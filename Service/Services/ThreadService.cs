@@ -53,7 +53,7 @@ namespace Service.Services
             var user = await _userManager.FindByIdAsync(authorId.ToString());
             if (user == null)
             {
-                throw new NotFoundException($"User with id '{authorId}' does not exist");
+                throw new ForumException($"User with id '{authorId}' does not exist");
             }
 
             var thread = _mapper.Map<Thread>(threadDto);

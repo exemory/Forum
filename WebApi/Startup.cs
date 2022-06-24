@@ -69,8 +69,8 @@ namespace WebApi
             }).AddJwtBearer(options =>
             {
                 var secret = _config["Jwt:Secret"];
-                var validIssuer = _config["Jwt:ValidIssuer"];
-                var validAudience = _config["Jwt:ValidAudience"];
+                var issuer = _config["Jwt:Issuer"];
+                var audience = _config["Jwt:Audience"];
 
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
@@ -78,8 +78,8 @@ namespace WebApi
                     ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = validIssuer,
-                    ValidAudience = validAudience,
+                    ValidIssuer = issuer,
+                    ValidAudience = audience,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret))
                 };
             });

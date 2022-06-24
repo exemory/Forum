@@ -1,5 +1,6 @@
 export interface Session {
-  token: string,
+  userId: string,
   username: string,
-  roles: string[]
+  userRoles: string[],
+  accessToken: string
 }

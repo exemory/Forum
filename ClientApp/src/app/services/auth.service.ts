@@ -14,7 +14,7 @@ export class AuthService {
   private jwtHelper = new JwtHelperService();
 
   constructor(private api: HttpClient, private ns: NotificationService) {
-    if (this.isLoggedIn && this.jwtHelper.isTokenExpired(this.session?.token)) {
+    if (this.isLoggedIn && this.jwtHelper.isTokenExpired(this.session?.accessToken)) {
       this.signOut();
     }
   }

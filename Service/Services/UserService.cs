@@ -16,20 +16,20 @@ namespace Service.Services
     public class UserService : IUserService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
         private readonly UserManager<User> _userManager;
+        private readonly IMapper _mapper;
 
         /// <summary>
         /// Constructor for initializing a <see cref="UserService"/> class instance
         /// </summary>
         /// <param name="unitOfWork">Unit of work</param>
-        /// <param name="mapper">Mapper</param>
         /// <param name="userManager">Identity user manager</param>
-        public UserService(IUnitOfWork unitOfWork, IMapper mapper, UserManager<User> userManager)
+        /// <param name="mapper">Mapper</param>
+        public UserService(IUnitOfWork unitOfWork, UserManager<User> userManager, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
-            _mapper = mapper;
             _userManager = userManager;
+            _mapper = mapper;
         }
 
         public async Task<IEnumerable<UserWithDetailsDto>> GetAllAsync()

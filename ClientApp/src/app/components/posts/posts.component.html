@@ -10,7 +10,7 @@
         </div>
         <div class="description">
           <span *ngIf="thread.author"> by <span class="thread-author-username">{{thread.author.username}}</span> • </span>
-          <span>{{thread.creationDate | date:'MMM d, y, H:mm'}}</span>
+          <span>{{thread.creationDate | date:'MMM d, y, h:mm a'}}</span>
           <span *ngIf="thread.closed"> • Closed</span>
         </div>
       </div>

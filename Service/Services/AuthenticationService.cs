@@ -46,8 +46,7 @@ namespace Service.Services
                 return result;
             }
 
-            result = await _userManager.AddToRoleAsync(user, "User");
-            return result;
+            return await _userManager.AddToRoleAsync(user, "User");
         }
 
         public async Task<SessionDto> SignInAsync(SingInDto signInDto)
@@ -68,9 +67,10 @@ namespace Service.Services
             
             var sessionDto = new SessionDto
             {
-                Token = token,
+                UserId = user.Id,
                 Username = user.UserName,
-                Roles = claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToList()
+                UserRoles = claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToList(),
+                AccessToken = token,
             };
 
             return sessionDto;
@@ -118,8 +118,8 @@ namespace Service.Services
         {
             var tokenOptions = new JwtSecurityToken
             (
-                issuer: _config["Jwt:ValidIssuer"],
-                audience: _config["Jwt:ValidAudience"],
+                issuer: _config["Jwt:Issuer"],
+                audience: _config["Jwt:Audience"],
                 claims: claims,
                 expires: DateTime.UtcNow + _config.GetValue<TimeSpan>("Jwt:Lifetime"),
                 signingCredentials: signingCredentials

@@ -24,7 +24,7 @@ export class NavbarComponent implements OnInit {
   }
 
   get isAdmin(): boolean | undefined {
-    return this.auth.session?.roles.includes("Administrator");
+    return this.auth.session?.userRoles.includes("Administrator");
   }
 
   signOut() {

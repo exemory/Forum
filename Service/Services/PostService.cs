@@ -38,7 +38,7 @@ namespace Service.Services
             {
                 throw new NotFoundException();
             }
-            
+
             return _mapper.Map<PostWithDetailsDto>(post);
         }
 
@@ -49,7 +49,7 @@ namespace Service.Services
             {
                 throw new NotFoundException();
             }
-            
+
             var posts = await _unitOfWork.PostRepository.GetThreadPostsWithDetailsAsync(threadId);
             return _mapper.Map<IEnumerable<PostWithDetailsDto>>(posts);
         }
@@ -67,7 +67,7 @@ namespace Service.Services
             {
                 throw new ForumException($"User with id '{authorId}' does not exist");
             }
-            
+
             if (thread.Closed)
             {
                 throw new ForumException("Thread is closed for posting");
@@ -75,10 +75,10 @@ namespace Service.Services
 
             var post = _mapper.Map<Post>(postDto);
             post.Author = user;
-            
+
             _unitOfWork.PostRepository.Add(post);
             await _unitOfWork.SaveAsync();
-            
+
             return _mapper.Map<PostWithDetailsDto>(post);
         }
 
@@ -91,7 +91,7 @@ namespace Service.Services
             }
 
             _mapper.Map(postDto, post);
-            
+
             _unitOfWork.PostRepository.Update(post);
             await _unitOfWork.SaveAsync();
         }
@@ -103,7 +103,7 @@ namespace Service.Services
             {
                 throw new NotFoundException();
             }
-            
+
             _unitOfWork.PostRepository.Delete(post);
             await _unitOfWork.SaveAsync();
         }
