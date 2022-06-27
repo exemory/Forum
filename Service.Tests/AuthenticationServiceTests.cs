@@ -195,25 +195,25 @@ namespace Service.Tests
 
         private static SignUpDto TestSignUpDto => new SignUpDto
         {
-            UserName = "test1",
-            Email = "test1@ukr.net",
-            Name = "test1",
+            UserName = "username1",
+            Email = "email1@example.com",
+            Name = "name1",
             Password = "test_password_123"
         };
 
         private static User CreatedUserToBeSaved => new User
         {
-            UserName = "test1",
-            Email = "test1@ukr.net",
-            Name = "test1"
+            UserName = "username1",
+            Email = "email1@example.com",
+            Name = "name1"
         };
 
         private static User TestUser => new User
         {
             Id = new Guid("dd7aeae4-98a1-45a4-8fc1-0a7f499e18bb"),
-            UserName = "test_login",
-            Email = "test@example.com",
-            Name = "test",
+            UserName = "test_username",
+            Email = "test_email@example.com",
+            Name = "test_name",
             RegistrationDate = new DateTime(2016, 3, 16, 5, 19, 59)
         };
 

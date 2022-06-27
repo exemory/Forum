@@ -26,7 +26,7 @@ namespace Data.Repositories
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
 
-        public async Task<IEnumerable<Post>> GetThreadPostsWithDetailsAsync(Guid threadId)
+        public async Task<IEnumerable<Post>> GetByThreadIdWithDetailsAsync(Guid threadId)
         {
             return await Set.AsNoTracking()
                 .Include(p => p.Author)

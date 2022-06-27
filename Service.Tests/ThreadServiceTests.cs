@@ -213,48 +213,48 @@ namespace Service.Tests
                 new Thread
                 {
                     Id = new Guid("10ceb8e3-b160-4b28-b237-1ecd448a52d3"),
-                    Topic = "Test topic 1",
+                    Topic = "Thread topic 1",
                     Closed = false,
                     CreationDate = new DateTime(2020, 5, 8, 5, 16, 30),
                     AuthorId = new Guid("2b6f10f7-b177-4a64-85af-de55fff46ea2"),
                     Author = new User
                     {
                         Id = new Guid("2b6f10f7-b177-4a64-85af-de55fff46ea2"),
-                        UserName = "test1",
-                        Email = "test1@ukr.net",
-                        Name = "test1",
+                        UserName = "username1",
+                        Email = "email1@example.com",
+                        Name = "name1",
                         RegistrationDate = new DateTime(2012, 11, 27, 17, 34, 12)
                     }
                 },
                 new Thread
                 {
                     Id = new Guid("0a793cc1-0f4f-4766-86e3-2d1f30e03a85"),
-                    Topic = "Test topic 2",
+                    Topic = "Thread topic 2",
                     Closed = false,
                     CreationDate = new DateTime(2020, 5, 3, 5, 12, 51),
                     AuthorId = new Guid("dd7aeae4-98a1-45a4-8fc1-0a7f499e18bb"),
                     Author = new User
                     {
                         Id = new Guid("dd7aeae4-98a1-45a4-8fc1-0a7f499e18bb"),
-                        UserName = "test2",
-                        Email = "test2@example.com",
-                        Name = "test2",
+                        UserName = "username2",
+                        Email = "email2@example.com",
+                        Name = "name2",
                         RegistrationDate = new DateTime(2016, 3, 16, 5, 19, 59)
                     }
                 },
                 new Thread
                 {
                     Id = new Guid("5891e6dc-09ec-4883-9040-80c38c0318ab"),
-                    Topic = "Test topic 3",
+                    Topic = "Thread topic 3",
                     Closed = false,
                     CreationDate = new DateTime(2020, 2, 24, 9, 18, 11),
                     AuthorId = new Guid("6bc56cad-0687-427a-a836-435d25af8575"),
                     Author = new User
                     {
                         Id = new Guid("6bc56cad-0687-427a-a836-435d25af8575"),
-                        UserName = "test3",
-                        Email = "test3@example.com",
-                        Name = "test3",
+                        UserName = "username3",
+                        Email = "email3@example.com",
+                        Name = "name3",
                         RegistrationDate = new DateTime(2005, 6, 3, 9, 12, 11)
                     }
                 },
@@ -266,42 +266,42 @@ namespace Service.Tests
                 new ThreadWithDetailsDto
                 {
                     Id = new Guid("10ceb8e3-b160-4b28-b237-1ecd448a52d3"),
-                    Topic = "Test topic 1",
+                    Topic = "Thread topic 1",
                     Closed = false,
                     CreationDate = new DateTime(2020, 5, 8, 5, 16, 30),
                     Author = new UserDto
                     {
                         Id = new Guid("2b6f10f7-b177-4a64-85af-de55fff46ea2"),
-                        Username = "test1",
-                        Name = "test1",
+                        Username = "username1",
+                        Name = "name1",
                         RegistrationDate = new DateTime(2012, 11, 27, 17, 34, 12)
                     }
                 },
                 new ThreadWithDetailsDto
                 {
                     Id = new Guid("0a793cc1-0f4f-4766-86e3-2d1f30e03a85"),
-                    Topic = "Test topic 2",
+                    Topic = "Thread topic 2",
                     Closed = false,
                     CreationDate = new DateTime(2020, 5, 3, 5, 12, 51),
                     Author = new UserDto
                     {
                         Id = new Guid("dd7aeae4-98a1-45a4-8fc1-0a7f499e18bb"),
-                        Username = "test2",
-                        Name = "test2",
+                        Username = "username2",
+                        Name = "name2",
                         RegistrationDate = new DateTime(2016, 3, 16, 5, 19, 59)
                     }
                 },
                 new ThreadWithDetailsDto
                 {
                     Id = new Guid("5891e6dc-09ec-4883-9040-80c38c0318ab"),
-                    Topic = "Test topic 3",
+                    Topic = "Thread topic 3",
                     Closed = false,
                     CreationDate = new DateTime(2020, 2, 24, 9, 18, 11),
                     Author = new UserDto
                     {
                         Id = new Guid("6bc56cad-0687-427a-a836-435d25af8575"),
-                        Username = "test3",
-                        Name = "test3",
+                        Username = "username3",
+                        Name = "name3",
                         RegistrationDate = new DateTime(2005, 6, 3, 9, 12, 11)
                     }
                 },
@@ -310,9 +310,9 @@ namespace Service.Tests
         private static User TestUser => new User
         {
             Id = new Guid("2b6f10f7-b177-4a64-85af-de55fff46ea2"),
-            UserName = "test1",
-            Email = "test1@ukr.net",
-            Name = "test1",
+            UserName = "test_username",
+            Email = "test_email@example.com",
+            Name = "test_name",
             RegistrationDate = new DateTime(2012, 11, 27, 17, 34, 12)
         };
 
@@ -329,9 +329,9 @@ namespace Service.Tests
                 Author = new User
                 {
                     Id = new Guid("2b6f10f7-b177-4a64-85af-de55fff46ea2"),
-                    UserName = "test1",
-                    Email = "test1@ukr.net",
-                    Name = "test1",
+                    UserName = "test_username",
+                    Email = "test_email@example.com",
+                    Name = "test_name",
                     RegistrationDate = new DateTime(2012, 11, 27, 17, 34, 12)
                 }
             };
@@ -343,8 +343,8 @@ namespace Service.Tests
                 Author = new UserDto
                 {
                     Id = new Guid("2b6f10f7-b177-4a64-85af-de55fff46ea2"),
-                    Username = "test1",
-                    Name = "test1",
+                    Username = "test_username",
+                    Name = "test_name",
                     RegistrationDate = new DateTime(2012, 11, 27, 17, 34, 12)
                 }
             };
@@ -353,7 +353,7 @@ namespace Service.Tests
             new Thread
             {
                 Id = new Guid("10ceb8e3-b160-4b28-b237-1ecd448a52d3"),
-                Topic = "Test topic 1",
+                Topic = "Test thread topic",
                 Closed = false,
                 CreationDate = new DateTime(2020, 5, 8, 5, 16, 30),
                 AuthorId = new Guid("2b6f10f7-b177-4a64-85af-de55fff46ea2")
@@ -385,7 +385,7 @@ namespace Service.Tests
             new Thread
             {
                 Id = new Guid("10ceb8e3-b160-4b28-b237-1ecd448a52d3"),
-                Topic = "Test topic 1",
+                Topic = "Test thread topic",
                 Closed = true,
                 CreationDate = new DateTime(2020, 5, 8, 5, 16, 30),
                 AuthorId = new Guid("2b6f10f7-b177-4a64-85af-de55fff46ea2")

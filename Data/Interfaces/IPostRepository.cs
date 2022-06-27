@@ -24,6 +24,6 @@ namespace Data.Interfaces
         /// </summary>
         /// <param name="threadId">Guid of the thread whose posts to be retrieved</param>
         /// <returns>List of posts, including their authors, ordered by publish date by ascending order</returns>
-        public Task<IEnumerable<Post>> GetThreadPostsWithDetailsAsync(Guid threadId);
+        public Task<IEnumerable<Post>> GetByThreadIdWithDetailsAsync(Guid threadId);
     }
 }

@@ -49,7 +49,7 @@ namespace Data.Repositories
             Set.Remove(entity);
         }
 
-        public void Delete(Guid id)
+        public void DeleteById(Guid id)
         {
             var entity = new T {Id = id};
             Set.Remove(entity);

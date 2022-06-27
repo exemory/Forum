@@ -1,3 +1,4 @@
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -61,7 +62,7 @@ namespace Service.Tests
 
             _unitOfWorkMock.Setup(u => u.ThreadRepository.GetByIdAsync(thread.Id))
                 .ReturnsAsync(TestThread);
-            _unitOfWorkMock.Setup(u => u.PostRepository.GetThreadPostsWithDetailsAsync(thread.Id))
+            _unitOfWorkMock.Setup(u => u.PostRepository.GetByThreadIdWithDetailsAsync(thread.Id))
                 .ReturnsAsync((Guid id) => PostListWithAuthors.Where(p => p.ThreadId == id));
 
             var result = await _sut.GetByThreadAsync(thread.Id);
@@ -229,48 +230,48 @@ namespace Service.Tests
                 new Post
                 {
                     Id = new Guid("d4376327-f24d-423e-9226-8f85117fe117"),
-                    Content = "Vivamus ante sem, vehicula at euismod eu, luctus eleifend erat.",
+                    Content = "Post content 1",
                     ThreadId = new Guid("8fa32919-5dd4-4e88-90e8-98c9323bdbb6"),
                     AuthorId = new Guid("2b6f10f7-b177-4a64-85af-de55fff46ea2"),
                     PublishDate = new DateTime(2021, 8, 14, 19, 25, 31),
                     Author = new User
                     {
                         Id = new Guid("2b6f10f7-b177-4a64-85af-de55fff46ea2"),
-                        UserName = "test1",
-                        Email = "test1@ukr.net",
-                        Name = "test1",
+                        UserName = "username1",
+                        Email = "email1@example.com",
+                        Name = "name1",
                         RegistrationDate = new DateTime(2012, 11, 27, 17, 34, 12)
                     }
                 },
                 new Post
                 {
                     Id = new Guid("0db39598-3cf9-4e98-9d21-50a2c55cf5a1"),
-                    Content = "Nulla eget",
+                    Content = "Post content 2",
                     ThreadId = new Guid("708fb0d0-94c7-4460-95bf-22f18ee38f29"),
                     AuthorId = new Guid("dd7aeae4-98a1-45a4-8fc1-0a7f499e18bb"),
                     PublishDate = new DateTime(2021, 8, 15, 13, 5, 53),
                     Author = new User
                     {
                         Id = new Guid("dd7aeae4-98a1-45a4-8fc1-0a7f499e18bb"),
-                        UserName = "test2",
-                        Email = "test2@example.com",
-                        Name = "test2",
+                        UserName = "username2",
+                        Email = "email2@example.com",
+                        Name = "name2",
                         RegistrationDate = new DateTime(2016, 3, 16, 5, 19, 59)
                     }
                 },
                 new Post
                 {
                     Id = new Guid("074b6e15-965b-4a06-add1-302014c4e589"),
-                    Content = "Aenean blandit luctus convallis",
+                    Content = "Post content 3",
                     ThreadId = new Guid("8fa32919-5dd4-4e88-90e8-98c9323bdbb6"),
                     AuthorId = new Guid("6bc56cad-0687-427a-a836-435d25af8575"),
                     PublishDate = new DateTime(2021, 8, 17, 18, 18, 44),
                     Author = new User
                     {
                         Id = new Guid("6bc56cad-0687-427a-a836-435d25af8575"),
-                        UserName = "test3",
-                        Email = "test3@example.com",
-                        Name = "test3",
+                        UserName = "username3",
+                        Email = "email3@example.com",
+                        Name = "name3",
                         RegistrationDate = new DateTime(2005, 6, 3, 9, 12, 11)
                     }
                 }
@@ -282,42 +283,42 @@ namespace Service.Tests
                 new PostWithDetailsDto
                 {
                     Id = new Guid("d4376327-f24d-423e-9226-8f85117fe117"),
-                    Content = "Vivamus ante sem, vehicula at euismod eu, luctus eleifend erat.",
+                    Content = "Post content 1",
                     ThreadId = new Guid("8fa32919-5dd4-4e88-90e8-98c9323bdbb6"),
                     PublishDate = new DateTime(2021, 8, 14, 19, 25, 31),
                     Author = new UserDto
                     {
                         Id = new Guid("2b6f10f7-b177-4a64-85af-de55fff46ea2"),
-                        Username = "test1",
-                        Name = "test1",
+                        Username = "username1",
+                        Name = "name1",
                         RegistrationDate = new DateTime(2012, 11, 27, 17, 34, 12)
                     }
                 },
                 new PostWithDetailsDto
                 {
                     Id = new Guid("0db39598-3cf9-4e98-9d21-50a2c55cf5a1"),
-                    Content = "Nulla eget",
+                    Content = "Post content 2",
                     ThreadId = new Guid("708fb0d0-94c7-4460-95bf-22f18ee38f29"),
                     PublishDate = new DateTime(2021, 8, 15, 13, 5, 53),
                     Author = new UserDto
                     {
                         Id = new Guid("dd7aeae4-98a1-45a4-8fc1-0a7f499e18bb"),
-                        Username = "test2",
-                        Name = "test2",
+                        Username = "username2",
+                        Name = "name2",
                         RegistrationDate = new DateTime(2016, 3, 16, 5, 19, 59)
                     }
                 },
                 new PostWithDetailsDto
                 {
                     Id = new Guid("074b6e15-965b-4a06-add1-302014c4e589"),
-                    Content = "Aenean blandit luctus convallis",
+                    Content = "Post content 3",
                     ThreadId = new Guid("8fa32919-5dd4-4e88-90e8-98c9323bdbb6"),
                     PublishDate = new DateTime(2021, 8, 17, 18, 18, 44),
                     Author = new UserDto
                     {
                         Id = new Guid("6bc56cad-0687-427a-a836-435d25af8575"),
-                        Username = "test3",
-                        Name = "test3",
+                        Username = "username3",
+                        Name = "name3",
                         RegistrationDate = new DateTime(2005, 6, 3, 9, 12, 11)
                     }
                 }
@@ -326,9 +327,9 @@ namespace Service.Tests
         private static User TestUser => new User
         {
             Id = new Guid("2b6f10f7-b177-4a64-85af-de55fff46ea2"),
-            UserName = "test1",
-            Email = "test1@ukr.net",
-            Name = "test1",
+            UserName = "test_username",
+            Email = "test_email@example.com",
+            Name = "test_name",
             RegistrationDate = new DateTime(2012, 11, 27, 17, 34, 12)
         };
 
@@ -336,7 +337,7 @@ namespace Service.Tests
             new Post
             {
                 Id = new Guid("d4376327-f24d-423e-9226-8f85117fe117"),
-                Content = "Vivamus ante sem, vehicula at euismod eu, luctus eleifend erat.",
+                Content = "Test post content",
                 ThreadId = new Guid("8fa32919-5dd4-4e88-90e8-98c9323bdbb6"),
                 AuthorId = new Guid("2b6f10f7-b177-4a64-85af-de55fff46ea2"),
                 PublishDate = new DateTime(2021, 8, 14, 19, 25, 31)
@@ -374,9 +375,9 @@ namespace Service.Tests
                 Author = new User
                 {
                     Id = new Guid("2b6f10f7-b177-4a64-85af-de55fff46ea2"),
-                    UserName = "test1",
-                    Email = "test1@ukr.net",
-                    Name = "test1",
+                    UserName = "test_username",
+                    Email = "test_email@example.com",
+                    Name = "test_name",
                     RegistrationDate = new DateTime(2012, 11, 27, 17, 34, 12)
                 }
             };
@@ -389,8 +390,8 @@ namespace Service.Tests
                 Author = new UserDto
                 {
                     Id = new Guid("2b6f10f7-b177-4a64-85af-de55fff46ea2"),
-                    Username = "test1",
-                    Name = "test1",
+                    Username = "test_username",
+                    Name = "test_name",
                     RegistrationDate = new DateTime(2012, 11, 27, 17, 34, 12)
                 }
             };

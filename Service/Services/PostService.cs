@@ -50,7 +50,7 @@ namespace Service.Services
                 throw new NotFoundException();
             }
 
-            var posts = await _unitOfWork.PostRepository.GetThreadPostsWithDetailsAsync(threadId);
+            var posts = await _unitOfWork.PostRepository.GetByThreadIdWithDetailsAsync(threadId);
             return _mapper.Map<IEnumerable<PostWithDetailsDto>>(posts);
         }
 

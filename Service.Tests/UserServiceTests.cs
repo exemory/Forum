@@ -204,25 +204,25 @@ namespace Service.Tests
                 new User
                 {
                     Id = new Guid("2b6f10f7-b177-4a64-85af-de55fff46ea2"),
-                    UserName = "test1",
-                    Email = "test1@ukr.net",
-                    Name = "test1",
+                    UserName = "username1",
+                    Email = "email1@example.com",
+                    Name = "name1",
                     RegistrationDate = new DateTime(2012, 11, 27, 17, 34, 12)
                 },
                 new User
                 {
                     Id = new Guid("dd7aeae4-98a1-45a4-8fc1-0a7f499e18bb"),
-                    UserName = "test2",
-                    Email = "test2@example.com",
-                    Name = "test2",
+                    UserName = "username2",
+                    Email = "email2@example.com",
+                    Name = "name2",
                     RegistrationDate = new DateTime(2016, 3, 16, 5, 19, 59)
                 },
                 new User
                 {
                     Id = new Guid("6bc56cad-0687-427a-a836-435d25af8575"),
-                    UserName = "test3",
-                    Email = "test3@example.com",
-                    Name = "test3",
+                    UserName = "username3",
+                    Email = "email3@example.com",
+                    Name = "name3",
                     RegistrationDate = new DateTime(2005, 6, 3, 9, 12, 11)
                 }
             };
@@ -241,27 +241,27 @@ namespace Service.Tests
                 new UserWithDetailsDto
                 {
                     Id = new Guid("2b6f10f7-b177-4a64-85af-de55fff46ea2"),
-                    Username = "test1",
-                    Email = "test1@ukr.net",
-                    Name = "test1",
+                    Username = "username1",
+                    Email = "email1@example.com",
+                    Name = "name1",
                     RegistrationDate = new DateTime(2012, 11, 27, 17, 34, 12),
                     Roles = new List<string> {"User"}
                 },
                 new UserWithDetailsDto
                 {
                     Id = new Guid("dd7aeae4-98a1-45a4-8fc1-0a7f499e18bb"),
-                    Username = "test2",
-                    Email = "test2@example.com",
-                    Name = "test2",
+                    Username = "username2",
+                    Email = "email2@example.com",
+                    Name = "name2",
                     RegistrationDate = new DateTime(2016, 3, 16, 5, 19, 59),
                     Roles = new List<string> {"Moderator"}
                 },
                 new UserWithDetailsDto
                 {
                     Id = new Guid("6bc56cad-0687-427a-a836-435d25af8575"),
-                    Username = "test3",
-                    Email = "test3@example.com",
-                    Name = "test3",
+                    Username = "username3",
+                    Email = "email3@example.com",
+                    Name = "name3",
                     RegistrationDate = new DateTime(2005, 6, 3, 9, 12, 11),
                     Roles = new List<string> {"Administrator"}
                 }

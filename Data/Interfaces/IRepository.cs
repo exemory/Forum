@@ -48,6 +48,6 @@ namespace Data.Interfaces
         /// Deletes entity specified by <paramref name="id"/>
         /// </summary>
         /// <param name="id">Guid of the entity to be started tracking by context as deleted</param>
-        void Delete(Guid id);
+        void DeleteById(Guid id);
     }
 }

@@ -36,20 +36,20 @@ namespace Service.DbInitializer
         {
             await _context.Database.MigrateAsync();
 
-            await SeedData();
+            await SeedDataAsync();
 
             if (_env.IsDevelopment())
             {
-                await SeedTestData();
+                await SeedTestDataAsync();
             }
 
             await _context.SaveChangesAsync();
         }
 
         /// <summary>
-        /// Seeds database
+        /// Seeds required data
         /// </summary>
-        private async Task SeedData()
+        private async Task SeedDataAsync()
         {
             foreach (var role in Data.Roles)
             {
@@ -68,9 +68,9 @@ namespace Service.DbInitializer
         }
         
         /// <summary>
-        /// Seeds database when application running in development environment
+        /// Seeds test data when application running in development environment
         /// </summary>
-        private async Task SeedTestData()
+        private async Task SeedTestDataAsync()
         {
             foreach (var user in TestData.Users)
             {
