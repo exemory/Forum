@@ -4,11 +4,16 @@ namespace Service.Tests
 {
     public static class UnitTestHelper
     {
-        public static IMapper CreateMapper()
+        public static MapperConfiguration CreateMapperConfiguration()
         {
             var profile = new AutomapperProfile();
-            var configuration = new MapperConfiguration(cfg => cfg.AddProfile(profile));
-            
+            return new MapperConfiguration(cfg => cfg.AddProfile(profile));
+        }
+
+        public static IMapper CreateMapper()
+        {
+            var configuration = CreateMapperConfiguration();
+
             return new Mapper(configuration);
         }
     }

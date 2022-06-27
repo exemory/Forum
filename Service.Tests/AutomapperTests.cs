@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Xunit;
+﻿using Xunit;
 
 namespace Service.Tests
 {
@@ -8,9 +7,8 @@ namespace Service.Tests
         [Fact]
         public void ValidateConfiguration()
         {
-            var profile = new AutomapperProfile();
-            var configuration = new MapperConfiguration(cfg => cfg.AddProfile(profile));
-            
+            var configuration = UnitTestHelper.CreateMapperConfiguration();
+
             configuration.AssertConfigurationIsValid();
         }
     }

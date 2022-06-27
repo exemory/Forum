@@ -8,19 +8,21 @@ namespace Service
     {
         public AutomapperProfile()
         {
-            CreateMap<SignUpDto, User>();
+            CreateMap<SignUpDto, User>(MemberList.Source)
+                .ForSourceMember(d => d.Password, o => o.DoNotValidate());
 
             CreateMap<User, UserDto>();
-            CreateMap<User, UserWithDetailsDto>();
+            CreateMap<User, UserWithDetailsDto>()
+                .ForMember(u => u.Roles, o => o.Ignore());
             
             CreateMap<Thread, ThreadWithDetailsDto>();
-            CreateMap<ThreadCreationDto, Thread>();
-            CreateMap<ThreadUpdateDto, Thread>();
-            CreateMap<ThreadStatusUpdateDto, Thread>();
+            CreateMap<ThreadCreationDto, Thread>(MemberList.Source);
+            CreateMap<ThreadUpdateDto, Thread>(MemberList.Source);
+            CreateMap<ThreadStatusUpdateDto, Thread>(MemberList.Source);
 
             CreateMap<Post, PostWithDetailsDto>();
-            CreateMap<PostCreationDto, Post>();
-            CreateMap<PostUpdateDto, Post>();
+            CreateMap<PostCreationDto, Post>(MemberList.Source);
+            CreateMap<PostUpdateDto, Post>(MemberList.Source);
         }
     }
 }
