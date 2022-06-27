@@ -19,6 +19,10 @@ export class ThreadsComponent implements OnInit {
   loading = true;
   threads!: ThreadWithDetails[];
 
+  filterValue = '';
+  fromDate?: Date;
+  toDate?: Date;
+
   constructor(private api: HttpClient,
               private auth: AuthService,
               private dialog: MatDialog,
@@ -53,6 +57,31 @@ export class ThreadsComponent implements OnInit {
 
     return roles?.includes('Moderator') ||
       roles?.includes('Administrator');
+  }
+
+  get filteredThreads(): ThreadWithDetails[] {
+    let filteredThreads = this.threads;
+
+    if (this.filterValue) {
+      filteredThreads = filteredThreads.filter(t => t.topic.toLowerCase().includes(this.filterValue.toLowerCase()));
+    }
+
+    if (this.fromDate) {
+      filteredThreads = filteredThreads.filter(t => this.getThreadCreationDate(t) >= this.fromDate!);
+    }
+
+    if (this.toDate) {
+      filteredThreads = filteredThreads.filter(t => this.getThreadCreationDate(t) <= this.toDate!);
+    }
+
+    return filteredThreads;
+  }
+
+  private getThreadCreationDate(thread: ThreadWithDetails) : Date
+  {
+    let threadCreationDate = new Date(thread.creationDate);
+    threadCreationDate.setHours(0,0,0,0);
+    return threadCreationDate;
   }
 
   openNewThreadDialog() {

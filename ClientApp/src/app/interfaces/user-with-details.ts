@@ -3,6 +3,6 @@ export interface UserWithDetails {
   username: string,
   email: string,
   name: string,
-  registrationDate: Date,
+  registrationDate: string,
   roles: string[]
 }

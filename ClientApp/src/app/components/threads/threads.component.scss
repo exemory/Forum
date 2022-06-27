@@ -12,10 +12,22 @@
 .actions {
   display: flex;
   align-items: flex-end;
-  margin-bottom: 12px;
+  gap: 20px;
+
+  mat-form-field {
+    max-width: 240px;
+    width: 100%;
+  }
+
+  .mat-input-element::placeholder,
+  .mat-date-range-input-inner::placeholder {
+    color: #686464;
+    opacity: 1;
+  }
 
   .create-thread {
     margin-left: auto;
+    margin-bottom: 19px;
   }
 }
 
@@ -24,6 +36,12 @@
   border-radius: 4px;
   background-color: #fff;
   box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.2);
+
+  .no-threads-message {
+    padding: 14px;
+    margin: 0;
+    color: #8a817c;
+  }
 
   .thread {
     position: relative;
@@ -58,6 +76,18 @@
 
       .username {
         font-weight: 500;
+      }
+
+      ul {
+        padding: 0;
+        margin: 0;
+        display: flex;
+        list-style-type: none;
+
+        li:not(:first-child)::before {
+          content: "•";
+          margin: 0 6px;
+        }
       }
     }
 

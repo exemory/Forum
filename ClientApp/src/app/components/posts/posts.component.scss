@@ -25,6 +25,18 @@
       .thread-author-username {
         font-weight: 500;
       }
+
+      ul {
+        padding: 0;
+        margin: 0;
+        display: flex;
+        list-style-type: none;
+
+        li:not(:first-child)::before {
+          content: "•";
+          margin: 0 7px;
+        }
+      }
     }
   }
 }
