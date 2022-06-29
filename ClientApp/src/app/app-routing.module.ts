@@ -5,8 +5,8 @@ import {SignUpComponent} from "./components/sign-up/sign-up.component";
 import {ThreadsComponent} from "./components/threads/threads.component";
 import {PostsComponent} from "./components/posts/posts.component";
 import {UsersComponent} from "./components/users/users.component";
-import {OnlyAdminsGuard} from "./guards/only-admins-guard.service";
-import {OnlyGuestsGuard} from "./guards/only-guests-guard.service";
+import {OnlyGuestsGuard} from "./guards/only-guests.guard";
+import {OnlyAdminsGuard} from "./guards/only-admins.guard";
 
 const routes: Routes = [
   {path: 'threads', component: ThreadsComponent},

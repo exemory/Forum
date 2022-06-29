@@ -1,10 +1,10 @@
-<h2 mat-dialog-title>New thread</h2>
+<h2 mat-dialog-title>Edit thread</h2>
 <div mat-dialog-content>
-  <form id="create-thread-form" (ngSubmit)="create()" #form="ngForm">
+  <form id="edit-thread-form" (ngSubmit)="save()" #form="ngForm">
     <mat-form-field class="name-field" appearance="outline">
       <mat-label>Topic</mat-label>
-      <textarea [(ngModel)]="threadCreationData.topic" name="topic" #topic="ngModel" matInput
-                placeholder="Ex. How can I ..." required minlength="10" maxlength="200"></textarea>
+      <textarea [(ngModel)]="threadUpdateData.topic" name="topic" #topic="ngModel" matInput required minlength="10"
+                maxlength="200"></textarea>
       <mat-error *ngIf="topic.hasError('required')">Topic is required</mat-error>
       <mat-error *ngIf="topic.hasError('minlength')">Topic must be at least 10 characters long</mat-error>
     </mat-form-field>
@@ -12,5 +12,5 @@
 </div>
 <div mat-dialog-actions align="end">
   <button mat-stroked-button [mat-dialog-close]="undefined">Cancel</button>
-  <button type="submit" form="create-thread-form" [disabled]="form.form.invalid" mat-raised-button color="primary">Create</button>
+  <button type="submit" form="edit-thread-form" mat-raised-button color="primary" [disabled]="form.form.invalid">Save</button>
 </div>

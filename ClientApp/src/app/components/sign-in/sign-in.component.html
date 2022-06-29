@@ -8,14 +8,14 @@
       <form [formGroup]="form" (ngSubmit)="onSubmit()">
 
         <mat-form-field appearance="standard" class="full-width-input">
-          <input matInput class="login" placeholder="Username or email" formControlName="login" autofocus required>
+          <input matInput class="login" placeholder="Username or email" formControlName="login" required #login>
           <mat-icon matSuffix>login</mat-icon>
           <mat-error *ngIf="form.controls['login'].hasError('required')">The field is required</mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="standard" class="full-width-input">
           <input matInput class="password" [type]="hidePassword ? 'password' : 'text'" placeholder="Password"
-                 formControlName="password" required>
+                 formControlName="password" required #password>
           <button class="show-hide-password" type="button" mat-icon-button matSuffix (click)="hidePassword = !hidePassword">
             <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
           </button>

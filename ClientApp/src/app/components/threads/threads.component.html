@@ -62,6 +62,10 @@
                 <mat-icon>lock_open</mat-icon>
                 <span>Open</span>
               </button>
+              <button mat-menu-item (click)="openEditThreadDialog(thread)">
+                <mat-icon>edit</mat-icon>
+                <span>Edit</span>
+              </button>
               <button mat-menu-item class="delete-menu-option" (click)="deleteThread(thread)">
                 <mat-icon>delete_forever</mat-icon>
                 <span>Delete</span>

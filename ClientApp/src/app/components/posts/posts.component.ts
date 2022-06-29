@@ -7,6 +7,9 @@ import {ThreadWithDetails} from "../../interfaces/thread-with-details";
 import {AuthService} from "../../services/auth.service";
 import {FormBuilder} from "@angular/forms";
 import {PostCreationData} from "../../interfaces/post-creation-data";
+import {MatDialog} from "@angular/material/dialog";
+import {PostUpdateData} from "../../interfaces/post-update-data";
+import {EditPostDialogComponent} from "./edit-post-dialog/edit-post-dialog.component";
 
 @Component({
   selector: 'app-posts',
@@ -20,7 +23,7 @@ export class PostsComponent implements OnInit {
   posts!: PostWithDetails[];
 
   postForm = this.fb.group({
-    postText: ['']
+    content: ['']
   });
 
   constructor(private route: ActivatedRoute,
@@ -28,7 +31,8 @@ export class PostsComponent implements OnInit {
               private ns: NotificationService,
               private auth: AuthService,
               private fb: FormBuilder,
-              private router: Router) {
+              private router: Router,
+              private dialog: MatDialog) {
   }
 
   ngOnInit(): void {
@@ -84,35 +88,69 @@ export class PostsComponent implements OnInit {
       roles?.includes('Administrator');
   }
 
-  inProgress = false;
+  sendingPost = false;
 
   onPostSubmit() {
-    if (this.postForm.invalid) {
+    if (this.postForm.invalid || this.sendingPost) {
       return;
     }
 
     const data: PostCreationData = {
-      content: this.postForm.get('postText')?.value,
+      content: this.postForm.get('content')?.value?.trim(),
       threadId: this.thread.id
     }
 
-    if (data.content == null || data.content === '') {
+    if (!data.content) {
       return;
     }
+
+    this.sendingPost = true;
 
     this.api.post<PostWithDetails>('posts', data)
       .subscribe({
         next: post => {
           this.posts.push(post);
-          this.ns.notifySuccess("Reply has been sent");
+          this.ns.notifySuccess("Post has been created");
           this.postForm.reset();
-          this.inProgress = false;
+          this.sendingPost = false;
         },
         error: err => {
-          this.ns.notifyError(`Sending reply failed. Error ${err.status}`);
-          this.inProgress = false;
+          this.ns.notifyError(`Operation failed. Error ${err.status}`);
+          this.sendingPost = false;
         }
       });
+  }
+
+  openEditPostDialog(post: PostWithDetails) {
+    const dialogRef = this.dialog.open(EditPostDialogComponent,
+      {
+        maxWidth: '600px',
+        width: '100%',
+        data: post
+      }
+    );
+
+    dialogRef.afterClosed().subscribe(result => {
+        if (result !== undefined) {
+          this.updatePost(post, result);
+        }
+      }
+    );
+  }
+
+  updatePost(post: PostWithDetails, data: PostUpdateData) {
+    this.api.put(`posts/${post.id}`, data)
+      .subscribe(
+        {
+          next: () => {
+            post.content = data.content;
+            this.ns.notifySuccess(`Post has been updated`);
+          },
+          error: err => {
+            this.ns.notifyError(`Operation failed. Error ${err.status}`);
+          }
+        }
+      );
   }
 
   deletePost(post: PostWithDetails) {
@@ -127,7 +165,7 @@ export class PostsComponent implements OnInit {
           this.ns.notifySuccess("Post has been deleted");
         },
         error: err => {
-          this.ns.notifyError(`Post deletion failed. Error ${err.status}`);
+          this.ns.notifyError(`Operation failed. Error ${err.status}`);
         }
       });
   }

@@ -1,0 +1,15 @@
+<h2 mat-dialog-title>Edit post</h2>
+<div mat-dialog-content>
+  <form id="edit-post-form" (ngSubmit)="save()" #form="ngForm">
+    <mat-form-field class="name-field" appearance="outline">
+      <mat-label>Content</mat-label>
+      <textarea [(ngModel)]="postUpdateData.content" name="content" #content="ngModel" matInput required
+                maxlength="10000"></textarea>
+      <mat-error *ngIf="content.hasError('required')">Post content is required</mat-error>
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-stroked-button [mat-dialog-close]="undefined">Cancel</button>
+  <button type="submit" form="edit-post-form" mat-raised-button color="primary" [disabled]="form.form.invalid">Save</button>
+</div>

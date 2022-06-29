@@ -28,6 +28,8 @@ import {MatPaginatorModule} from "@angular/material/paginator";
 import {MatSortModule} from "@angular/material/sort";
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatNativeDateModule} from "@angular/material/core";
+import { EditThreadDialogComponent } from './components/threads/edit-thread-dialog/edit-thread-dialog.component';
+import { EditPostDialogComponent } from './components/posts/edit-post-dialog/edit-post-dialog.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +40,9 @@ import {MatNativeDateModule} from "@angular/material/core";
     ThreadsComponent,
     NewThreadDialogComponent,
     PostsComponent,
-    UsersComponent
+    UsersComponent,
+    EditThreadDialogComponent,
+    EditPostDialogComponent
   ],
   imports: [
     BrowserModule,

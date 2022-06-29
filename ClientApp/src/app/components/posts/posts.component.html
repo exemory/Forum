@@ -42,6 +42,10 @@
             <mat-icon>more_vert</mat-icon>
           </button>
           <mat-menu #menu="matMenu" class="thread-action-menu">
+            <button mat-menu-item (click)="openEditPostDialog(post)">
+              <mat-icon>edit</mat-icon>
+              <span>Edit</span>
+            </button>
             <button mat-menu-item class="delete-menu-option" (click)="deletePost(post)">
               <mat-icon>delete_forever</mat-icon>
               <span>Delete</span>
@@ -53,13 +57,13 @@
     <div *ngIf="isLoggedIn && !thread.closed" class="new-post">
       <h3 class="header">Create a post</h3>
 
-      <form [formGroup]="postForm" id="new-post" (ngSubmit)="onPostSubmit()">
+      <form [formGroup]="postForm" (ngSubmit)="onPostSubmit()">
         <mat-form-field class="post-text-field" appearance="outline">
-          <mat-label>Post content</mat-label>
-          <textarea formControlName="postText" matInput maxlength="10000"></textarea>
+          <mat-label>Content</mat-label>
+          <textarea formControlName="content" matInput maxlength="10000" #content></textarea>
         </mat-form-field>
 
-        <button type="submit" [disabled]="inProgress" mat-raised-button color="primary">Post</button>
+        <button type="submit" [disabled]="sendingPost || !content.value" mat-raised-button color="primary">Post</button>
       </form>
     </div>
     <div class="bottom-message-block">

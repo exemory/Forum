@@ -67,7 +67,7 @@ export class SignUpComponent implements OnInit {
       .subscribe({
         next: () => {
           this.ns.notifySuccess('You are successfully registered');
-          this.router.navigate(['/sign-in']);
+          this.router.navigate(['/sign-in'], {queryParams: {login: data.username}});
         },
         error: err => {
           this.ns.notifyError(`Registration failed. Error ${err.status}`);

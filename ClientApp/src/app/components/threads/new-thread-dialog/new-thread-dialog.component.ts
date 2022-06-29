@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {MatDialogRef} from "@angular/material/dialog";
-import {FormControl} from "@angular/forms";
+import {ThreadCreationData} from "../../../interfaces/thread-creation-data";
 
 @Component({
   selector: 'app-new-thread-dialog',
@@ -9,19 +9,18 @@ import {FormControl} from "@angular/forms";
 })
 export class NewThreadDialogComponent implements OnInit {
 
-  topic = new FormControl('');
+  threadCreationData: ThreadCreationData = {
+    topic: ''
+  }
 
-  constructor(private dialogRef: MatDialogRef<NewThreadDialogComponent>) { }
+  constructor(private dialogRef: MatDialogRef<NewThreadDialogComponent>) {
+  }
 
   ngOnInit(): void {
   }
 
-
   create() {
-    if (this.topic.invalid) {
-      return;
-    }
-
-    this.dialogRef.close(this.topic.value);
+    this.threadCreationData.topic = this.threadCreationData.topic.trim();
+    this.dialogRef.close(this.threadCreationData);
   }
 }
