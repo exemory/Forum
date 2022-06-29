@@ -62,7 +62,7 @@ namespace WebApi.Controllers
         [HttpPost("sign-in")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<SessionDto>> SingIn([FromBody] SingInDto signInDto)
+        public async Task<ActionResult<SessionDto>> SignIn([FromBody] SignInDto signInDto)
         {
             return await _authService.SignInAsync(signInDto);
         }

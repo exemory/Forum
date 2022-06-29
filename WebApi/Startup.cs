@@ -5,6 +5,8 @@ using System.Text;
 using Data;
 using Data.Entities;
 using Data.Interfaces;
+using FluentValidation.AspNetCore;
+using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -19,6 +21,7 @@ using Service;
 using Service.DbInitializer;
 using Service.Interfaces;
 using Service.Services;
+using Service.Validators;
 using WebApi.Middlewares;
 
 namespace WebApi
@@ -41,9 +44,15 @@ namespace WebApi
             services.AddScoped<IPostService, PostService>();
             services.AddScoped<IUserService, UserService>();
 
-            services.AddControllers();
-
             services.AddAutoMapper(typeof(AutomapperProfile));
+            services.AddFluentValidationRulesToSwagger();
+
+            services.AddControllers()
+                .AddFluentValidation(o =>
+                {
+                    o.RegisterValidatorsFromAssemblyContaining<PostCreationDtoValidator>();
+                    o.DisableDataAnnotationsValidation = true;
+                });
 
             services.AddDbContext<ForumContext>(options =>
             {
@@ -127,10 +136,7 @@ namespace WebApi
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(options =>
-                {
-                    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Forum API v1");
-                });
+                app.UseSwaggerUI(options => { options.SwaggerEndpoint("/swagger/v1/swagger.json", "Forum API v1"); });
             }
             else
             {

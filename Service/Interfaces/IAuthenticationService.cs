@@ -23,6 +23,6 @@ namespace Service.Interfaces
         /// <returns>
         /// Session information, including access token
         /// </returns>
-        public Task<SessionDto> SignInAsync(SingInDto signInDto);
+        public Task<SessionDto> SignInAsync(SignInDto signInDto);
     }
 }

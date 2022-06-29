@@ -23,7 +23,7 @@
         <div class="user-section">
           <div *ngIf="post.author">
             <p class="post-author-username">{{post.author.username}}</p>
-            <p class="post-author-name">{{post.author.name}}</p>
+            <p *ngIf="post.author.name" class="post-author-name">{{post.author.name}}</p>
             <p class="joined">joined: {{post.author.registrationDate | date: 'mediumDate'}}</p>
           </div>
           <div *ngIf="!post.author" class="deleted-user">

@@ -49,7 +49,7 @@ namespace Service.Services
             return await _userManager.AddToRoleAsync(user, "User");
         }
 
-        public async Task<SessionDto> SignInAsync(SingInDto signInDto)
+        public async Task<SessionDto> SignInAsync(SignInDto signInDto)
         {
             var user = await _userManager.FindByNameAsync(signInDto.Login);
             user ??= await _userManager.FindByEmailAsync(signInDto.Login);

@@ -115,6 +115,8 @@ namespace WebApi.Controllers
         /// <response code="404">Thread specified by <paramref name="id"/> not found</response>
         [HttpPut("{id:guid}/status")]
         [Authorize(Roles = "Moderator,Administrator")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult> UpdateStatus(Guid id, [FromBody] ThreadStatusUpdateDto statusDto)
         {
             await _threadService.UpdateStatusAsync(id, statusDto);

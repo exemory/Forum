@@ -1,12 +1,7 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-
-namespace Service.DataTransferObjects
+﻿namespace Service.DataTransferObjects
 {
     public class PostUpdateDto
     {
-        [Required]
-        [StringLength(10000)]
         public string Content { get; set; }
     }
 }

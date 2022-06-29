@@ -80,7 +80,7 @@ namespace Service.Tests
 
         [Theory]
         [MemberData(nameof(SignInAsync_TestData))]
-        public async Task SignInAsync_ShouldAuthenticateUser_WhenCredentialsAreCorrect(SingInDto signInDto)
+        public async Task SignInAsync_ShouldAuthenticateUser_WhenCredentialsAreCorrect(SignInDto signInDto)
         {
             var expectedUserToCheckPassword = TestUser
                 .ToExpectedObject(o => o.Ignore(u => u.ConcurrencyStamp));
@@ -125,11 +125,11 @@ namespace Service.Tests
         [Fact]
         public async Task SignInAsync_ShouldFail_WhenUserDoesNotExist()
         {
-            var signInDto = TestSingInDto;
+            var signInDto = TestSignInDto;
 
-            _userManagerMock.Setup(um => um.FindByNameAsync(TestSingInDto.Login))
+            _userManagerMock.Setup(um => um.FindByNameAsync(TestSignInDto.Login))
                 .ReturnsAsync((User) null);
-            _userManagerMock.Setup(um => um.FindByEmailAsync(TestSingInDto.Login))
+            _userManagerMock.Setup(um => um.FindByEmailAsync(TestSignInDto.Login))
                 .ReturnsAsync((User) null);
 
             Func<Task> result = async () => await _sut.SignInAsync(signInDto);
@@ -143,13 +143,13 @@ namespace Service.Tests
         [Fact]
         public async Task SignInAsync_ShouldFail_WhenPasswordIsInvalid()
         {
-            var signInDto = TestSingInDto;
+            var signInDto = TestSignInDto;
             var expectedUserToCheckPassword = TestUser
                 .ToExpectedObject(o => o.Ignore(u => u.ConcurrencyStamp));
 
-            _userManagerMock.Setup(um => um.FindByNameAsync(TestSingInDto.Login))
+            _userManagerMock.Setup(um => um.FindByNameAsync(TestSignInDto.Login))
                 .ReturnsAsync(TestUser);
-            _userManagerMock.Setup(um => um.FindByEmailAsync(TestSingInDto.Login))
+            _userManagerMock.Setup(um => um.FindByEmailAsync(TestSignInDto.Login))
                 .ReturnsAsync((User) null);
             _userManagerMock.Setup(um =>
                     um.CheckPasswordAsync(It.Is<User>(u => expectedUserToCheckPassword.Equals(u)), signInDto.Password))
@@ -168,7 +168,7 @@ namespace Service.Tests
         {
             yield return new object[]
             {
-                new SingInDto
+                new SignInDto
                 {
                     Login = TestUser.UserName,
                     Password = "test_password_123"
@@ -176,7 +176,7 @@ namespace Service.Tests
             };
             yield return new object[]
             {
-                new SingInDto
+                new SignInDto
                 {
                     Login = TestUser.Email,
                     Password = "test_password_123"
@@ -195,7 +195,7 @@ namespace Service.Tests
 
         private static SignUpDto TestSignUpDto => new SignUpDto
         {
-            UserName = "username1",
+            Username = "username1",
             Email = "email1@example.com",
             Name = "name1",
             Password = "test_password_123"
@@ -219,7 +219,7 @@ namespace Service.Tests
 
         private static IEnumerable<string> TestUserRoles = new List<string> {"TestRole"};
 
-        private static SingInDto TestSingInDto => new SingInDto
+        private static SignInDto TestSignInDto => new SignInDto
         {
             Login = "test_login",
             Password = "test_password_123"
