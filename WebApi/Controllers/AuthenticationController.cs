@@ -37,18 +37,7 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> SignUp([FromBody] SignUpDto signUpDto)
         {
-            var result = await _authService.SignUpAsync(signUpDto);
-            
-            if (!result.Succeeded)
-            {
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(error.Code, error.Description);
-                }
-                
-                return BadRequest(ModelState);
-            }
-
+            await _authService.SignUpAsync(signUpDto);
             return StatusCode(StatusCodes.Status201Created);
         }
 

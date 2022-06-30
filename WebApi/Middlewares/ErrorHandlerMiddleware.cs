@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Text.Json;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Service.Exceptions;
 
@@ -21,7 +22,7 @@ namespace WebApi.Middlewares
         }
 
         /// <summary>
-        /// Middleware logic for handling exceptions and convert them to the corresponding responses
+        /// Middleware logic for handling exceptions and convert them to the error response
         /// </summary>
         /// <param name="context">Context of current http request</param>
         public async Task InvokeAsync(HttpContext context)
@@ -30,18 +31,25 @@ namespace WebApi.Middlewares
             {
                 await _next(context);
             }
-            catch (NotFoundException)
+            catch (ForumException exception)
             {
-                context.Response.StatusCode = StatusCodes.Status404NotFound;
-            }
-            catch (AuthenticationException)
-            {
-                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-            }
-            catch (ForumException e)
-            {
-                context.Response.StatusCode = StatusCodes.Status400BadRequest;
-                await context.Response.WriteAsync(e.Message);
+                context.Response.StatusCode = exception switch
+                {
+                    RegistrationException e => StatusCodes.Status400BadRequest,
+                    AuthenticationException e => StatusCodes.Status401Unauthorized,
+                    NotFoundException e => StatusCodes.Status404NotFound,
+                    _ => StatusCodes.Status400BadRequest
+                };
+
+                context.Response.ContentType = "application/json";
+
+                var response = JsonSerializer.Serialize(new
+                {
+                    status = context.Response.StatusCode,
+                    message = exception.Message
+                });
+
+                await context.Response.WriteAsync(response);
             }
         }
     }

@@ -36,7 +36,7 @@ export class UsersComponent implements OnInit, AfterViewInit {
           this.loading = false;
         },
         error: err => {
-          this.ns.notifyError(`Loading data failed. Error ${err.status}`, true);
+          this.ns.notifyError(`Loading data failed. ${err.error?.message ?? ''}`, true);
         }
       });
   }
@@ -79,7 +79,7 @@ export class UsersComponent implements OnInit, AfterViewInit {
           this.ns.notifySuccess(`${user.username}'s role has been updated`);
         },
         error: err => {
-          this.ns.notifyError(`Operation failed. Error ${err.status}`);
+          this.ns.notifyError(`Operation failed. ${err.error?.message ?? ''}`);
         }
       });
   }
@@ -96,7 +96,7 @@ export class UsersComponent implements OnInit, AfterViewInit {
           this.ns.notifySuccess(`User '${user.username}' has been deleted`);
         },
         error: err => {
-          this.ns.notifyError(`Operation failed. Error ${err.status}`);
+          this.ns.notifyError(`Operation failed. ${err.error?.message ?? ''}`);
         }
       });
   }

@@ -36,7 +36,7 @@ namespace Service.Services
             var thread = await _unitOfWork.ThreadRepository.GetByIdWithDetailsAsync(id);
             if (thread == null)
             {
-                throw new NotFoundException();
+                throw new NotFoundException($"Thread with id '{id}' not found");
             }
 
             return _mapper.Map<ThreadWithDetailsDto>(thread);
@@ -70,7 +70,7 @@ namespace Service.Services
             var thread = await _unitOfWork.ThreadRepository.GetByIdAsync(id);
             if (thread == null)
             {
-                throw new NotFoundException();
+                throw new NotFoundException($"Thread with id '{id}' not found");
             }
 
             _mapper.Map(threadDto, thread);
@@ -84,7 +84,7 @@ namespace Service.Services
             var thread = await _unitOfWork.ThreadRepository.GetByIdAsync(id);
             if (thread == null)
             {
-                throw new NotFoundException();
+                throw new NotFoundException($"Thread with id '{id}' not found");
             }
 
             _unitOfWork.ThreadRepository.Delete(thread);
@@ -96,7 +96,7 @@ namespace Service.Services
             var thread = await _unitOfWork.ThreadRepository.GetByIdAsync(id);
             if (thread == null)
             {
-                throw new NotFoundException();
+                throw new NotFoundException($"Thread with id '{id}' not found");
             }
 
             _mapper.Map(statusDto, thread);

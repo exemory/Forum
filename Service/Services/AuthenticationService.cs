@@ -36,17 +36,20 @@ namespace Service.Services
             _config = config;
         }
 
-        public async Task<IdentityResult> SignUpAsync(SignUpDto signUpDto)
+        public async Task SignUpAsync(SignUpDto signUpDto)
         {
             var user = _mapper.Map<User>(signUpDto);
             var result = await _userManager.CreateAsync(user, signUpDto.Password);
 
             if (!result.Succeeded)
             {
-                return result;
+                var sb = new StringBuilder();
+                sb.AppendJoin(' ', result.Errors.Select(e => e.Description));
+
+                throw new RegistrationException(sb.ToString());
             }
 
-            return await _userManager.AddToRoleAsync(user, "User");
+            await _userManager.AddToRoleAsync(user, "User");
         }
 
         public async Task<SessionDto> SignInAsync(SignInDto signInDto)
@@ -56,7 +59,7 @@ namespace Service.Services
             
             if (user == null || !(await _userManager.CheckPasswordAsync(user, signInDto.Password)))
             {
-                throw new AuthenticationException();
+                throw new AuthenticationException("Invalid credentials");
             }
 
             var signingCredentials = GetSigningCredentials();

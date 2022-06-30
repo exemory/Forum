@@ -70,7 +70,7 @@ export class SignUpComponent implements OnInit {
           this.router.navigate(['/sign-in'], {queryParams: {login: data.username}});
         },
         error: err => {
-          this.ns.notifyError(`Registration failed. Error ${err.status}`);
+          this.ns.notifyError(`Registration failed. ${err.error?.message ?? ''}`);
           this.inProgress = false;
         }
       });

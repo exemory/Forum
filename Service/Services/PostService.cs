@@ -36,7 +36,7 @@ namespace Service.Services
             var post = await _unitOfWork.PostRepository.GetByIdWithDetailsAsync(id);
             if (post == null)
             {
-                throw new NotFoundException();
+                throw new NotFoundException($"Post with id '{id}' not found");
             }
 
             return _mapper.Map<PostWithDetailsDto>(post);
@@ -47,7 +47,7 @@ namespace Service.Services
             var thread = await _unitOfWork.ThreadRepository.GetByIdAsync(threadId);
             if (thread == null)
             {
-                throw new NotFoundException();
+                throw new NotFoundException($"Thread with id '{threadId}' not found");
             }
 
             var posts = await _unitOfWork.PostRepository.GetByThreadIdWithDetailsAsync(threadId);
@@ -59,7 +59,7 @@ namespace Service.Services
             var thread = await _unitOfWork.ThreadRepository.GetByIdAsync(postDto.ThreadId);
             if (thread == null)
             {
-                throw new NotFoundException();
+                throw new NotFoundException($"Thread with id '{postDto.ThreadId}' not found");
             }
 
             var user = await _userManager.FindByIdAsync(authorId.ToString());
@@ -87,7 +87,7 @@ namespace Service.Services
             var post = await _unitOfWork.PostRepository.GetByIdAsync(id);
             if (post == null)
             {
-                throw new NotFoundException();
+                throw new NotFoundException($"Post with id '{id}' not found");
             }
 
             _mapper.Map(postDto, post);
@@ -101,7 +101,7 @@ namespace Service.Services
             var post = await _unitOfWork.PostRepository.GetByIdAsync(id);
             if (post == null)
             {
-                throw new NotFoundException();
+                throw new NotFoundException($"Post with id '{id}' not found");
             }
 
             _unitOfWork.PostRepository.Delete(post);

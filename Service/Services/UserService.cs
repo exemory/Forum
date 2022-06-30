@@ -52,7 +52,7 @@ namespace Service.Services
             var user = await _userManager.FindByIdAsync(id.ToString());
             if (user == null)
             {
-                throw new NotFoundException();
+                throw new NotFoundException($"User with id '{id}' not found");
             }
 
             var userRoles = await _userManager.GetRolesAsync(user);
@@ -76,7 +76,7 @@ namespace Service.Services
             var user = await _userManager.FindByIdAsync(id.ToString());
             if (user == null)
             {
-                throw new NotFoundException();
+                throw new NotFoundException($"User with id '{id}' not found");
             }
 
             if (await _userManager.IsInRoleAsync(user, "Administrator"))

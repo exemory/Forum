@@ -2,7 +2,6 @@ import {AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChi
 import {AuthService} from "../../services/auth.service";
 import {FormBuilder} from "@angular/forms";
 import {NotificationService} from "../../services/notification.service";
-import {HttpStatusCode} from "@angular/common/http";
 import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
@@ -63,8 +62,7 @@ export class SignInComponent implements OnInit, AfterViewInit {
         },
         error: err => {
           this.inProgress = false;
-          this.ns.notifyError(err.status === HttpStatusCode.Unauthorized ?
-            "Login or password is incorrect" : `Authentication failed. Error ${err.status}`);
+          this.ns.notifyError(`Authentication failed. ${err.error?.message ?? ''}`);
         }
       });
   }

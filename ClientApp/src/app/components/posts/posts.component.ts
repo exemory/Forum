@@ -55,7 +55,7 @@ export class PostsComponent implements OnInit {
             this.router.navigate(['../']);
             return;
           }
-          this.ns.notifyError(`Loading data failed. Error ${err.status}`, true);
+          this.ns.notifyError(`Loading data failed. ${err.error?.message ?? ''}`, true);
         }
       });
   }
@@ -68,7 +68,7 @@ export class PostsComponent implements OnInit {
           this.loading = false
         },
         error: err => {
-          this.ns.notifyError(`Loading data failed. Error ${err.status}`, true);
+          this.ns.notifyError(`Loading data failed. ${err.error?.message ?? ''}`, true);
         }
       });
   }
@@ -115,7 +115,7 @@ export class PostsComponent implements OnInit {
           this.sendingPost = false;
         },
         error: err => {
-          this.ns.notifyError(`Operation failed. Error ${err.status}`);
+          this.ns.notifyError(`Operation failed. ${err.error?.message ?? ''}`);
           this.sendingPost = false;
         }
       });
@@ -147,7 +147,7 @@ export class PostsComponent implements OnInit {
             this.ns.notifySuccess(`Post has been updated`);
           },
           error: err => {
-            this.ns.notifyError(`Operation failed. Error ${err.status}`);
+            this.ns.notifyError(`Operation failed. ${err.error?.message ?? ''}`);
           }
         }
       );
@@ -165,7 +165,7 @@ export class PostsComponent implements OnInit {
           this.ns.notifySuccess("Post has been deleted");
         },
         error: err => {
-          this.ns.notifyError(`Operation failed. Error ${err.status}`);
+          this.ns.notifyError(`Operation failed. ${err.error?.message ?? ''}`);
         }
       });
   }

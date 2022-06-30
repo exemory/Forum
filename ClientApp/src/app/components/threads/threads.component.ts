@@ -41,7 +41,7 @@ export class ThreadsComponent implements OnInit {
           this.loading = false;
         },
         error: err => {
-          this.ns.notifyError(`Loading data failed. Error ${err.status}`, true);
+          this.ns.notifyError(`Loading data failed. ${err.error?.message ?? ''}`, true);
         }
       })
   }
@@ -126,7 +126,7 @@ export class ThreadsComponent implements OnInit {
           this.router.navigate([thread.id], {relativeTo: this.route});
         },
         error: err => {
-          this.ns.notifyError(`Operation failed. Error ${err.status}`);
+          this.ns.notifyError(`Operation failed. ${err.error?.message ?? ''}`);
         }
       });
   }
@@ -140,7 +140,7 @@ export class ThreadsComponent implements OnInit {
             this.ns.notifySuccess(`Thread has been ${closed ? 'closed' : 'opened'}`);
           },
           error: err => {
-            this.ns.notifyError(`Operation failed. Error ${err.status}`);
+            this.ns.notifyError(`Operation failed. ${err.error?.message ?? ''}`);
           }
         }
       );
@@ -155,7 +155,7 @@ export class ThreadsComponent implements OnInit {
             this.ns.notifySuccess(`Thread has been updated`);
           },
           error: err => {
-            this.ns.notifyError(`Operation failed. Error ${err.status}`);
+            this.ns.notifyError(`Operation failed. ${err.error?.message ?? ''}`);
           }
         }
       );
@@ -174,7 +174,7 @@ export class ThreadsComponent implements OnInit {
             this.ns.notifySuccess("Thread has been deleted");
           },
           error: err => {
-            this.ns.notifyError(`Operation failed. Error ${err.status}`);
+            this.ns.notifyError(`Operation failed. ${err.error?.message ?? ''}`);
           }
         }
       );

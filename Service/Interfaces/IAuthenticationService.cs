@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Service.DataTransferObjects;
+using Service.Exceptions;
 
 namespace Service.Interfaces
 {
@@ -13,8 +14,10 @@ namespace Service.Interfaces
         /// Registers new user
         /// </summary>
         /// <param name="signUpDto">Registration data</param>
-        /// <returns>Result of registration</returns>
-        public Task<IdentityResult> SignUpAsync(SignUpDto signUpDto);
+        /// <exception cref="RegistrationException">
+        /// Thrown when registration failed
+        /// </exception>
+        public Task SignUpAsync(SignUpDto signUpDto);
 
         /// <summary>
         /// Logins user by provided credentials

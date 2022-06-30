@@ -47,9 +47,7 @@ namespace Service.Tests
             _userManagerMock.Setup(um => um.AddToRoleAsync(It.Is<User>(u => expectedUser.Equals(u)), "User"))
                 .ReturnsAsync(IdentityResult.Success);
 
-            var result = await _sut.SignUpAsync(signUpDto);
-
-            result.Should().BeEquivalentTo(IdentityResult.Success);
+            await _sut.SignUpAsync(signUpDto);
 
             _userManagerMock.Verify(um =>
                 um.CreateAsync(It.Is<User>(u => expectedUser.Equals(u)), signUpDto.Password), Times.Once);
@@ -68,9 +66,9 @@ namespace Service.Tests
                     um.CreateAsync(It.Is<User>(u => expectedUser.Equals(u)), signUpDto.Password))
                 .ReturnsAsync(IdentityResult.Failed());
 
-            var result = await _sut.SignUpAsync(signUpDto);
+            Func<Task> result = async () => await _sut.SignUpAsync(signUpDto);
 
-            result.Should().BeEquivalentTo(IdentityResult.Failed());
+            await result.Should().ThrowAsync<RegistrationException>();
 
             _userManagerMock.Verify(um =>
                 um.CreateAsync(It.Is<User>(u => expectedUser.Equals(u)), signUpDto.Password), Times.Once);
@@ -85,7 +83,7 @@ namespace Service.Tests
             var expectedUserToCheckPassword = TestUser
                 .ToExpectedObject(o => o.Ignore(u => u.ConcurrencyStamp));
             var expectedTokenExpirationDate = DateTime.UtcNow + TimeSpan.Parse(ConfigurationSettings["Jwt:Lifetime"]);
-            
+
             _userManagerMock.Setup(um => um.FindByNameAsync(It.IsAny<string>()))
                 .ReturnsAsync((string username) => TestUser.UserName == username ? TestUser : null);
             _userManagerMock.Setup(um => um.FindByEmailAsync(It.IsAny<string>()))
@@ -112,7 +110,7 @@ namespace Service.Tests
             jwt.Claims.Where(c => c.Type == ClaimTypes.Role)
                 .Select(c => c.Value)
                 .Should().BeEquivalentTo(TestUserRoles);
-            
+
             var tokenExpiration = jwt.Claims.Single(c => c.Type == JwtRegisteredClaimNames.Exp).Value;
             var tokenExpirationDate = DateTimeOffset.FromUnixTimeSeconds(Convert.ToInt64(tokenExpiration)).UtcDateTime;
             tokenExpirationDate.Should().BeCloseTo(expectedTokenExpirationDate, TimeSpan.FromSeconds(1));
