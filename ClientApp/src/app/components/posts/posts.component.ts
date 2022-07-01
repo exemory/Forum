@@ -38,6 +38,12 @@ export class PostsComponent implements OnInit {
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       const threadId = params.get('id')!;
+
+      if (!threadId.match(/^[\da-f]{8}-([\da-f]{4}-){3}[\da-f]{12}$/i)) {
+        this.threadDoesNotExists();
+        return;
+      }
+
       this.loadThreadInfo(threadId);
     });
   }
@@ -50,14 +56,19 @@ export class PostsComponent implements OnInit {
           this.loadPosts(this.thread.id);
         },
         error: err => {
+          console.log(err);
           if (err.status === HttpStatusCode.NotFound) {
-            this.ns.notifyError('Thread does not exist');
-            this.router.navigate(['../']);
+            this.threadDoesNotExists();
             return;
           }
           this.ns.notifyError(`Loading data failed. ${err.error?.message ?? ''}`, true);
         }
       });
+  }
+
+  private threadDoesNotExists() {
+    this.ns.notifyError('Thread does not exist');
+    this.router.navigate(['../']);
   }
 
   private loadPosts(threadId: string) {

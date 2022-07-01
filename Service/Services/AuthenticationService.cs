@@ -59,7 +59,7 @@ namespace Service.Services
             
             if (user == null || !(await _userManager.CheckPasswordAsync(user, signInDto.Password)))
             {
-                throw new AuthenticationException("Invalid credentials");
+                throw new AuthenticationException("Login or password is incorrect");
             }
 
             var signingCredentials = GetSigningCredentials();

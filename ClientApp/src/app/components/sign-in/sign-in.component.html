@@ -10,7 +10,7 @@
         <mat-form-field appearance="standard" class="full-width-input">
           <input matInput class="login" placeholder="Username or email" formControlName="login" required #login>
           <mat-icon matSuffix>login</mat-icon>
-          <mat-error *ngIf="form.controls['login'].hasError('required')">The field is required</mat-error>
+          <mat-error *ngIf="form.controls['login'].hasError('required')">This field is required</mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="standard" class="full-width-input">
@@ -19,7 +19,7 @@
           <button class="show-hide-password" type="button" mat-icon-button matSuffix (click)="hidePassword = !hidePassword">
             <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
           </button>
-          <mat-error *ngIf="form.controls['password'].hasError('required')">The field is required</mat-error>
+          <mat-error *ngIf="form.controls['password'].hasError('required')">This field is required</mat-error>
         </mat-form-field>
 
         <button type="submit" [disabled]="inProgress" mat-raised-button color="primary">Sign In</button>

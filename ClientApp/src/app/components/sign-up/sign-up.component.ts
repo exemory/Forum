@@ -5,7 +5,7 @@ import {
   FormControl,
   FormGroupDirective, NgForm,
   ValidationErrors,
-  ValidatorFn
+  ValidatorFn, Validators
 } from "@angular/forms";
 import {NotificationService} from "../../services/notification.service";
 import {HttpClient} from "@angular/common/http";
@@ -27,9 +27,9 @@ export class SignUpComponent implements OnInit {
   }
 
   form = this.fb.group({
-    username: [''],
+    username: ['', Validators.pattern(/^[a-z\d-._@+]*$/i)],
     email: [''],
-    name: [''],
+    name: ['', Validators.pattern(/^[a-z ]*$/i)],
     password: [''],
     confirmPassword: ['']
   }, {validators: this.passwordsValidator});
@@ -59,9 +59,13 @@ export class SignUpComponent implements OnInit {
     let data: SignUpData = {
       username: this.form.get('username')?.value,
       email: this.form.get('email')?.value,
-      name: this.form.get('name')?.value,
+      name: this.form.get('name')?.value.trim(),
       password: this.form.get('password')?.value
     };
+
+    if (data.name === '') {
+      data.name = undefined;
+    }
 
     this.api.post('auth/sign-up', data)
       .subscribe({

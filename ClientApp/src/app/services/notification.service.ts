@@ -26,6 +26,6 @@ export class NotificationService {
   }
 
   notifyError(message: string, critical = false) {
-    return this.notify(message, 'error', critical ? Infinity : 2500);
+    return this.notify(message, 'error', critical ? 5000 : 2500);
   }
 }

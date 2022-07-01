@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using System.Text.RegularExpressions;
+using FluentValidation;
 using Service.DataTransferObjects;
 
 namespace Service.Validators
@@ -16,7 +17,9 @@ namespace Service.Validators
                 .EmailAddress();
 
             RuleFor(d => d.Name)
-                .MaximumLength(20);
+                .Matches("^[a-z ]*$", RegexOptions.IgnoreCase)
+                .WithMessage("'Name' must consist only of latin letters and whitespace")
+                .Length(1, 20);
 
             RuleFor(d => d.Password)
                 .NotNull()
