@@ -1,17 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {
-  AbstractControl,
-  FormBuilder,
-  FormControl,
-  FormGroupDirective, NgForm,
-  ValidationErrors,
-  ValidatorFn, Validators
-} from "@angular/forms";
+import {FormBuilder, Validators} from "@angular/forms";
 import {NotificationService} from "../../services/notification.service";
 import {HttpClient} from "@angular/common/http";
 import {Router} from "@angular/router";
 import {SignUpData} from "../../interfaces/sign-up-data";
-import {ErrorStateMatcher} from "@angular/material/core";
+import {ConfirmPasswordStateMatcher} from "../../shared/confirm-password-state-matcher";
+import {confirmPasswordValidator} from "../../shared/confirm-password-validator";
 
 @Component({
   selector: 'app-sign-up',
@@ -20,19 +14,13 @@ import {ErrorStateMatcher} from "@angular/material/core";
 })
 export class SignUpComponent implements OnInit {
 
-  passwordsValidator: ValidatorFn = (group: AbstractControl): ValidationErrors | null => {
-    const password = group.get('password')?.value;
-    const confirmPassword = group.get('confirmPassword')?.value;
-    return password === confirmPassword ? null : {passwordMismatch: true};
-  }
-
   form = this.fb.group({
     username: ['', Validators.pattern(/^[a-z\d-._@+]*$/i)],
     email: [''],
     name: ['', Validators.pattern(/^[a-z ]*$/i)],
     password: [''],
     confirmPassword: ['']
-  }, {validators: this.passwordsValidator});
+  }, {validators: confirmPasswordValidator('password', 'confirmPassword')});
 
   confirmPasswordStateMatcher = new ConfirmPasswordStateMatcher();
 
@@ -78,11 +66,5 @@ export class SignUpComponent implements OnInit {
           this.inProgress = false;
         }
       });
-  }
-}
-
-export class ConfirmPasswordStateMatcher implements ErrorStateMatcher {
-  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
-    return (!!control?.touched || !!form?.submitted) && !!form?.hasError('passwordMismatch');
   }
 }

@@ -1,17 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {PasswordChangeData} from "../../../interfaces/password-change-data";
-import {
-  AbstractControl,
-  FormBuilder,
-  FormControl,
-  FormGroupDirective, NgForm,
-  ValidationErrors,
-  ValidatorFn
-} from "@angular/forms";
-import {ErrorStateMatcher} from "@angular/material/core";
+import {FormBuilder} from "@angular/forms";
 import {MatDialogRef} from "@angular/material/dialog";
 import {HttpClient} from "@angular/common/http";
 import {NotificationService} from "../../../services/notification.service";
+import {ConfirmPasswordStateMatcher} from "../../../shared/confirm-password-state-matcher";
+import {confirmPasswordValidator} from "../../../shared/confirm-password-validator";
 
 @Component({
   selector: 'app-change-password-dialog',
@@ -20,17 +14,11 @@ import {NotificationService} from "../../../services/notification.service";
 })
 export class ChangePasswordDialogComponent implements OnInit {
 
-  passwordsValidator: ValidatorFn = (group: AbstractControl): ValidationErrors | null => {
-    const newPassword = group.get('newPassword')?.value;
-    const confirmPassword = group.get('confirmPassword')?.value;
-    return newPassword === confirmPassword ? null : {passwordMismatch: true};
-  }
-
   form = this.fb.group({
     currentPassword: [''],
     newPassword: [''],
     confirmPassword: ['']
-  }, {validators: this.passwordsValidator});
+  }, {validators: confirmPasswordValidator('newPassword', 'confirmPassword')});
 
   confirmPasswordStateMatcher = new ConfirmPasswordStateMatcher();
 
@@ -43,7 +31,8 @@ export class ChangePasswordDialogComponent implements OnInit {
   constructor(private dialogRef: MatDialogRef<ChangePasswordDialogComponent>,
               private fb: FormBuilder,
               private api: HttpClient,
-              private ns: NotificationService) { }
+              private ns: NotificationService) {
+  }
 
   ngOnInit(): void {
   }
@@ -77,11 +66,5 @@ export class ChangePasswordDialogComponent implements OnInit {
           this.ns.notifyError(`Operation failed. ${err.error?.message ?? ''}`);
         }
       });
-  }
-}
-
-export class ConfirmPasswordStateMatcher implements ErrorStateMatcher {
-  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
-    return (!!control?.touched || !!form?.submitted) && !!form?.hasError('passwordMismatch');
   }
 }
