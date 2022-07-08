@@ -64,11 +64,12 @@ namespace Service.Tests
 
             _userManagerMock.Setup(um =>
                     um.CreateAsync(It.Is<User>(u => expectedUser.Equals(u)), signUpDto.Password))
-                .ReturnsAsync(IdentityResult.Failed());
+                .ReturnsAsync(IdentityError);
 
             Func<Task> result = async () => await _sut.SignUpAsync(signUpDto);
 
-            await result.Should().ThrowAsync<RegistrationException>();
+            await result.Should().ThrowAsync<RegistrationException>()
+                .WithMessage(ExpectedErrorMessage);
 
             _userManagerMock.Verify(um =>
                 um.CreateAsync(It.Is<User>(u => expectedUser.Equals(u)), signUpDto.Password), Times.Once);
@@ -181,6 +182,15 @@ namespace Service.Tests
                 }
             };
         }
+        
+        private static IdentityResult IdentityError => 
+            IdentityResult.Failed(new IdentityError
+            {
+                Code = "TestError", 
+                Description = "Test error description"
+            });
+
+        private static string ExpectedErrorMessage => "Test error description";
 
         private static Dictionary<string, string> ConfigurationSettings =>
             new Dictionary<string, string>

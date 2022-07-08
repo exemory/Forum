@@ -30,6 +30,9 @@ import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatNativeDateModule} from "@angular/material/core";
 import { EditThreadDialogComponent } from './components/threads/edit-thread-dialog/edit-thread-dialog.component';
 import { EditPostDialogComponent } from './components/posts/edit-post-dialog/edit-post-dialog.component';
+import { ProfileComponent } from './components/profile/profile.component';
+import { EditProfileDialogComponent } from './components/profile/edit-profile-dialog/edit-profile-dialog.component';
+import { ChangePasswordDialogComponent } from './components/profile/change-password-dialog/change-password-dialog.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +45,10 @@ import { EditPostDialogComponent } from './components/posts/edit-post-dialog/edi
     PostsComponent,
     UsersComponent,
     EditThreadDialogComponent,
-    EditPostDialogComponent
+    EditPostDialogComponent,
+    ProfileComponent,
+    EditProfileDialogComponent,
+    ChangePasswordDialogComponent
   ],
   imports: [
     BrowserModule,

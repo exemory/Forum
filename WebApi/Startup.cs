@@ -43,6 +43,7 @@ namespace WebApi
             services.AddScoped<IThreadService, ThreadService>();
             services.AddScoped<IPostService, PostService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAccountService, AccountService>();
 
             services.AddAutoMapper(typeof(AutomapperProfile));
             services.AddFluentValidationRulesToSwagger();

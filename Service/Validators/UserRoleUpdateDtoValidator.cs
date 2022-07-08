@@ -11,7 +11,7 @@ namespace Service.Validators
             RuleFor(u => u.Role)
                 .NotNull()
                 .Matches("User|Moderator", RegexOptions.IgnoreCase)
-                .WithMessage("'Role' must be either 'User' or 'Moderator'");
+                .WithMessage($"'{nameof(UserRoleUpdateDto.Role)}' must be either 'User' or 'Moderator'");
         }
     }
 }

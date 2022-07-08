@@ -4,9 +4,9 @@ using Service.DataTransferObjects;
 
 namespace Service.Validators
 {
-    public class SignUpDtoValidator : AbstractValidator<SignUpDto>
+    public class AccountUpdateDtoValidator : AbstractValidator<AccountUpdateDto>
     {
-        public SignUpDtoValidator()
+        public AccountUpdateDtoValidator()
         {
             RuleFor(d => d.Username)
                 .NotEmpty()
@@ -18,12 +18,11 @@ namespace Service.Validators
 
             RuleFor(d => d.Name)
                 .Matches("^[a-z ]*$", RegexOptions.IgnoreCase)
-                .WithMessage($"'{nameof(SignUpDto.Name)}' must consist only of latin letters and whitespace")
+                .WithMessage($"'{nameof(AccountUpdateDto.Name)}' must consist only of latin letters and whitespace")
                 .Length(1, 20);
 
-            RuleFor(d => d.Password)
-                .NotNull()
-                .MinimumLength(8);
+            RuleFor(d => d.CurrentPassword)
+                .NotNull();
         }
     }
 }

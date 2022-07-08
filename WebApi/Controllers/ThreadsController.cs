@@ -117,7 +117,7 @@ namespace WebApi.Controllers
         [Authorize(Roles = "Moderator,Administrator")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult> UpdateStatus(Guid id, [FromBody] ThreadStatusUpdateDto statusDto)
+        public async Task<ActionResult> UpdateStatus(Guid id, ThreadStatusUpdateDto statusDto)
         {
             await _threadService.UpdateStatusAsync(id, statusDto);
             return NoContent();

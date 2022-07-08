@@ -53,7 +53,7 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult> UpdateRole(Guid id, [FromBody] UserRoleUpdateDto roleDto)
+        public async Task<ActionResult> UpdateRole(Guid id, UserRoleUpdateDto roleDto)
         {
             await _userService.UpdateRoleAsync(id, roleDto);
             return NoContent();

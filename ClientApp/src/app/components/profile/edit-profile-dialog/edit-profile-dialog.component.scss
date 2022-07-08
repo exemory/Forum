@@ -1,0 +1,23 @@
+#edit-profile-form {
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+
+  mat-card-header {
+    justify-content: center;
+    margin: 10px 0 20px;
+  }
+
+  mat-card-title {
+    font-size: 22px;
+  }
+
+  mat-form-field {
+    display: block;
+    margin-bottom: 12px;
+
+    .show-hide-password {
+      margin: 0 -5.5px 0 0;
+    }
+  }
+}

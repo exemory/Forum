@@ -24,7 +24,7 @@ namespace Service.DbInitializer
                 Id = new Guid("dd7aeae4-98a1-45a4-8fc1-0a7f499e18bb"),
                 UserName = "inna_36",
                 Email = "horinna@example.com",
-                Name = "Inna",
+                Name = "Inna Hmarna",
                 RegistrationDate = new DateTime(2016, 3, 16, 5, 19, 59)
             },
             new User
@@ -34,13 +34,7 @@ namespace Service.DbInitializer
                 Email = "superboris@gmail.com",
                 Name = "Boris",
                 RegistrationDate = new DateTime(2007, 5, 2, 20, 29, 42)
-            }
-        };
-
-        public const string UserPassword = "userpass";
-
-        public static readonly User[] Moderators =
-        {
+            },
             new User
             {
                 Id = new Guid("cf91684e-984d-4acc-bad2-89362a05ae2e"),
@@ -59,7 +53,7 @@ namespace Service.DbInitializer
             }
         };
 
-        public const string ModerPassword = "moderpass";
+        public const string UserPassword = "userpass";
 
         public static readonly Thread[] Threads =
         {
@@ -132,7 +126,7 @@ namespace Service.DbInitializer
                 Id = new Guid("ec4cfba5-f75a-4bb4-8969-e29f3da6639b"),
                 Content = "Vivamus ante sem, vehicula at euismod eu, luctus eleifend erat.",
                 ThreadId = Threads[0].Id,
-                AuthorId = Moderators[1].Id,
+                AuthorId = Users[4].Id,
                 PublishDate = new DateTime(2021, 8, 17, 4, 53, 48)
             },
             new Post

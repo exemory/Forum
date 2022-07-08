@@ -1,0 +1,52 @@
+<h2 mat-dialog-title>Edit profile</h2>
+<div mat-dialog-content>
+  <form [formGroup]="form" id="edit-profile-form" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="outline">
+      <mat-label>Username</mat-label>
+      <input matInput formControlName="username" required minlength="3" maxlength="15">
+      <mat-icon matSuffix>login</mat-icon>
+      <mat-error *ngIf="form.controls['username'].hasError('required')">This field is required</mat-error>
+      <mat-error *ngIf="form.controls['username'].hasError('minlength')">
+        Username must be at least 3 characters long
+      </mat-error>
+      <mat-error
+        *ngIf="form.controls['username'].hasError('pattern') && !form.controls['username'].hasError('minlength')">
+        Username contains illegal characters
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Email</mat-label>
+      <input matInput placeholder="mail@example.com" formControlName="email" required email>
+      <mat-icon matSuffix>alternate_email</mat-icon>
+      <mat-error *ngIf="form.controls['email'].hasError('required')">This field is required</mat-error>
+      <mat-error *ngIf="form.controls['email'].hasError('email')">Email address is invalid</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Name (optional)</mat-label>
+      <input matInput formControlName="name" maxlength="20">
+      <mat-icon matSuffix>face</mat-icon>
+      <mat-error *ngIf="form.controls['name'].hasError('pattern')">
+        Name must consist only of latin letters and whitespace
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Current password</mat-label>
+      <input matInput [type]="hideCurrentPassword ? 'password' : 'text'"
+             formControlName="currentPassword" required>
+      <button class="show-hide-password" type="button" mat-icon-button matSuffix
+              (click)="hideCurrentPassword = !hideCurrentPassword">
+        <mat-icon>{{hideCurrentPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+      </button>
+      <mat-error *ngIf="form.controls['currentPassword'].hasError('required')">
+        This field is required
+      </mat-error>
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-stroked-button [mat-dialog-close]="undefined" [disabled]="inProgress">Cancel</button>
+  <button type="submit" form="edit-profile-form" [disabled]="form.invalid || inProgress" mat-raised-button color="primary">Change</button>
+</div>

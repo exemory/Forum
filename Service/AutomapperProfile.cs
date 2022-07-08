@@ -10,6 +10,8 @@ namespace Service
         {
             CreateMap<SignUpDto, User>(MemberList.Source)
                 .ForSourceMember(d => d.Password, o => o.DoNotValidate());
+            CreateMap<AccountUpdateDto, User>(MemberList.Source)
+                .ForSourceMember(d => d.CurrentPassword, o => o.DoNotValidate());
 
             CreateMap<User, UserDto>();
             CreateMap<User, UserWithDetailsDto>()

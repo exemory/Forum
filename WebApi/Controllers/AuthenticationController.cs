@@ -35,7 +35,7 @@ namespace WebApi.Controllers
         [HttpPost("sign-up")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> SignUp([FromBody] SignUpDto signUpDto)
+        public async Task<ActionResult> SignUp(SignUpDto signUpDto)
         {
             await _authService.SignUpAsync(signUpDto);
             return StatusCode(StatusCodes.Status201Created);
@@ -51,7 +51,7 @@ namespace WebApi.Controllers
         [HttpPost("sign-in")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<SessionDto>> SignIn([FromBody] SignInDto signInDto)
+        public async Task<ActionResult<SessionDto>> SignIn(SignInDto signInDto)
         {
             return await _authService.SignInAsync(signInDto);
         }

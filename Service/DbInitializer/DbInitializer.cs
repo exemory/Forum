@@ -59,7 +59,7 @@ namespace Service.DbInitializer
                 }
             }
 
-            var isAdminExists = await _userManager.FindByNameAsync(Data.AdminUser.UserName) != null;
+            var isAdminExists = await _userManager.FindByIdAsync(Data.AdminUser.Id.ToString()) != null;
             if (!isAdminExists)
             {
                 await _userManager.CreateAsync(Data.AdminUser, Data.AdminPassword);
@@ -74,21 +74,11 @@ namespace Service.DbInitializer
         {
             foreach (var user in TestData.Users)
             {
-                var isUserExists = await _userManager.FindByNameAsync(user.UserName) != null;
+                var isUserExists = await _userManager.FindByIdAsync(user.Id.ToString()) != null;
                 if (!isUserExists)
                 {
                     await _userManager.CreateAsync(user, TestData.UserPassword);
                     await _userManager.AddToRoleAsync(user, "User");
-                }
-            }
-            
-            foreach (var user in TestData.Moderators)
-            {
-                var isUserExists = await _userManager.FindByNameAsync(user.UserName) != null;
-                if (!isUserExists)
-                {
-                    await _userManager.CreateAsync(user, TestData.ModerPassword);
-                    await _userManager.AddToRoleAsync(user, "Moderator");
                 }
             }
             

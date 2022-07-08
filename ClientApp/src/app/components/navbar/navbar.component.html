@@ -7,13 +7,18 @@
     <nav class="navigation">
       <ul>
         <li>
-          <a routerLink="/threads" routerLinkActive="active-link">
+          <a routerLink="/threads" [routerLinkActiveOptions]="{exact: true}" routerLinkActive="active-link">
             Threads
           </a>
         </li>
         <li *ngIf="isAdmin">
-          <a routerLink="/users" routerLinkActive="active-link">
+          <a routerLink="/users" [routerLinkActiveOptions]="{exact: true}" routerLinkActive="active-link">
             Users
+          </a>
+        </li>
+        <li *ngIf="isLoggedIn">
+          <a routerLink="/profile" routerLinkActive="active-link">
+            Profile
           </a>
         </li>
       </ul>
@@ -28,6 +33,10 @@
         <span>{{userName}}</span>
       </button>
       <mat-menu class="user-menu" backdropClass="custom" #menu="matMenu">
+        <a mat-menu-item routerLink="/profile">
+          <mat-icon>account_circle</mat-icon>
+          <span>Profile</span>
+        </a>
         <button mat-menu-item (click)="signOut()">
           <mat-icon>logout</mat-icon>
           <span>Sign out</span>
