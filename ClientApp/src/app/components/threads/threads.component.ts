@@ -4,7 +4,6 @@ import {AuthService} from "../../services/auth.service";
 import {MatDialog} from "@angular/material/dialog";
 import {NewThreadDialogComponent} from "./new-thread-dialog/new-thread-dialog.component";
 import {ThreadWithDetails} from "../../interfaces/thread-with-details";
-import {ThreadCreationData} from "../../interfaces/thread-creation-data";
 import {NotificationService} from "../../services/notification.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ThreadStatusUpdateData} from "../../interfaces/thread-status-update-data";
@@ -65,7 +64,7 @@ export class ThreadsComponent implements OnInit {
     let filteredThreads = this.threads;
 
     if (this.filterValue) {
-      filteredThreads = filteredThreads.filter(t => t.topic.toLowerCase().includes(this.filterValue.toLowerCase()));
+      filteredThreads = filteredThreads.filter(t => t.topic.toLowerCase().includes(this.filterValue.trim().toLowerCase()));
     }
 
     if (this.fromDate) {
@@ -92,9 +91,10 @@ export class ThreadsComponent implements OnInit {
         width: '100%'
       });
 
-    dialogRef.afterClosed().subscribe(result => {
-        if (result !== undefined) {
-          this.createNewThread(result);
+    dialogRef.afterClosed().subscribe((thread?: ThreadWithDetails) => {
+        if (thread !== undefined) {
+          this.threads.unshift(thread);
+          this.router.navigate([thread.id], {relativeTo: this.route});
         }
       }
     );
@@ -109,26 +109,12 @@ export class ThreadsComponent implements OnInit {
       }
     );
 
-    dialogRef.afterClosed().subscribe(result => {
-        if (result !== undefined) {
-          this.updateThread(thread, result);
+    dialogRef.afterClosed().subscribe((data?: ThreadUpdateData) => {
+        if (data !== undefined) {
+          thread.topic = data.topic;
         }
       }
     );
-  }
-
-  createNewThread(data: ThreadCreationData) {
-    this.api.post<ThreadWithDetails>('threads', data)
-      .subscribe({
-        next: thread => {
-          this.threads.unshift(thread);
-          this.ns.notifySuccess("New thread has been created");
-          this.router.navigate([thread.id], {relativeTo: this.route});
-        },
-        error: err => {
-          this.ns.notifyError(`Operation failed. ${err.error?.message ?? ''}`);
-        }
-      });
   }
 
   updateThreadStatus(thread: ThreadWithDetails, closed: boolean) {
@@ -138,21 +124,6 @@ export class ThreadsComponent implements OnInit {
           next: () => {
             thread.closed = closed;
             this.ns.notifySuccess(`Thread has been ${closed ? 'closed' : 'opened'}`);
-          },
-          error: err => {
-            this.ns.notifyError(`Operation failed. ${err.error?.message ?? ''}`);
-          }
-        }
-      );
-  }
-
-  updateThread(thread: ThreadWithDetails, data: ThreadUpdateData) {
-    this.api.put(`threads/${thread.id}`, data)
-      .subscribe(
-        {
-          next: () => {
-            thread.topic = data.topic;
-            this.ns.notifySuccess(`Thread has been updated`);
           },
           error: err => {
             this.ns.notifyError(`Operation failed. ${err.error?.message ?? ''}`);

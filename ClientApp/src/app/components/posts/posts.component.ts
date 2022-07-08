@@ -141,27 +141,12 @@ export class PostsComponent implements OnInit {
       }
     );
 
-    dialogRef.afterClosed().subscribe(result => {
-        if (result !== undefined) {
-          this.updatePost(post, result);
+    dialogRef.afterClosed().subscribe((data?: PostUpdateData) => {
+        if (data !== undefined) {
+          post.content = data.content;
         }
       }
     );
-  }
-
-  updatePost(post: PostWithDetails, data: PostUpdateData) {
-    this.api.put(`posts/${post.id}`, data)
-      .subscribe(
-        {
-          next: () => {
-            post.content = data.content;
-            this.ns.notifySuccess(`Post has been updated`);
-          },
-          error: err => {
-            this.ns.notifyError(`Operation failed. ${err.error?.message ?? ''}`);
-          }
-        }
-      );
   }
 
   deletePost(post: PostWithDetails) {
