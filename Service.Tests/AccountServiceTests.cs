@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Moq;
 using Service.DataTransferObjects;
 using Service.Exceptions;
+using Service.Interfaces;
 using Service.Services;
 using Xunit;
 
@@ -21,24 +22,28 @@ namespace Service.Tests
         private readonly Mock<UserManager<User>> _userManagerMock =
             new Mock<UserManager<User>>(Mock.Of<IUserStore<User>>(), null, null, null, null, null, null, null, null);
 
+        private readonly Mock<ISession> _sessionMock = new Mock<ISession>();
+
         public AccountServiceTests()
         {
-            _sut = new AccountService(_userManagerMock.Object, UnitTestHelper.CreateMapper());
+            _sut = new AccountService(_userManagerMock.Object, UnitTestHelper.CreateMapper(), _sessionMock.Object);
         }
 
         [Fact]
         public async Task GetInfoAsync_ShouldReturnAccountInfo_WhenUserExists()
         {
             var user = TestUser;
-            var expectedToCheck = TestUser
+            var expectedUserToCheck = TestUser
                 .ToExpectedObject(o => o.Ignore(u => u.ConcurrencyStamp));
 
+            _sessionMock.SetupGet(s => s.UserId)
+                .Returns(user.Id);
             _userManagerMock.Setup(um => um.FindByIdAsync(user.Id.ToString()))
                 .ReturnsAsync(TestUser);
-            _userManagerMock.Setup(um => um.GetRolesAsync(It.Is<User>(u => expectedToCheck.Equals(u))))
+            _userManagerMock.Setup(um => um.GetRolesAsync(It.Is<User>(u => expectedUserToCheck.Equals(u))))
                 .ReturnsAsync(TestUserRoles.ToList());
 
-            var result = await _sut.GetInfoAsync(user.Id);
+            var result = await _sut.GetInfoAsync();
 
             result.Should().BeEquivalentTo(TestUserWithDetailsDto);
         }
@@ -48,10 +53,12 @@ namespace Service.Tests
         {
             var nonexistentUserId = Guid.NewGuid();
 
+            _sessionMock.SetupGet(s => s.UserId)
+                .Returns(nonexistentUserId);
             _userManagerMock.Setup(um => um.FindByIdAsync(nonexistentUserId.ToString()))
                 .ReturnsAsync((User) null);
 
-            Func<Task> result = async () => await _sut.GetInfoAsync(nonexistentUserId);
+            Func<Task> result = async () => await _sut.GetInfoAsync();
 
             await result.Should().ThrowAsync<ForumException>();
         }
@@ -66,6 +73,8 @@ namespace Service.Tests
             var expectedToUpdate = UpdatedUserToBeSaved
                 .ToExpectedObject(o => o.Ignore(u => u.ConcurrencyStamp));
 
+            _sessionMock.SetupGet(s => s.UserId)
+                .Returns(user.Id);
             _userManagerMock.Setup(um => um.FindByIdAsync(user.Id.ToString()))
                 .ReturnsAsync(TestUser);
             _userManagerMock.Setup(um =>
@@ -74,7 +83,7 @@ namespace Service.Tests
             _userManagerMock.Setup(um => um.UpdateAsync(It.Is<User>(u => expectedToUpdate.Equals(u))))
                 .ReturnsAsync(IdentityResult.Success);
 
-            await _sut.UpdateAsync(user.Id, TestAccountUpdateDto);
+            await _sut.UpdateAsync(TestAccountUpdateDto);
 
             _userManagerMock.Verify(um =>
                     um.CheckPasswordAsync(It.Is<User>(u => expectedToUpdate.Equals(u)), accountDto.CurrentPassword),
@@ -88,10 +97,12 @@ namespace Service.Tests
         {
             var nonexistentUserId = Guid.NewGuid();
 
+            _sessionMock.SetupGet(s => s.UserId)
+                .Returns(nonexistentUserId);
             _userManagerMock.Setup(um => um.FindByIdAsync(nonexistentUserId.ToString()))
                 .ReturnsAsync((User) null);
 
-            Func<Task> result = async () => await _sut.UpdateAsync(nonexistentUserId, TestAccountUpdateDto);
+            Func<Task> result = async () => await _sut.UpdateAsync(TestAccountUpdateDto);
 
             await result.Should().ThrowAsync<ForumException>()
                 .WithMessage($"User with id {nonexistentUserId} does not exist");
@@ -110,13 +121,15 @@ namespace Service.Tests
             var expectedToCheck = TestUser
                 .ToExpectedObject(o => o.Ignore(u => u.ConcurrencyStamp));
 
+            _sessionMock.SetupGet(s => s.UserId)
+                .Returns(user.Id);
             _userManagerMock.Setup(um => um.FindByIdAsync(user.Id.ToString()))
                 .ReturnsAsync(TestUser);
             _userManagerMock.Setup(um =>
                     um.CheckPasswordAsync(It.Is<User>(u => expectedToCheck.Equals(u)), accountDto.CurrentPassword))
                 .ReturnsAsync(false);
 
-            Func<Task> result = async () => await _sut.UpdateAsync(user.Id, TestAccountUpdateDto);
+            Func<Task> result = async () => await _sut.UpdateAsync(TestAccountUpdateDto);
 
             await result.Should().ThrowAsync<ForumException>()
                 .WithMessage($"Incorrect password");
@@ -138,6 +151,8 @@ namespace Service.Tests
             var expectedToUpdate = UpdatedUserToBeSaved
                 .ToExpectedObject(o => o.Ignore(u => u.ConcurrencyStamp));
 
+            _sessionMock.SetupGet(s => s.UserId)
+                .Returns(user.Id);
             _userManagerMock.Setup(um => um.FindByIdAsync(user.Id.ToString()))
                 .ReturnsAsync(TestUser);
             _userManagerMock.Setup(um =>
@@ -146,7 +161,7 @@ namespace Service.Tests
             _userManagerMock.Setup(um => um.UpdateAsync(It.Is<User>(u => expectedToUpdate.Equals(u))))
                 .ReturnsAsync(IdentityError);
 
-            Func<Task> result = async () => await _sut.UpdateAsync(user.Id, TestAccountUpdateDto);
+            Func<Task> result = async () => await _sut.UpdateAsync(TestAccountUpdateDto);
 
             await result.Should().ThrowAsync<ForumException>()
                 .WithMessage(ExpectedErrorMessage);
@@ -166,6 +181,8 @@ namespace Service.Tests
             var expectedUserToChangePassword = TestUser
                 .ToExpectedObject(o => o.Ignore(u => u.ConcurrencyStamp));
 
+            _sessionMock.SetupGet(s => s.UserId)
+                .Returns(user.Id);
             _userManagerMock.Setup(um => um.FindByIdAsync(user.Id.ToString()))
                 .ReturnsAsync(TestUser);
             _userManagerMock.Setup(um =>
@@ -173,7 +190,7 @@ namespace Service.Tests
                         passwordDto.CurrentPassword, passwordDto.NewPassword))
                 .ReturnsAsync(IdentityResult.Success);
 
-            await _sut.ChangePasswordAsync(user.Id, TestPasswordChangeDto);
+            await _sut.ChangePasswordAsync(TestPasswordChangeDto);
 
             _userManagerMock.Verify(um =>
                 um.ChangePasswordAsync(It.Is<User>(u => expectedUserToChangePassword.Equals(u)),
@@ -185,10 +202,12 @@ namespace Service.Tests
         {
             var nonexistentUserId = Guid.NewGuid();
 
+            _sessionMock.SetupGet(s => s.UserId)
+                .Returns(nonexistentUserId);
             _userManagerMock.Setup(um => um.FindByIdAsync(nonexistentUserId.ToString()))
                 .ReturnsAsync((User) null);
 
-            Func<Task> result = async () => await _sut.ChangePasswordAsync(nonexistentUserId, TestPasswordChangeDto);
+            Func<Task> result = async () => await _sut.ChangePasswordAsync(TestPasswordChangeDto);
 
             await result.Should().ThrowAsync<ForumException>()
                 .WithMessage($"User with id {nonexistentUserId} does not exist");
@@ -205,6 +224,8 @@ namespace Service.Tests
             var expectedUserToChangePassword = TestUser
                 .ToExpectedObject(o => o.Ignore(u => u.ConcurrencyStamp));
 
+            _sessionMock.SetupGet(s => s.UserId)
+                .Returns(user.Id);
             _userManagerMock.Setup(um => um.FindByIdAsync(user.Id.ToString()))
                 .ReturnsAsync(TestUser);
             _userManagerMock.Setup(um =>
@@ -212,7 +233,7 @@ namespace Service.Tests
                         passwordDto.CurrentPassword, passwordDto.NewPassword))
                 .ReturnsAsync(IdentityError);
 
-            Func<Task> result = async () => await _sut.ChangePasswordAsync(user.Id, TestPasswordChangeDto);
+            Func<Task> result = async () => await _sut.ChangePasswordAsync(TestPasswordChangeDto);
 
             await result.Should().ThrowAsync<ForumException>()
                 .WithMessage(ExpectedErrorMessage);
@@ -222,15 +243,15 @@ namespace Service.Tests
                     passwordDto.CurrentPassword, passwordDto.NewPassword), Times.Once);
         }
 
-        private static IdentityResult IdentityError => 
+        private static IdentityResult IdentityError =>
             IdentityResult.Failed(new IdentityError
             {
-                Code = "TestError", 
+                Code = "TestError",
                 Description = "Test error description"
             });
 
         private static string ExpectedErrorMessage => "Test error description";
-        
+
         private static User TestUser => new User
         {
             Id = new Guid("dd7aeae4-98a1-45a4-8fc1-0a7f499e18bb"),

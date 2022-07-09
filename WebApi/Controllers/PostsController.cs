@@ -77,8 +77,7 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<PostWithDetailsDto>> Create(PostCreationDto postDto)
         {
-            var userId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            var result = await _postService.CreateAsync(postDto, userId);
+            var result = await _postService.CreateAsync(postDto);
             return CreatedAtAction(nameof(GetById), new {id = result.Id}, result);
         }
 

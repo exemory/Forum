@@ -17,6 +17,7 @@ namespace Service.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
+        private readonly ISession _session;
 
         /// <summary>
         /// Constructor for initializing a <see cref="ThreadService"/> class instance
@@ -24,11 +25,13 @@ namespace Service.Services
         /// <param name="unitOfWork">Unit of work</param>
         /// <param name="userManager">Identity user manager</param>
         /// <param name="mapper">Mapper</param>
-        public ThreadService(IUnitOfWork unitOfWork, UserManager<User> userManager, IMapper mapper)
+        /// <param name="session">Current session</param>
+        public ThreadService(IUnitOfWork unitOfWork, UserManager<User> userManager, IMapper mapper, ISession session)
         {
             _unitOfWork = unitOfWork;
             _userManager = userManager;
             _mapper = mapper;
+            _session = session;
         }
 
         public async Task<ThreadWithDetailsDto> GetByIdAsync(Guid id)
@@ -48,16 +51,16 @@ namespace Service.Services
             return _mapper.Map<IEnumerable<ThreadWithDetailsDto>>(threads);
         }
 
-        public async Task<ThreadWithDetailsDto> CreateAsync(ThreadCreationDto threadDto, Guid authorId)
+        public async Task<ThreadWithDetailsDto> CreateAsync(ThreadCreationDto threadDto)
         {
-            var user = await _userManager.FindByIdAsync(authorId.ToString());
-            if (user == null)
+            var author = await _userManager.FindByIdAsync(_session.UserId.ToString());
+            if (author == null)
             {
-                throw new ForumException($"User with id '{authorId}' does not exist");
+                throw new ForumException($"User with id '{_session.UserId}' does not exist");
             }
 
             var thread = _mapper.Map<Thread>(threadDto);
-            thread.Author = user;
+            thread.Author = author;
 
             _unitOfWork.ThreadRepository.Add(thread);
             await _unitOfWork.SaveAsync();

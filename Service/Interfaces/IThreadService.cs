@@ -31,12 +31,11 @@ namespace Service.Interfaces
         /// Creates new thread
         /// </summary>
         /// <param name="threadDto">Thread creation data</param>
-        /// <param name="authorId">Author guid of the new thread</param>
         /// <returns>Created thread mapped into <see cref="ThreadWithDetailsDto"/></returns>
         /// <exception cref="ForumException">
         /// The user who creates the thread does not exist
         /// </exception>
-        public Task<ThreadWithDetailsDto> CreateAsync(ThreadCreationDto threadDto, Guid authorId);
+        public Task<ThreadWithDetailsDto> CreateAsync(ThreadCreationDto threadDto);
 
         /// <summary>
         /// Updates the thread

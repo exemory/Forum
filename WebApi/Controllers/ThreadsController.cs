@@ -68,8 +68,7 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<ActionResult<ThreadWithDetailsDto>> Create(ThreadCreationDto threadDto)
         {
-            var userId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            var result = await _threadService.CreateAsync(threadDto, userId);
+            var result = await _threadService.CreateAsync(threadDto);
             return CreatedAtAction(nameof(GetById), new {id = result.Id}, result);
         }
 

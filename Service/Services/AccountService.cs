@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -16,24 +15,27 @@ namespace Service.Services
     {
         private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
+        private readonly ISession _session;
 
         /// <summary>
         /// Constructor for initializing a <see cref="AccountService"/> class instance
         /// </summary>
         /// <param name="userManager">Identity user manager</param>
         /// <param name="mapper">Mapper</param>
-        public AccountService(UserManager<User> userManager, IMapper mapper)
+        /// <param name="session">Current session</param>
+        public AccountService(UserManager<User> userManager, IMapper mapper, ISession session)
         {
             _userManager = userManager;
             _mapper = mapper;
+            _session = session;
         }
 
-        public async Task<UserWithDetailsDto> GetInfoAsync(Guid userId)
+        public async Task<UserWithDetailsDto> GetInfoAsync()
         {
-            var user = await _userManager.FindByIdAsync(userId.ToString());
+            var user = await _userManager.FindByIdAsync(_session.UserId.ToString());
             if (user == null)
             {
-                throw new ForumException($"User with id {userId} does not exist");
+                throw new ForumException($"User with id {_session.UserId} does not exist");
             }
 
             var result = _mapper.Map<UserWithDetailsDto>(user);
@@ -42,12 +44,12 @@ namespace Service.Services
             return result;
         }
 
-        public async Task UpdateAsync(Guid userId, AccountUpdateDto accountDto)
+        public async Task UpdateAsync(AccountUpdateDto accountDto)
         {
-            var user = await _userManager.FindByIdAsync(userId.ToString());
+            var user = await _userManager.FindByIdAsync(_session.UserId.ToString());
             if (user == null)
             {
-                throw new ForumException($"User with id {userId} does not exist");
+                throw new ForumException($"User with id {_session.UserId} does not exist");
             }
 
             if (!await _userManager.CheckPasswordAsync(user, accountDto.CurrentPassword))
@@ -68,12 +70,12 @@ namespace Service.Services
             }
         }
 
-        public async Task ChangePasswordAsync(Guid userId, PasswordChangeDto passwordDto)
+        public async Task ChangePasswordAsync(PasswordChangeDto passwordDto)
         {
-            var user = await _userManager.FindByIdAsync(userId.ToString());
+            var user = await _userManager.FindByIdAsync(_session.UserId.ToString());
             if (user == null)
             {
-                throw new ForumException($"User with id {userId} does not exist");
+                throw new ForumException($"User with id {_session.UserId} does not exist");
             }
 
             var result = await _userManager.ChangePasswordAsync(user, passwordDto.CurrentPassword, passwordDto.NewPassword);

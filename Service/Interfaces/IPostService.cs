@@ -35,7 +35,6 @@ namespace Service.Interfaces
         /// Creates new post
         /// </summary>
         /// <param name="postDto">Post creation data</param>
-        /// <param name="authorId">Author guid of the new post</param>
         /// <returns>Created post mapped into <see cref="PostWithDetailsDto"/></returns>
         /// <exception cref="NotFoundException">
         /// Thrown when the thread specified by <paramref name="postDto.ThreadId"/> does not exist
@@ -47,7 +46,7 @@ namespace Service.Interfaces
         /// <item><description>Thread is closed for posting</description></item>
         /// </list>
         /// </exception>
-        public Task<PostWithDetailsDto> CreateAsync(PostCreationDto postDto, Guid authorId);
+        public Task<PostWithDetailsDto> CreateAsync(PostCreationDto postDto);
 
         /// <summary>
         /// Updates the post

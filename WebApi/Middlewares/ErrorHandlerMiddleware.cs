@@ -24,7 +24,7 @@ namespace WebApi.Middlewares
         /// <summary>
         /// Middleware logic for handling exceptions and convert them to the error response
         /// </summary>
-        /// <param name="context">Context of current http request</param>
+        /// <param name="context">Context of the current http request</param>
         public async Task InvokeAsync(HttpContext context)
         {
             try

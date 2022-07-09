@@ -17,6 +17,7 @@ namespace Service.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
+        private readonly ISession _session;
 
         /// <summary>
         /// Constructor for initializing a <see cref="PostService"/> class instance
@@ -24,11 +25,13 @@ namespace Service.Services
         /// <param name="unitOfWork">Unit of work</param>
         /// <param name="userManager">Identity user manager</param>
         /// <param name="mapper">Mapper</param>
-        public PostService(IUnitOfWork unitOfWork, UserManager<User> userManager, IMapper mapper)
+        /// <param name="session">Current session</param>
+        public PostService(IUnitOfWork unitOfWork, UserManager<User> userManager, IMapper mapper, ISession session)
         {
             _unitOfWork = unitOfWork;
             _userManager = userManager;
             _mapper = mapper;
+            _session = session;
         }
 
         public async Task<PostWithDetailsDto> GetByIdAsync(Guid id)
@@ -54,7 +57,7 @@ namespace Service.Services
             return _mapper.Map<IEnumerable<PostWithDetailsDto>>(posts);
         }
 
-        public async Task<PostWithDetailsDto> CreateAsync(PostCreationDto postDto, Guid authorId)
+        public async Task<PostWithDetailsDto> CreateAsync(PostCreationDto postDto)
         {
             var thread = await _unitOfWork.ThreadRepository.GetByIdAsync(postDto.ThreadId);
             if (thread == null)
@@ -62,10 +65,10 @@ namespace Service.Services
                 throw new NotFoundException($"Thread with id '{postDto.ThreadId}' not found");
             }
 
-            var user = await _userManager.FindByIdAsync(authorId.ToString());
-            if (user == null)
+            var author = await _userManager.FindByIdAsync(_session.UserId.ToString());
+            if (author == null)
             {
-                throw new ForumException($"User with id '{authorId}' does not exist");
+                throw new ForumException($"User with id '{_session.UserId}' does not exist");
             }
 
             if (thread.Closed)
@@ -74,7 +77,7 @@ namespace Service.Services
             }
 
             var post = _mapper.Map<Post>(postDto);
-            post.Author = user;
+            post.Author = author;
 
             _unitOfWork.PostRepository.Add(post);
             await _unitOfWork.SaveAsync();

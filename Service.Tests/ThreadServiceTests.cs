@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Moq;
 using Service.DataTransferObjects;
 using Service.Exceptions;
+using Service.Interfaces;
 using Service.Services;
 using Xunit;
 
@@ -23,9 +24,12 @@ namespace Service.Tests
         private readonly Mock<UserManager<User>> _userManagerMock =
             new Mock<UserManager<User>>(Mock.Of<IUserStore<User>>(), null, null, null, null, null, null, null, null);
 
+        private readonly Mock<ISession> _sessionMock = new Mock<ISession>();
+
         public ThreadServiceTests()
         {
-            _sut = new ThreadService(_unitOfWorkMock.Object, _userManagerMock.Object, UnitTestHelper.CreateMapper());
+            _sut = new ThreadService(_unitOfWorkMock.Object, _userManagerMock.Object, UnitTestHelper.CreateMapper(),
+                _sessionMock.Object);
         }
 
         [Fact]
@@ -77,11 +81,13 @@ namespace Service.Tests
                 .ToExpectedObject(o => o.Ignore(t => t.Author.ConcurrencyStamp));
             var expected = CreatedThreadDto;
 
+            _sessionMock.SetupGet(s => s.UserId)
+                .Returns(author.Id);
             _userManagerMock.Setup(um => um.FindByIdAsync(author.Id.ToString()))
                 .ReturnsAsync(TestUser);
             _unitOfWorkMock.Setup(u => u.ThreadRepository.Add(It.IsAny<Thread>()));
 
-            var result = await _sut.CreateAsync(threadDto, author.Id);
+            var result = await _sut.CreateAsync(threadDto);
 
             result.Should().BeEquivalentTo(expected);
 
@@ -96,10 +102,12 @@ namespace Service.Tests
             var threadDto = ThreadCreationDto;
             var nonexistentAuthorId = Guid.NewGuid();
 
+            _sessionMock.SetupGet(s => s.UserId)
+                .Returns(nonexistentAuthorId);
             _userManagerMock.Setup(um => um.FindByIdAsync(nonexistentAuthorId.ToString()))
                 .ReturnsAsync((User) null);
 
-            Func<Task> result = async () => await _sut.CreateAsync(threadDto, nonexistentAuthorId);
+            Func<Task> result = async () => await _sut.CreateAsync(threadDto);
 
             await result.Should().ThrowAsync<ForumException>();
 

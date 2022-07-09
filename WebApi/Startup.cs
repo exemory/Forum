@@ -22,6 +22,7 @@ using Service.DbInitializer;
 using Service.Interfaces;
 using Service.Services;
 using Service.Validators;
+using WebApi.Filters;
 using WebApi.Middlewares;
 
 namespace WebApi
@@ -45,15 +46,20 @@ namespace WebApi
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAccountService, AccountService>();
 
+            services.AddScoped<ISession, Session>();
+
             services.AddAutoMapper(typeof(AutomapperProfile));
             services.AddFluentValidationRulesToSwagger();
 
-            services.AddControllers()
-                .AddFluentValidation(o =>
-                {
-                    o.RegisterValidatorsFromAssemblyContaining<PostCreationDtoValidator>();
-                    o.DisableDataAnnotationsValidation = true;
-                });
+            services.AddControllers(o =>
+            {
+                o.Filters.Add<SessionFilter>();
+            }).AddFluentValidation(o =>
+            {
+                o.RegisterValidatorsFromAssemblyContaining<PostCreationDtoValidator>();
+                o.DisableDataAnnotationsValidation = true;
+            });
+
 
             services.AddDbContext<ForumContext>(options =>
             {

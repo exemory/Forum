@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Moq;
 using Service.DataTransferObjects;
 using Service.Exceptions;
+using Service.Interfaces;
 using Service.Services;
 using Xunit;
 
@@ -23,9 +24,12 @@ namespace Service.Tests
         private readonly Mock<UserManager<User>> _userManagerMock =
             new Mock<UserManager<User>>(Mock.Of<IUserStore<User>>(), null, null, null, null, null, null, null, null);
 
+        private readonly Mock<ISession> _sessionMock = new Mock<ISession>();
+
         public PostServiceTests()
         {
-            _sut = new PostService(_unitOfWorkMock.Object, _userManagerMock.Object, UnitTestHelper.CreateMapper());
+            _sut = new PostService(_unitOfWorkMock.Object, _userManagerMock.Object, UnitTestHelper.CreateMapper(),
+                _sessionMock.Object);
         }
 
         [Fact]
@@ -92,11 +96,13 @@ namespace Service.Tests
 
             _unitOfWorkMock.Setup(u => u.ThreadRepository.GetByIdAsync(postDto.ThreadId))
                 .ReturnsAsync(TestThread);
+            _sessionMock.SetupGet(s => s.UserId)
+                .Returns(author.Id);
             _userManagerMock.Setup(um => um.FindByIdAsync(author.Id.ToString()))
                 .ReturnsAsync(TestUser);
             _unitOfWorkMock.Setup(u => u.PostRepository.Add(It.IsAny<Post>()));
 
-            var result = await _sut.CreateAsync(postDto, author.Id);
+            var result = await _sut.CreateAsync(postDto);
 
             result.Should().BeEquivalentTo(expected);
 
@@ -109,11 +115,10 @@ namespace Service.Tests
         public async Task CreateAsync_ShouldFail_WhenThreadDoesNotExist()
         {
             var postDto = PostCreationDto;
-            var authorId = Guid.NewGuid();
             _unitOfWorkMock.Setup(u => u.ThreadRepository.GetByIdAsync(postDto.ThreadId))
                 .ReturnsAsync((Thread) null);
 
-            Func<Task> result = async () => await _sut.CreateAsync(postDto, authorId);
+            Func<Task> result = async () => await _sut.CreateAsync(postDto);
 
             await result.Should().ThrowAsync<NotFoundException>();
 
@@ -128,10 +133,12 @@ namespace Service.Tests
             var nonexistentAuthorId = Guid.NewGuid();
             _unitOfWorkMock.Setup(u => u.ThreadRepository.GetByIdAsync(postDto.ThreadId))
                 .ReturnsAsync(TestThread);
+            _sessionMock.SetupGet(s => s.UserId)
+                .Returns(nonexistentAuthorId);
             _userManagerMock.Setup(um => um.FindByIdAsync(nonexistentAuthorId.ToString()))
                 .ReturnsAsync((User) null);
 
-            Func<Task> result = async () => await _sut.CreateAsync(postDto, nonexistentAuthorId);
+            Func<Task> result = async () => await _sut.CreateAsync(postDto);
 
             await result.Should().ThrowAsync<ForumException>()
                 .WithMessage($"User with id '{nonexistentAuthorId}' does not exist");
@@ -147,10 +154,12 @@ namespace Service.Tests
             var author = TestUser;
             _unitOfWorkMock.Setup(u => u.ThreadRepository.GetByIdAsync(postDto.ThreadId))
                 .ReturnsAsync(ClosedThread);
+            _sessionMock.SetupGet(s => s.UserId)
+                .Returns(author.Id);
             _userManagerMock.Setup(um => um.FindByIdAsync(author.Id.ToString()))
                 .ReturnsAsync(TestUser);
 
-            Func<Task> result = async () => await _sut.CreateAsync(postDto, author.Id);
+            Func<Task> result = async () => await _sut.CreateAsync(postDto);
 
             await result.Should().ThrowAsync<ForumException>()
                 .WithMessage("Thread is closed for posting");
@@ -164,7 +173,7 @@ namespace Service.Tests
         {
             var post = TestPost;
             var postDto = PostUpdateDto;
-            var expoctedToUpdate = UpdatedPostToBeSaved.ToExpectedObject();
+            var expectedPostToUpdate = UpdatedPostToBeSaved.ToExpectedObject();
 
             _unitOfWorkMock.Setup(u => u.PostRepository.GetByIdAsync(post.Id))
                 .ReturnsAsync(TestPost);
@@ -172,7 +181,7 @@ namespace Service.Tests
             await _sut.UpdateAsync(post.Id, postDto);
 
             _unitOfWorkMock.Verify(uow =>
-                uow.PostRepository.Update(It.Is<Post>(p => expoctedToUpdate.Equals(p))), Times.Once);
+                uow.PostRepository.Update(It.Is<Post>(p => expectedPostToUpdate.Equals(p))), Times.Once);
             _unitOfWorkMock.Verify(uow => uow.SaveAsync(), Times.Once);
         }
 

@@ -37,8 +37,7 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<UserWithDetailsDto>> GetInfo()
         {
-            var userId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            return await _accountService.GetInfoAsync(userId);
+            return await _accountService.GetInfoAsync();
         }
 
         /// <summary>
@@ -52,8 +51,7 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> Update(AccountUpdateDto accountDto)
         {
-            var userId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            await _accountService.UpdateAsync(userId, accountDto);
+            await _accountService.UpdateAsync(accountDto);
             return NoContent();
         }
 
@@ -68,8 +66,7 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> ChangePassword(PasswordChangeDto passwordDto)
         {
-            var userId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            await _accountService.ChangePasswordAsync(userId, passwordDto);
+            await _accountService.ChangePasswordAsync(passwordDto);
             return NoContent();
         }
     }
