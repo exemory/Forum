@@ -54,6 +54,16 @@
         </div>
       </div>
     </div>
+
+    <div class="bottom-message-block">
+      <div *ngIf="posts.length === 0" class="no-thread-posts">
+        <p class="message">There are no posts</p>
+      </div>
+      <div *ngIf="thread.closed" class="thread-closed">
+        <p class="message">This thread is closed for posting</p>
+      </div>
+    </div>
+
     <div *ngIf="isLoggedIn && !thread.closed" class="new-post">
       <h3 class="header">Create a post</h3>
 
@@ -65,11 +75,6 @@
 
         <button type="submit" [disabled]="sendingPost || !content.value" mat-raised-button color="primary">Post</button>
       </form>
-    </div>
-    <div class="bottom-message-block">
-      <div *ngIf="thread.closed && isLoggedIn" class="thread-closed">
-        <p class="message">This thread is closed for posting</p>
-      </div>
     </div>
   </div>
 </div>

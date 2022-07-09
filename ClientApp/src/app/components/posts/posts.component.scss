@@ -144,12 +144,11 @@
 }
 
 .bottom-message-block {
-  display: flex;
-  justify-content: center;
-  margin: 56px 0 24px;
-  color: #6b6260;
+  text-align: center;
+  margin: 48px 0 24px;
 
   .message {
+    color: #6b6260;
     font-size: 18px;
     font-style: italic;
   }
