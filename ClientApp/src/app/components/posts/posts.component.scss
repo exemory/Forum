@@ -24,7 +24,12 @@
       color: #6B6361;
 
       .thread-author-username {
-        font-weight: 500;
+        color: #2175ff;
+        text-decoration: none;
+
+        &:hover {
+          text-decoration: underline;
+        }
       }
 
       ul {
@@ -59,11 +64,18 @@
 
     .post-author-username {
       font-size: 16px;
-      color: #10567E;
-      margin-bottom: 8px;
+      color: #2175ff;
+      margin-bottom: 4px;
+      text-decoration: none;
+      padding: 3px;
+
+      &:hover {
+        text-decoration: underline;
+      }
     }
 
     .post-author-name {
+      margin-top: 6px;
       margin-bottom: 0;
     }
 
@@ -76,7 +88,7 @@
       p {
         font-size: 16px;
         margin: 0;
-        color: #C03221;
+        color: #8a817c;
       }
     }
   }

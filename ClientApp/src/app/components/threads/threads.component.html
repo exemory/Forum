@@ -44,7 +44,7 @@
           </div>
           <div class="description">
             <ul>
-              <li *ngIf="thread.author">by <span class="username">{{thread.author.username}}</span></li>
+              <li *ngIf="thread.author">by <a [routerLink]="['/users', thread.author.username]" class="username">{{thread.author.username}}</a></li>
               <li>{{thread.creationDate | date:'MMM d, y, h:mm a'}}</li>
               <li *ngIf="thread.closed">Closed</li>
             </ul>

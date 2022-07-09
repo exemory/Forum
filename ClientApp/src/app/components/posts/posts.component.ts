@@ -56,7 +56,6 @@ export class PostsComponent implements OnInit {
           this.loadPosts(this.thread.id);
         },
         error: err => {
-          console.log(err);
           if (err.status === HttpStatusCode.NotFound) {
             this.threadDoesNotExists();
             return;

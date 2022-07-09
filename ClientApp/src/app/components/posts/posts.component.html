@@ -10,7 +10,7 @@
         </div>
         <div class="description">
           <ul>
-            <li *ngIf="thread.author">by <span class="username">{{thread.author.username}}</span></li>
+            <li *ngIf="thread.author">by <a [routerLink]="['/users', thread.author.username]" class="thread-author-username">{{thread.author.username}}</a></li>
             <li>{{thread.creationDate | date:'MMM d, y, h:mm a'}}</li>
             <li *ngIf="thread.closed">Closed</li>
           </ul>
@@ -22,7 +22,7 @@
       <div *ngFor="let post of posts; let i = index" class="post">
         <div class="user-section">
           <div *ngIf="post.author">
-            <p class="post-author-username">{{post.author.username}}</p>
+            <a [routerLink]="['/users', post.author.username]" class="post-author-username">{{post.author.username}}</a>
             <p *ngIf="post.author.name" class="post-author-name">{{post.author.name}}</p>
             <p class="joined">joined: {{post.author.registrationDate | date: 'mediumDate'}}</p>
           </div>

@@ -32,6 +32,20 @@ namespace Service.Services
             _mapper = mapper;
         }
 
+        public async Task<UserProfileInfoDto> GetInfoByUsernameAsync(string username)
+        {
+            var user = await _userManager.FindByNameAsync(username);
+            if (user == null)
+            {
+                throw new NotFoundException($"User with username '{username}' not found");
+            }
+            
+            var result = _mapper.Map<UserProfileInfoDto>(user);
+            result.Roles = await _userManager.GetRolesAsync(user);
+
+            return result;
+        }
+
         public async Task<IEnumerable<UserWithDetailsDto>> GetAllAsync()
         {
             var users = await _unitOfWork.UserRepository.GetAllAsync();

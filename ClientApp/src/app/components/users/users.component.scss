@@ -25,6 +25,15 @@
   .options-header {
     width: 40px;
   }
+
+  .username {
+    color: #2175ff;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }
 
 .delete-menu-option {

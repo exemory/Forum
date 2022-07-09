@@ -9,7 +9,7 @@
           <mat-icon>account_circle</mat-icon>
           Profile information
         </mat-card-title>
-        <mat-card-subtitle class="actions">
+        <mat-card-subtitle *ngIf="ownProfileInfo" class="actions">
           <ul class="action-list">
             <li>
               <button class="action-button" (click)="openEditProfileDialog()">Edit profile</button>
@@ -21,14 +21,10 @@
         </mat-card-subtitle>
       </mat-card-header>
       <mat-card-content class="profile-info-content">
-        <div class="info-blocks-container">
+        <div *ngIf="profileInfo" class="info-blocks-container">
           <div class="info-block">
             <p class="info-block-label">Username</p>
             <p class="info-block-value">{{profileInfo.username}}</p>
-          </div>
-          <div class="info-block">
-            <p class="info-block-label">Email</p>
-            <p class="info-block-value">{{profileInfo.email}}</p>
           </div>
           <div *ngIf="profileInfo.name" class="info-block">
             <p class="info-block-label">Name</p>
@@ -41,6 +37,28 @@
           <div class="info-block">
             <p class="info-block-label">Roles</p>
             <p class="info-block-value">{{profileInfo.roles.join(', ')}}</p>
+          </div>
+        </div>
+        <div *ngIf="ownProfileInfo" class="info-blocks-container">
+          <div class="info-block">
+            <p class="info-block-label">Username</p>
+            <p class="info-block-value">{{ownProfileInfo.username}}</p>
+          </div>
+          <div class="info-block">
+            <p class="info-block-label">Email</p>
+            <p class="info-block-value">{{ownProfileInfo.email}}</p>
+          </div>
+          <div *ngIf="ownProfileInfo.name" class="info-block">
+            <p class="info-block-label">Name</p>
+            <p class="info-block-value">{{ownProfileInfo.name}}</p>
+          </div>
+          <div class="info-block">
+            <p class="info-block-label">Registration date</p>
+            <p class="info-block-value">{{ownProfileInfo.registrationDate | date:'MMM d, y, h:mm a'}}</p>
+          </div>
+          <div class="info-block">
+            <p class="info-block-label">Roles</p>
+            <p class="info-block-value">{{ownProfileInfo.roles.join(', ')}}</p>
           </div>
         </div>
       </mat-card-content>

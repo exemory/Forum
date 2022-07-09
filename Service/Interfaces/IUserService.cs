@@ -12,6 +12,16 @@ namespace Service.Interfaces
     public interface IUserService
     {
         /// <summary>
+        /// Gets information about user by specified username
+        /// </summary>
+        /// <param name="username">Username of the user whose information is to be retrieved</param>
+        /// <returns>User profile information mapped into <see cref="UserProfileInfoDto"/></returns>
+        /// <exception cref="NotFoundException">
+        /// Thrown when the user with specified <paramref name="username"/> does not exist
+        /// </exception>
+        public Task<UserProfileInfoDto> GetInfoByUsernameAsync(string username);
+
+        /// <summary>
         /// Gets all users including their roles
         /// </summary>
         /// <returns>The list of users mapped into <see cref="UserWithDetailsDto"/></returns>
@@ -34,7 +44,7 @@ namespace Service.Interfaces
         /// </exception>
         /// <remarks>Unable to update role of user in Administrator role</remarks>
         public Task UpdateRoleAsync(Guid id, UserRoleUpdateDto roleDto);
-        
+
         /// <summary>
         /// Deletes the user
         /// </summary>

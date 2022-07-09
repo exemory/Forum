@@ -29,6 +29,37 @@ namespace Service.Tests
         }
 
         [Fact]
+        public async Task GetInfoByUsernameAsync_ShouldReturnUser_WhenUserExists()
+        {
+            var user = RegularUser;
+            var expectedUser = RegularUser
+                .ToExpectedObject(o => o.Ignore(u => u.ConcurrencyStamp));
+            var expected = ExpectedUserProfileInfoDto;
+
+            _userManagerMock.Setup(um => um.FindByNameAsync(user.UserName))
+                .ReturnsAsync(RegularUser);
+            _userManagerMock.Setup(um => um.GetRolesAsync(It.Is<User>(u => expectedUser.Equals(u))))
+                .ReturnsAsync(GetUserRoles(user).ToList());
+
+            var result = await _sut.GetInfoByUsernameAsync(user.UserName);
+
+            result.Should().BeEquivalentTo(expected);
+        }
+
+        [Fact]
+        public async Task GetInfoByUsernameAsync_ShouldFail_WhenUserDoesNotExist()
+        {
+            const string nonexistentUsername = "nonexistent_username";
+
+            _userManagerMock.Setup(um => um.FindByNameAsync(nonexistentUsername))
+                .ReturnsAsync((User) null);
+
+            Func<Task> result = async () => await _sut.GetInfoByUsernameAsync(nonexistentUsername);
+
+            await result.Should().ThrowAsync<NotFoundException>();
+        }
+
+        [Fact]
         public async Task GetAllAsync_ShouldReturnUsers()
         {
             var expected = UserWithDetailsDtoList;
@@ -36,8 +67,7 @@ namespace Service.Tests
             _unitOfWorkMock.Setup(u => u.UserRepository.GetAllAsync())
                 .ReturnsAsync(UserList);
             _userManagerMock.Setup(u => u.GetRolesAsync(It.IsAny<User>()))
-                .ReturnsAsync((User user) => UserRolesList.First(i => i.userId == user.Id).roles);
-
+                .ReturnsAsync((User user) => GetUserRoles(user).ToList());
 
             var result = await _sut.GetAllAsync();
 
@@ -60,7 +90,7 @@ namespace Service.Tests
 
             await _sut.UpdateRoleAsync(user.Id, roleDto);
 
-            _userManagerMock.Verify(um => 
+            _userManagerMock.Verify(um =>
                 um.RemoveFromRolesAsync(It.Is<User>(u => expectedUser.Equals(u)),
                     It.Is<IEnumerable<string>>(r => userRoles.ToExpectedObject().Equals(r))), Times.Once);
             _userManagerMock.Verify(um =>
@@ -121,7 +151,7 @@ namespace Service.Tests
             _userManagerMock.Setup(um => um.FindByIdAsync(user.Id.ToString()))
                 .ReturnsAsync(user);
             _userManagerMock.Setup(um => um.GetRolesAsync(It.Is<User>(u => expectedUser.Equals(u))))
-                .ReturnsAsync((User user) => UserRolesList.First(i => i.userId == user.Id).roles);
+                .ReturnsAsync((User user) => GetUserRoles(user).ToList());
 
             Func<Task> result = async () => await _sut.UpdateRoleAsync(user.Id, roleDto);
 
@@ -191,7 +221,7 @@ namespace Service.Tests
             yield return new object[] {RegularUser, "Moderator"};
             yield return new object[] {ModerUser, "User"};
         }
-        
+
         public static IEnumerable<object[]> UpdateRoleAsync_ShouldFail_TestData()
         {
             yield return new object[] {RegularUser, "User"};
@@ -266,6 +296,15 @@ namespace Service.Tests
                     Roles = new List<string> {"Administrator"}
                 }
             };
+
+        private static UserProfileInfoDto ExpectedUserProfileInfoDto => new UserProfileInfoDto
+        {
+            Id = new Guid("2b6f10f7-b177-4a64-85af-de55fff46ea2"),
+            Username = "username1",
+            Name = "name1",
+            RegistrationDate = new DateTime(2012, 11, 27, 17, 34, 12),
+            Roles = new List<string> {"User"}
+        };
 
         private static IEnumerable<string> GetUserRoles(User user)
         {

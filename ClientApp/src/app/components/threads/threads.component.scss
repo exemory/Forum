@@ -75,7 +75,12 @@
       color: #8a817c;
 
       .username {
-        font-weight: 500;
+        color: #2175ff;
+        text-decoration: none;
+
+        &:hover {
+          text-decoration: underline;
+        }
       }
 
       ul {

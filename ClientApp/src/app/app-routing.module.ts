@@ -16,6 +16,7 @@ const routes: Routes = [
   {path: 'sign-in', component: SignInComponent, canActivate: [GuestsGuard]},
   {path: 'sign-up', component: SignUpComponent, canActivate: [GuestsGuard]},
   {path: 'users', component: UsersComponent, canActivate: [AdminsGuard]},
+  {path: 'users/:username', component: ProfileComponent},
   {path: 'profile', component: ProfileComponent, canActivate: [AuthorizedUsersGuard]},
   {path: '**', redirectTo: 'threads'}
 ];

@@ -16,6 +16,8 @@ namespace Service
             CreateMap<User, UserDto>();
             CreateMap<User, UserWithDetailsDto>()
                 .ForMember(u => u.Roles, o => o.Ignore());
+            CreateMap<User, UserProfileInfoDto>()
+                .ForMember(u => u.Roles, o => o.Ignore());
             
             CreateMap<Thread, ThreadWithDetailsDto>();
             CreateMap<ThreadCreationDto, Thread>(MemberList.Source);
