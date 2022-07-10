@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Data.Entities;
@@ -93,6 +94,13 @@ namespace Service.Services
                 throw new NotFoundException($"Post with id '{id}' not found");
             }
 
+            if (post.AuthorId != _session.UserId &&
+                !_session.UserRoles.Contains("Moderator") && 
+                !_session.UserRoles.Contains("Administrator"))
+            {
+                throw new AccessDeniedException("Access denied");
+            }
+
             _mapper.Map(postDto, post);
 
             _unitOfWork.PostRepository.Update(post);
@@ -105,6 +113,13 @@ namespace Service.Services
             if (post == null)
             {
                 throw new NotFoundException($"Post with id '{id}' not found");
+            }
+            
+            if (post.AuthorId != _session.UserId &&
+                !_session.UserRoles.Contains("Moderator") && 
+                !_session.UserRoles.Contains("Administrator"))
+            {
+                throw new AccessDeniedException("Access denied");
             }
 
             _unitOfWork.PostRepository.Delete(post);

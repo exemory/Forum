@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Service.Interfaces;
 
 namespace Service
@@ -16,11 +15,6 @@ namespace Service
         {
             UserId = userId;
             UserRoles = userRoles;
-        }
-
-        public bool HasRole(string role)
-        {
-            return IsAuthorized && UserRoles.Contains(role, StringComparer.OrdinalIgnoreCase);
         }
     }
 }

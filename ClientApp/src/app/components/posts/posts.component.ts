@@ -98,6 +98,14 @@ export class PostsComponent implements OnInit {
       roles?.includes('Administrator');
   }
 
+  isOwnPost(post: PostWithDetails): boolean | undefined {
+    if (!this.auth.isLoggedIn) {
+      return;
+    }
+
+    return post.author?.id === this.auth.session?.userId;
+  }
+
   sendingPost = false;
 
   onPostSubmit() {

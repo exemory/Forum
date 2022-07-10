@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -86,11 +85,17 @@ namespace WebApi.Controllers
         /// </summary>
         /// <param name="id">Guid of the post to be updated</param>
         /// <param name="postDto">Post update data</param>
+        /// <remarks>
+        /// Moderators and administrators have permission to edit any
+        /// posts, while users can only edit their own posts
+        /// </remarks>
         /// <response code="204">Post has been updated</response>
+        /// <response code="403">User tries to update someone else's post</response>
         /// <response code="404">Post specified by <paramref name="id"/> not found</response>
         [HttpPut("{id:guid}")]
-        [Authorize(Roles = "Moderator,Administrator")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult> Update(Guid id, PostUpdateDto postDto)
         {
@@ -102,11 +107,17 @@ namespace WebApi.Controllers
         /// Deletes the post
         /// </summary>
         /// <param name="id">Guid of the post to be deleted</param>
+        /// <remarks>
+        /// Moderators and administrators have permission to delete any
+        /// posts, while users can only delete their own posts
+        /// </remarks>
         /// <response code="204">Post has been deleted</response>
+        /// <response code="403">User tries to delete someone else's post</response>
         /// <response code="404">Post specified by <paramref name="id"/> not found</response>
         [HttpDelete("{id:guid}")]
-        [Authorize(Roles = "Moderator,Administrator")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult> Delete(Guid id)
         {

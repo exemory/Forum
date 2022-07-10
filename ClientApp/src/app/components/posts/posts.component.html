@@ -37,7 +37,7 @@
           </div>
           <p class="post-content">{{post.content}}</p>
         </div>
-        <div *ngIf="isUserModeratorOrAdmin" class="action-panel">
+        <div *ngIf="isOwnPost(post) || isUserModeratorOrAdmin" class="action-panel">
           <button class="open-menu-button" mat-icon-button [matMenuTriggerFor]="menu">
             <mat-icon>more_vert</mat-icon>
           </button>

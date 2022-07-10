@@ -56,6 +56,13 @@ namespace Service.Interfaces
         /// <exception cref="NotFoundException">
         /// Thrown when the post specified by <paramref name="id"/> does not exist
         /// </exception>
+        /// <exception cref="AccessDeniedException">
+        /// Thrown when user tries to update someone else's post
+        /// </exception>
+        /// <remarks>
+        /// Moderators and administrators have permission to edit any
+        /// posts, while users can only edit their own posts
+        /// </remarks>
         public Task UpdateAsync(Guid id, PostUpdateDto postDto);
         
         /// <summary>
@@ -65,6 +72,13 @@ namespace Service.Interfaces
         /// <exception cref="NotFoundException">
         /// Thrown when the post with specified <paramref name="id"/> does not exist
         /// </exception>
+        /// <exception cref="AccessDeniedException">
+        /// Thrown when user tries to delete someone else's post
+        /// </exception>
+        /// <remarks>
+        /// Moderators and administrators have permission to delete any
+        /// posts, while users can only delete their own posts
+        /// </remarks>
         public Task DeleteAsync(Guid id);
     }
 }

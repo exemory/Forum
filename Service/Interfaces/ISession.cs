@@ -29,14 +29,5 @@ namespace Service.Interfaces
         /// <param name="userId">Guid of the authorized user</param>
         /// <param name="userRoles">Roles of the authorized user</param>
         public void Initialize(Guid userId, IEnumerable<string> userRoles);
-        
-        /// <summary>
-        /// Checks whether the user contains the specified role or not
-        /// </summary>
-        /// <param name="role">Role to check</param>
-        /// <returns>
-        /// <c>true</c> if the user authorized and has <paramref name="role"/>, <c>false</c> otherwise
-        /// </returns>
-        public bool HasRole(string role);
     }
 }

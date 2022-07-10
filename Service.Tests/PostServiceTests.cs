@@ -169,7 +169,7 @@ namespace Service.Tests
         }
 
         [Fact]
-        public async Task UpdateAsync_ShouldUpdatePost_WhenPostExists()
+        public async Task UpdateAsync_ShouldUpdatePost_WhenUserTriesToUpdateOwnPost()
         {
             var post = TestPost;
             var postDto = PostUpdateDto;
@@ -177,6 +177,32 @@ namespace Service.Tests
 
             _unitOfWorkMock.Setup(u => u.PostRepository.GetByIdAsync(post.Id))
                 .ReturnsAsync(TestPost);
+            _sessionMock.SetupGet(s => s.UserId)
+                .Returns(post.AuthorId);
+
+            await _sut.UpdateAsync(post.Id, postDto);
+
+            _unitOfWorkMock.Verify(uow =>
+                uow.PostRepository.Update(It.Is<Post>(p => expectedPostToUpdate.Equals(p))), Times.Once);
+            _unitOfWorkMock.Verify(uow => uow.SaveAsync(), Times.Once);
+        }
+
+        [Theory]
+        [InlineData("Moderator")]
+        [InlineData("Administrator")]
+        public async Task UpdateAsync_ShouldUpdatePost_WhenUserIsModerOrAdmin(string userRole)
+        {
+            var userId = Guid.NewGuid();
+            var post = TestPost;
+            var postDto = PostUpdateDto;
+            var expectedPostToUpdate = UpdatedPostToBeSaved.ToExpectedObject();
+
+            _unitOfWorkMock.Setup(u => u.PostRepository.GetByIdAsync(post.Id))
+                .ReturnsAsync(TestPost);
+            _sessionMock.SetupGet(s => s.UserId)
+                .Returns(userId);
+            _sessionMock.SetupGet(s => s.UserRoles)
+                .Returns(new[] {userRole});
 
             await _sut.UpdateAsync(post.Id, postDto);
 
@@ -190,6 +216,7 @@ namespace Service.Tests
         {
             var nonexistentPostId = Guid.NewGuid();
             var postDto = PostUpdateDto;
+
             _unitOfWorkMock.Setup(u => u.PostRepository.GetByIdAsync(nonexistentPostId))
                 .ReturnsAsync((Post) null);
 
@@ -202,13 +229,60 @@ namespace Service.Tests
         }
 
         [Fact]
-        public async Task DeleteAsync_ShouldDeletePost_WhenPostExists()
+        public async Task UpdateAsync_ShouldFail_WhenUserTriesToUpdateNotOwnPost()
+        {
+            var userId = Guid.NewGuid();
+            var post = TestPost;
+            var postDto = PostUpdateDto;
+
+            _unitOfWorkMock.Setup(u => u.PostRepository.GetByIdAsync(post.Id))
+                .ReturnsAsync(TestPost);
+            _sessionMock.SetupGet(s => s.UserId)
+                .Returns(userId);
+            _sessionMock.SetupGet(s => s.UserRoles)
+                .Returns(new[] {"User"});
+
+            Func<Task> result = async () => await _sut.UpdateAsync(post.Id, postDto);
+
+            await result.Should().ThrowAsync<AccessDeniedException>();
+
+            _unitOfWorkMock.Verify(uow => uow.PostRepository.Update(It.IsAny<Post>()), Times.Never);
+            _unitOfWorkMock.Verify(uow => uow.SaveAsync(), Times.Never);
+        }
+
+        [Fact]
+        public async Task DeleteAsync_ShouldDeletePost_WhenUserTriesToDeleteOwnPost()
         {
             var post = TestPost;
             var expectedToDelete = TestPost.ToExpectedObject();
 
             _unitOfWorkMock.Setup(u => u.PostRepository.GetByIdAsync(post.Id))
                 .ReturnsAsync(TestPost);
+            _sessionMock.SetupGet(s => s.UserId)
+                .Returns(post.AuthorId);
+
+            await _sut.DeleteAsync(post.Id);
+
+            _unitOfWorkMock.Verify(uow =>
+                uow.PostRepository.Delete(It.Is<Post>(p => expectedToDelete.Equals(p))), Times.Once);
+            _unitOfWorkMock.Verify(uow => uow.SaveAsync(), Times.Once);
+        }
+
+        [Theory]
+        [InlineData("Moderator")]
+        [InlineData("Administrator")]
+        public async Task DeleteAsync_ShouldDeletePost_WhenUserIsModerOrAdmin(string userRole)
+        {
+            var userId = Guid.NewGuid();
+            var post = TestPost;
+            var expectedToDelete = TestPost.ToExpectedObject();
+
+            _unitOfWorkMock.Setup(u => u.PostRepository.GetByIdAsync(post.Id))
+                .ReturnsAsync(TestPost);
+            _sessionMock.SetupGet(s => s.UserId)
+                .Returns(userId);
+            _sessionMock.SetupGet(s => s.UserRoles)
+                .Returns(new[] {userRole});
 
             await _sut.DeleteAsync(post.Id);
 
@@ -227,6 +301,27 @@ namespace Service.Tests
             Func<Task> result = async () => await _sut.DeleteAsync(nonexistentPostId);
 
             await result.Should().ThrowAsync<NotFoundException>();
+
+            _unitOfWorkMock.Verify(uow => uow.PostRepository.Delete(It.IsAny<Post>()), Times.Never);
+            _unitOfWorkMock.Verify(uow => uow.SaveAsync(), Times.Never);
+        }
+
+        [Fact]
+        public async Task DeleteAsync_ShouldFail_WhenUserTriesToDeleteNotOwnPost()
+        {
+            var userId = Guid.NewGuid();
+            var post = TestPost;
+
+            _unitOfWorkMock.Setup(u => u.PostRepository.GetByIdAsync(post.Id))
+                .ReturnsAsync(TestPost);
+            _sessionMock.SetupGet(s => s.UserId)
+                .Returns(userId);
+            _sessionMock.SetupGet(s => s.UserRoles)
+                .Returns(new[] {"User"});
+
+            Func<Task> result = async () => await _sut.DeleteAsync(post.Id);
+
+            await result.Should().ThrowAsync<AccessDeniedException>();
 
             _unitOfWorkMock.Verify(uow => uow.PostRepository.Delete(It.IsAny<Post>()), Times.Never);
             _unitOfWorkMock.Verify(uow => uow.SaveAsync(), Times.Never);
