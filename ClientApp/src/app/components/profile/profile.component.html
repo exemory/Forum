@@ -7,7 +7,7 @@
       <mat-card-header class="profile-info-header">
         <mat-card-title class="profile-info-title">
           <mat-icon>account_circle</mat-icon>
-          Profile information
+          <span>Profile information</span>
         </mat-card-title>
         <mat-card-subtitle *ngIf="ownProfileInfo" class="actions">
           <ul class="action-list">
@@ -16,6 +16,9 @@
             </li>
             <li>
               <button class="action-button" (click)="openChangePasswordDialog()">Change password</button>
+            </li>
+            <li>
+              <a class="action-link" [routerLink]="['/users', ownProfileInfo.username]">View public profile</a>
             </li>
           </ul>
         </mat-card-subtitle>

@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {AuthService} from "../../services/auth.service";
 
 @Component({
@@ -9,10 +9,14 @@ import {AuthService} from "../../services/auth.service";
 })
 export class NavbarComponent implements OnInit {
 
-  constructor(private auth: AuthService) {
+  hideMobileMenu = true;
+
+  constructor(private auth: AuthService,
+              private cdr: ChangeDetectorRef) {
   }
 
   ngOnInit(): void {
+    document.addEventListener('click', this.onPageClick.bind(this));
   }
 
   get isLoggedIn(): boolean {
@@ -29,5 +33,13 @@ export class NavbarComponent implements OnInit {
 
   signOut() {
     this.auth.signOut();
+  }
+
+  private onPageClick(e: any)  {
+    if (!e.target.closest('.menu-toggle-btn'))
+    {
+      this.hideMobileMenu = true;
+      this.cdr.detectChanges();
+    }
   }
 }

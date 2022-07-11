@@ -1,47 +1,60 @@
 <div class="navbar">
-  <div class="container">
+  <div class="wrapper">
     <div class="logo">
       <img src="assets/logo.png" alt="logo">
       <span>Forum</span>
     </div>
-    <nav class="navigation">
-      <ul>
-        <li>
-          <a routerLink="/threads" [routerLinkActiveOptions]="{exact: true}" routerLinkActive="active-link">
-            Threads
-          </a>
-        </li>
-        <li *ngIf="isAdmin">
-          <a routerLink="/users" [routerLinkActiveOptions]="{exact: true}" routerLinkActive="active-link">
-            Users
-          </a>
-        </li>
-        <li *ngIf="isLoggedIn">
-          <a routerLink="/profile" routerLinkActive="active-link">
-            Profile
-          </a>
-        </li>
-      </ul>
-    </nav>
-    <div *ngIf="!isLoggedIn" class="unauthorized-panel">
-      <a routerLink="/sign-in" class="sign-in" mat-stroked-button>Sign In</a>
-      <a routerLink="/sign-up" class="sign-up" mat-raised-button>Sign Up</a>
-    </div>
-    <div *ngIf="isLoggedIn" class="authorized-panel">
-      <button class="user-menu-button" mat-button [matMenuTriggerFor]="menu">
-        <mat-icon>account_circle</mat-icon>
-        <span>{{userName}}</span>
-      </button>
-      <mat-menu class="user-menu" backdropClass="custom" #menu="matMenu">
-        <a mat-menu-item routerLink="/profile">
+
+    <div class="menu" [class.hide-mobile-menu]="hideMobileMenu">
+      <nav class="navigation">
+        <ul class="nav-links">
+          <li>
+            <a routerLink="/threads" [routerLinkActiveOptions]="{exact: true}" routerLinkActive="active-link">
+              Threads
+            </a>
+          </li>
+          <li *ngIf="isAdmin">
+            <a routerLink="/users" [routerLinkActiveOptions]="{exact: true}" routerLinkActive="active-link">
+              Users
+            </a>
+          </li>
+          <li *ngIf="isLoggedIn">
+            <a routerLink="/profile" routerLinkActive="active-link">
+              Profile
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div *ngIf="!isLoggedIn" class="unauthorized-panel">
+        <a routerLink="/sign-in" class="sign-in" mat-stroked-button>Sign In</a>
+        <a routerLink="/sign-up" class="sign-up" mat-raised-button>Sign Up</a>
+      </div>
+
+      <div *ngIf="isLoggedIn" class="authorized-panel">
+        <button class="user-menu-button" mat-button [matMenuTriggerFor]="menu">
           <mat-icon>account_circle</mat-icon>
-          <span>Profile</span>
-        </a>
-        <button mat-menu-item (click)="signOut()">
-          <mat-icon>logout</mat-icon>
-          <span>Sign out</span>
+          <span>{{userName}}</span>
         </button>
-      </mat-menu>
+        <mat-menu class="user-menu" backdropClass="custom" #menu="matMenu">
+          <a mat-menu-item routerLink="/profile">
+            <mat-icon>account_circle</mat-icon>
+            <span>Profile</span>
+          </a>
+          <button mat-menu-item (click)="signOut()">
+            <mat-icon>logout</mat-icon>
+            <span>Sign out</span>
+          </button>
+        </mat-menu>
+      </div>
+
+      <button *ngIf="isLoggedIn" class="sign-out-btn" (click)="signOut()">
+        Sign out
+      </button>
     </div>
+
+    <button mat-icon-button class="menu-toggle-btn" (click)="hideMobileMenu = !hideMobileMenu">
+      <mat-icon>menu</mat-icon>
+    </button>
   </div>
 </div>

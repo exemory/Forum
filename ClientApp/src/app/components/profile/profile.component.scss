@@ -30,7 +30,8 @@
       .action-list {
         list-style-type: none;
         display: flex;
-        gap: 12px;
+        flex-wrap: wrap;
+        column-gap: 12px;
         margin: 0;
         padding: 0;
       }
@@ -42,6 +43,17 @@
         color: #2175ff;
         cursor: pointer;
         font-size: 14px;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+
+      .action-link {
+        padding: 3px;
+        color: #2175ff;
+        text-decoration: none;
+        display: inline-block;
 
         &:hover {
           text-decoration: underline;
