@@ -2,7 +2,7 @@
   <div *ngIf="loading" class="loading-wrapper">
     <mat-spinner></mat-spinner>
   </div>
-  <div *ngIf="!loading">
+  <ng-container *ngIf="!loading">
     <mat-card class="profile-info">
       <mat-card-header class="profile-info-header">
         <mat-card-title class="profile-info-title">
@@ -24,47 +24,49 @@
         </mat-card-subtitle>
       </mat-card-header>
       <mat-card-content class="profile-info-content">
-        <div *ngIf="profileInfo" class="info-blocks-container">
-          <div class="info-block">
-            <p class="info-block-label">Username</p>
-            <p class="info-block-value">{{profileInfo.username}}</p>
-          </div>
-          <div *ngIf="profileInfo.name" class="info-block">
-            <p class="info-block-label">Name</p>
-            <p class="info-block-value">{{profileInfo.name}}</p>
-          </div>
-          <div class="info-block">
-            <p class="info-block-label">Registration date</p>
-            <p class="info-block-value">{{profileInfo.registrationDate | date:'MMM d, y, h:mm a'}}</p>
-          </div>
-          <div class="info-block">
-            <p class="info-block-label">Roles</p>
-            <p class="info-block-value">{{profileInfo.roles.join(', ')}}</p>
-          </div>
-        </div>
-        <div *ngIf="ownProfileInfo" class="info-blocks-container">
-          <div class="info-block">
-            <p class="info-block-label">Username</p>
-            <p class="info-block-value">{{ownProfileInfo.username}}</p>
-          </div>
-          <div class="info-block">
-            <p class="info-block-label">Email</p>
-            <p class="info-block-value">{{ownProfileInfo.email}}</p>
-          </div>
-          <div *ngIf="ownProfileInfo.name" class="info-block">
-            <p class="info-block-label">Name</p>
-            <p class="info-block-value">{{ownProfileInfo.name}}</p>
-          </div>
-          <div class="info-block">
-            <p class="info-block-label">Registration date</p>
-            <p class="info-block-value">{{ownProfileInfo.registrationDate | date:'MMM d, y, h:mm a'}}</p>
-          </div>
-          <div class="info-block">
-            <p class="info-block-label">Roles</p>
-            <p class="info-block-value">{{ownProfileInfo.roles.join(', ')}}</p>
-          </div>
+        <div class="info-blocks-container">
+          <ng-container *ngIf="profileInfo">
+            <div class="info-block">
+              <p class="info-block-label">Username</p>
+              <p class="info-block-value">{{profileInfo.username}}</p>
+            </div>
+            <div *ngIf="profileInfo.name" class="info-block">
+              <p class="info-block-label">Name</p>
+              <p class="info-block-value">{{profileInfo.name}}</p>
+            </div>
+            <div class="info-block">
+              <p class="info-block-label">Registration date</p>
+              <p class="info-block-value">{{profileInfo.registrationDate | date:'MMM d, y, h:mm a'}}</p>
+            </div>
+            <div class="info-block">
+              <p class="info-block-label">Roles</p>
+              <p class="info-block-value">{{profileInfo.roles.join(', ')}}</p>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="ownProfileInfo">
+            <div class="info-block">
+              <p class="info-block-label">Username</p>
+              <p class="info-block-value">{{ownProfileInfo.username}}</p>
+            </div>
+            <div class="info-block">
+              <p class="info-block-label">Email</p>
+              <p class="info-block-value">{{ownProfileInfo.email}}</p>
+            </div>
+            <div *ngIf="ownProfileInfo.name" class="info-block">
+              <p class="info-block-label">Name</p>
+              <p class="info-block-value">{{ownProfileInfo.name}}</p>
+            </div>
+            <div class="info-block">
+              <p class="info-block-label">Registration date</p>
+              <p class="info-block-value">{{ownProfileInfo.registrationDate | date:'MMM d, y, h:mm a'}}</p>
+            </div>
+            <div class="info-block">
+              <p class="info-block-label">Roles</p>
+              <p class="info-block-value">{{ownProfileInfo.roles.join(', ')}}</p>
+            </div>
+          </ng-container>
         </div>
       </mat-card-content>
     </mat-card>
-  </div>
+  </ng-container>
 </div>

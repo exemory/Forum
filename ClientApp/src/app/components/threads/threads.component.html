@@ -2,7 +2,7 @@
   <div *ngIf="loading" class="loading-wrapper">
     <mat-spinner></mat-spinner>
   </div>
-  <div *ngIf="!loading">
+  <ng-container *ngIf="!loading">
     <div class="actions">
       <mat-form-field appearance="standard">
         <input matInput [(ngModel)]="filterValue" (keydown.escape)="filterValue=''" maxlength="30"
@@ -29,51 +29,50 @@
       </button>
     </div>
     <div class="thread-list">
-      <p *ngIf="threads.length === 0" class="no-threads-message">
+      <p *ngIf="!threads.length" class="no-threads-message">
         There are no threads
       </p>
-      <p *ngIf="threads.length !== 0 && filteredThreads.length === 0" class="no-threads-message">
+      <p *ngIf="threads.length && !filteredThreads.length" class="no-threads-message">
         No threads matching the filters
       </p>
-      <div *ngIf="filteredThreads.length > 0">
-        <div *ngFor="let thread of filteredThreads" class="thread">
-          <div class="topic">
-            <h3 class="header">
-              <a [routerLink]="[thread.id]">{{thread.topic}}</a>
-            </h3>
-          </div>
-          <div class="description-container">
-            <ul class="description-list">
-              <li *ngIf="thread.author">by <a [routerLink]="['/users', thread.author.username]" class="username">{{thread.author.username}}</a></li>
-              <li>{{thread.creationDate | date:'MMM d, y, h:mm a'}}</li>
-              <li *ngIf="thread.closed">Closed</li>
-            </ul>
-          </div>
-          <div *ngIf="isUserModeratorOrAdmin" class="action-panel">
-            <button class="open-menu-button" mat-icon-button [matMenuTriggerFor]="menu">
-              <mat-icon>more_vert</mat-icon>
+      <div *ngFor="let thread of filteredThreads" class="thread">
+        <div class="topic">
+          <h3 class="header">
+            <a [routerLink]="[thread.id]">{{thread.topic}}</a>
+          </h3>
+        </div>
+        <div class="description-container">
+          <ul class="description-list">
+            <li *ngIf="thread.author">by <a [routerLink]="['/users', thread.author.username]"
+                                            class="username">{{thread.author.username}}</a></li>
+            <li>{{thread.creationDate | date:'MMM d, y, h:mm a'}}</li>
+            <li *ngIf="thread.closed">Closed</li>
+          </ul>
+        </div>
+        <div *ngIf="isUserModeratorOrAdmin" class="action-panel">
+          <button class="open-menu-button" mat-icon-button [matMenuTriggerFor]="menu">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu" class="thread-action-menu">
+            <button mat-menu-item *ngIf="!thread.closed" (click)="updateThreadStatus(thread, true)">
+              <mat-icon>lock</mat-icon>
+              <span>Close</span>
             </button>
-            <mat-menu #menu="matMenu" class="thread-action-menu">
-              <button mat-menu-item *ngIf="!thread.closed" (click)="updateThreadStatus(thread, true)">
-                <mat-icon>lock</mat-icon>
-                <span>Close</span>
-              </button>
-              <button mat-menu-item *ngIf="thread.closed" (click)="updateThreadStatus(thread, false)">
-                <mat-icon>lock_open</mat-icon>
-                <span>Open</span>
-              </button>
-              <button mat-menu-item (click)="openEditThreadDialog(thread)">
-                <mat-icon>edit</mat-icon>
-                <span>Edit</span>
-              </button>
-              <button mat-menu-item class="delete-menu-option" (click)="deleteThread(thread)">
-                <mat-icon>delete_forever</mat-icon>
-                <span>Delete</span>
-              </button>
-            </mat-menu>
-          </div>
+            <button mat-menu-item *ngIf="thread.closed" (click)="updateThreadStatus(thread, false)">
+              <mat-icon>lock_open</mat-icon>
+              <span>Open</span>
+            </button>
+            <button mat-menu-item (click)="openEditThreadDialog(thread)">
+              <mat-icon>edit</mat-icon>
+              <span>Edit</span>
+            </button>
+            <button mat-menu-item class="delete-menu-option" (click)="deleteThread(thread)">
+              <mat-icon>delete_forever</mat-icon>
+              <span>Delete</span>
+            </button>
+          </mat-menu>
         </div>
       </div>
     </div>
-  </div>
+  </ng-container>
 </div>

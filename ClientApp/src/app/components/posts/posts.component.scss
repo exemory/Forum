@@ -4,11 +4,6 @@
   padding: 0 16px;
 }
 
-.loading-wrapper {
-  display: flex;
-  justify-content: center;
-}
-
 .thread {
   .thread-info {
     margin-bottom: 40px;
@@ -84,11 +79,9 @@
     }
 
     .deleted-user {
-      p {
         font-size: 16px;
         margin: 0;
         color: #8a817c;
-      }
     }
   }
 
@@ -135,7 +128,7 @@
 }
 
 .new-post {
-  margin: 56px 0 24px;
+  margin-top: 56px;
   text-align: center;
 
   mat-card-header {
@@ -153,7 +146,7 @@
   }
 }
 
-.bottom-message-block {
+.message-block {
   text-align: center;
   margin: 48px 0 24px;
 

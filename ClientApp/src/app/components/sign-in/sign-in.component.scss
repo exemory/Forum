@@ -1,11 +1,10 @@
 .wrapper {
-  display: flex;
-  justify-content: center;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 0 16px;
 }
 
 .sign-in-form {
-  max-width: 400px;
-  width: 100%;
   text-align: center;
 
   mat-card-header {

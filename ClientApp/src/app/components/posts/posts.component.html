@@ -2,7 +2,7 @@
   <div *ngIf="loading" class="loading-wrapper">
     <mat-spinner></mat-spinner>
   </div>
-  <div *ngIf="!loading">
+  <ng-container *ngIf="!loading">
     <div class="thread">
       <div class="thread-info">
         <div class="topic">
@@ -22,14 +22,14 @@
     <div class="post-list">
       <mat-card *ngFor="let post of posts; let i = index" class="post">
         <div class="user-section">
-          <div *ngIf="post.author">
+          <ng-container *ngIf="post.author">
             <a [routerLink]="['/users', post.author.username]" class="post-author-username">{{post.author.username}}</a>
             <p *ngIf="post.author.name" class="post-author-name">{{post.author.name}}</p>
             <p class="joined">joined {{post.author.registrationDate | date: 'mediumDate'}}</p>
-          </div>
-          <div *ngIf="!post.author" class="deleted-user">
-            <p>user deleted</p>
-          </div>
+          </ng-container>
+          <ng-container *ngIf="!post.author">
+            <p class="deleted-user">user deleted</p>
+          </ng-container>
         </div>
         <div class="content-section">
           <div class="post-info">
@@ -56,13 +56,13 @@
       </mat-card>
     </div>
 
-    <div class="bottom-message-block">
-      <div *ngIf="posts.length === 0" class="no-thread-posts">
+    <div *ngIf="!posts.length || thread.closed" class="message-block">
+      <ng-container *ngIf="!posts.length">
         <p class="message">There are no posts</p>
-      </div>
-      <div *ngIf="thread.closed" class="thread-closed">
+      </ng-container>
+      <ng-container *ngIf="thread.closed">
         <p class="message">This thread is closed for posting</p>
-      </div>
+      </ng-container>
     </div>
 
     <mat-card *ngIf="isLoggedIn && !thread.closed" class="new-post">
@@ -83,5 +83,5 @@
         </form>
       </mat-card-content>
     </mat-card>
-  </div>
+  </ng-container>
 </div>

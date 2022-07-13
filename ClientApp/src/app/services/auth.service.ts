@@ -5,6 +5,7 @@ import {Session} from "../interfaces/session";
 import {JwtHelperService} from "@auth0/angular-jwt";
 import {NotificationService} from "./notification.service";
 import {SignInData} from "../interfaces/sing-in-data";
+import {Router} from "@angular/router";
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,9 @@ export class AuthService {
 
   private jwtHelper = new JwtHelperService();
 
-  constructor(private api: HttpClient, private ns: NotificationService) {
+  constructor(private api: HttpClient,
+              private ns: NotificationService,
+              private roter: Router) {
     if (this.isLoggedIn && this.jwtHelper.isTokenExpired(this.session?.accessToken)) {
       this.signOut();
     }
@@ -28,6 +31,12 @@ export class AuthService {
 
   public signOut() {
     localStorage.removeItem('session');
+
+    switch (this.roter.url) {
+      case '/users':
+      case '/profile':
+        this.roter.navigate(['/']);
+    }
   }
 
   private setSession(session: Session) {
