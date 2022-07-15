@@ -6,7 +6,7 @@
     <div class="tools">
       <mat-form-field appearance="standard">
         <mat-label>Filter</mat-label>
-        <input matInput [(ngModel)]="filterValue" (input)="applyFilter()" (keydown.escape)="clearFilter()" maxlength="30">
+        <input matInput [(ngModel)]="filterValue" (input)="applyFilter()" (keydown.escape)="clearFilter()">
         <button *ngIf="filterValue" matSuffix mat-icon-button (click)="clearFilter()">
           <mat-icon>clear</mat-icon>
         </button>

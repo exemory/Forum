@@ -5,8 +5,7 @@
   <ng-container *ngIf="!loading">
     <div class="actions">
       <mat-form-field appearance="standard">
-        <input matInput [(ngModel)]="filterValue" (keydown.escape)="filterValue=''" maxlength="30"
-               placeholder="Filter by topic">
+        <input matInput [(ngModel)]="filterValue" (keydown.escape)="filterValue=''" placeholder="Filter by topic">
         <button *ngIf="filterValue" matSuffix mat-icon-button (click)="filterValue=''">
           <mat-icon>clear</mat-icon>
         </button>
