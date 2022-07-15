@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Bogus;
 using Data;
 using Data.Entities;
 using Microsoft.AspNetCore.Identity;
@@ -18,13 +19,23 @@ namespace Service.DbInitializer
         private readonly RoleManager<IdentityRole<Guid>> _roleManager;
 
         /// <summary>
-        /// Constructor for initializing a <see cref="DbInitializer"/> class instance/>
+        /// Static constructor for initializing <see cref="DbInitializer"/> class
+        /// </summary>
+        static DbInitializer()
+        {
+            // Sets randomizer seed to generate repeatable data sets
+            Randomizer.Seed = new Random(0x25592ca3);
+        }
+
+        /// <summary>
+        /// Constructor for initializing a <see cref="DbInitializer"/> class instance
         /// </summary>
         /// <param name="env">Application environment</param>
         /// <param name="context">Database context</param>
         /// <param name="userManager">Identity user manager</param>
         /// <param name="roleManager">Identity role manager</param>
-        public DbInitializer(IHostEnvironment env, ForumContext context, UserManager<User> userManager, RoleManager<IdentityRole<Guid>> roleManager)
+        public DbInitializer(IHostEnvironment env, ForumContext context, UserManager<User> userManager,
+            RoleManager<IdentityRole<Guid>> roleManager)
         {
             _env = env;
             _context = context;
@@ -32,6 +43,9 @@ namespace Service.DbInitializer
             _roleManager = roleManager;
         }
 
+        /// <summary>
+        /// Initializes database
+        /// </summary>
         public async Task InitializeAsync()
         {
             await _context.Database.MigrateAsync();
@@ -59,14 +73,13 @@ namespace Service.DbInitializer
                 }
             }
 
-            var isAdminExists = await _userManager.FindByIdAsync(Data.AdminUser.Id.ToString()) != null;
-            if (!isAdminExists)
+            if (!await _context.Users.AnyAsync(u => u.Id == Data.AdminUser.Id))
             {
                 await _userManager.CreateAsync(Data.AdminUser, Data.AdminPassword);
                 await _userManager.AddToRoleAsync(Data.AdminUser, "Administrator");
             }
         }
-        
+
         /// <summary>
         /// Seeds test data when application running in development environment
         /// </summary>
@@ -74,25 +87,24 @@ namespace Service.DbInitializer
         {
             foreach (var user in TestData.Users)
             {
-                var isUserExists = await _userManager.FindByIdAsync(user.Id.ToString()) != null;
-                if (!isUserExists)
+                if (!await _context.Users.AnyAsync(u => u.Id == user.Id))
                 {
                     await _userManager.CreateAsync(user, TestData.UserPassword);
-                    await _userManager.AddToRoleAsync(user, "User");
+                    await _userManager.AddToRoleAsync(user, TestData.RandomRole);
                 }
             }
-            
+
             foreach (var thread in TestData.Threads)
             {
-                if (!await _context.Threads.AnyAsync(c => c.Id == thread.Id))
+                if (!await _context.Threads.AnyAsync(t => t.Id == thread.Id))
                 {
                     _context.Threads.Add(thread);
                 }
             }
-            
+
             foreach (var post in TestData.Posts)
             {
-                if (!await _context.Posts.AnyAsync(c => c.Id == post.Id))
+                if (!await _context.Posts.AnyAsync(p => p.Id == post.Id))
                 {
                     _context.Posts.Add(post);
                 }

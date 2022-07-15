@@ -87,7 +87,7 @@ namespace WebApi.Controllers
         /// <param name="postDto">Post update data</param>
         /// <remarks>
         /// Moderators and administrators have permission to edit any
-        /// posts, while users can only edit their own posts
+        /// posts, whereas users can only edit their own posts
         /// </remarks>
         /// <response code="204">Post has been updated</response>
         /// <response code="403">User tries to update someone else's post</response>
@@ -109,7 +109,7 @@ namespace WebApi.Controllers
         /// <param name="id">Guid of the post to be deleted</param>
         /// <remarks>
         /// Moderators and administrators have permission to delete any
-        /// posts, while users can only delete their own posts
+        /// posts, whereas users can only delete their own posts
         /// </remarks>
         /// <response code="204">Post has been deleted</response>
         /// <response code="403">User tries to delete someone else's post</response>

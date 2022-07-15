@@ -29,10 +29,12 @@ namespace WebApi
 {
     public class Startup
     {
+        private readonly IWebHostEnvironment _env;
         private readonly IConfiguration _config;
 
-        public Startup(IConfiguration config)
+        public Startup(IWebHostEnvironment env, IConfiguration config)
         {
+            _env = env;
             _config = config;
         }
 
@@ -64,6 +66,11 @@ namespace WebApi
             services.AddDbContext<ForumContext>(options =>
             {
                 options.UseSqlServer(_config.GetConnectionString("DefaultConnection"));
+
+                if (_env.IsDevelopment())
+                {
+                    options.EnableSensitiveDataLogging();
+                }
             });
 
             services.AddIdentityCore<User>(options =>
@@ -137,13 +144,16 @@ namespace WebApi
             });
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
-            if (env.IsDevelopment())
+            if (_env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(options => { options.SwaggerEndpoint("/swagger/v1/swagger.json", "Forum API v1"); });
+                app.UseSwaggerUI(options =>
+                {
+                    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Forum API v1");
+                });
             }
             else
             {
