@@ -6,8 +6,7 @@ using Data.Entities;
 namespace Service.DbInitializer
 {
     /// <summary>
-    /// Static class that holds initial test data to be seeded only if application
-    /// running in development environment for development and testing purposes
+    /// Static class that contains initial test data for development and testing purposes
     /// </summary>
     public static class TestData
     {

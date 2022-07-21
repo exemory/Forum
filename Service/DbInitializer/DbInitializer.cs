@@ -5,7 +5,6 @@ using Data;
 using Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
 using Service.Interfaces;
 
 namespace Service.DbInitializer
@@ -13,7 +12,6 @@ namespace Service.DbInitializer
     /// <inheritdoc />
     public class DbInitializer : IDbInitializer
     {
-        private readonly IHostEnvironment _env;
         private readonly ForumContext _context;
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<IdentityRole<Guid>> _roleManager;
@@ -30,29 +28,24 @@ namespace Service.DbInitializer
         /// <summary>
         /// Constructor for initializing a <see cref="DbInitializer"/> class instance
         /// </summary>
-        /// <param name="env">Application environment</param>
         /// <param name="context">Database context</param>
         /// <param name="userManager">Identity user manager</param>
         /// <param name="roleManager">Identity role manager</param>
-        public DbInitializer(IHostEnvironment env, ForumContext context, UserManager<User> userManager,
+        public DbInitializer(ForumContext context, UserManager<User> userManager,
             RoleManager<IdentityRole<Guid>> roleManager)
         {
-            _env = env;
             _context = context;
             _userManager = userManager;
             _roleManager = roleManager;
         }
 
-        /// <summary>
-        /// Initializes database
-        /// </summary>
-        public async Task InitializeAsync()
+        public async Task InitializeAsync(bool seedTestData)
         {
             await _context.Database.MigrateAsync();
 
             await SeedDataAsync();
 
-            if (_env.IsDevelopment())
+            if (seedTestData)
             {
                 await SeedTestDataAsync();
             }
@@ -81,7 +74,7 @@ namespace Service.DbInitializer
         }
 
         /// <summary>
-        /// Seeds test data when application running in development environment
+        /// Seeds test data
         /// </summary>
         private async Task SeedTestDataAsync()
         {

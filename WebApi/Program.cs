@@ -28,8 +28,12 @@ namespace WebApi
         private static async Task InitializeDb(IServiceProvider serviceProvider)
         {
             using var scope = serviceProvider.CreateScope();
+
             var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
-            await dbInitializer.InitializeAsync();
+            var env = scope.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
+
+            var isDevEnv = env.IsDevelopment();
+            await dbInitializer.InitializeAsync(isDevEnv);
         }
     }
 }
