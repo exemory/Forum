@@ -43,18 +43,18 @@ namespace Service.DbInitializer
             var postsFaker = new Faker<Post>()
                 .RuleFor(t => t.Id, f => f.Random.Guid())
                 .RuleFor(t => t.Content, f => f.Lorem.Text())
-                .RuleFor(t => t.Author, f => f.PickRandom(Users).OrNull(f, 0.1f))
+                .RuleFor(t => t.AuthorId, f => f.PickRandom(Users).Id.OrNull(f, 0.1f))
                 .RuleFor(t => t.PublishDate, f => f.Date.Past(15));
 
             var threadsFaker = new Faker<Thread>()
                 .RuleFor(t => t.Id, f => f.Random.Guid())
                 .RuleFor(t => t.Topic, f => f.Lorem.Sentences(f.Random.Int(1, 2), " "))
                 .RuleFor(t => t.Closed, f => f.Random.Bool(0.2f))
-                .RuleFor(t => t.Author, f => f.PickRandom(Users).OrNull(f, 0.1f))
+                .RuleFor(t => t.AuthorId, f => f.PickRandom(Users).Id.OrNull(f, 0.1f))
                 .RuleFor(t => t.CreationDate, f => f.Date.Past(15))
                 .RuleFor(t => t.Posts, (f, t) =>
                 {
-                    postsFaker.RuleFor(p => p.Thread, _ => t);
+                    postsFaker.RuleFor(p => p.ThreadId, _ => t.Id);
                     var threadPosts = postsFaker.GenerateBetween(0, 6);
                     posts.AddRange(threadPosts);
                     return threadPosts;
