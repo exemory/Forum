@@ -43,7 +43,7 @@ export class EditProfileDialogComponent implements OnInit {
     let data: AccountUpdateData = {
       username: this.form.get('username')?.value,
       email: this.form.get('email')?.value,
-      name: this.form.get('name')?.value.trim(),
+      name: this.form.get('name')?.value?.trim(),
       currentPassword: this.form.get('currentPassword')?.value,
     }
 
