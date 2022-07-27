@@ -59,9 +59,10 @@
     .post-author-username {
       font-size: 16px;
       color: #2175ff;
-      margin-bottom: 4px;
+      margin-bottom: 8px;
       text-decoration: none;
       padding: 3px;
+      display: block;
 
       &:hover {
         text-decoration: underline;
@@ -69,7 +70,6 @@
     }
 
     .post-author-name {
-      margin-top: 6px;
       margin-bottom: 0;
     }
 
@@ -181,5 +181,4 @@
       top: 0;
     }
   }
-
 }
