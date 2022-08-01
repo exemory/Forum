@@ -3,7 +3,6 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.Extensions.DependencyInjection;
 using Service.Interfaces;
 
 namespace WebApi.Filters
@@ -13,6 +12,17 @@ namespace WebApi.Filters
     /// </summary>
     public class SessionFilter : IAsyncActionFilter
     {
+        private readonly ISession _session;
+        
+        /// <summary>
+        /// Constructor for initializing a <see cref="SessionFilter"/> class instance
+        /// </summary>
+        /// <param name="session">Current session</param>
+        public SessionFilter(ISession session)
+        {
+            _session = session;
+        }
+        
         /// <summary>
         /// Session filter logic
         /// </summary>
@@ -20,9 +30,6 @@ namespace WebApi.Filters
         /// <param name="next">Next action filter in pipeline</param>
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            var serviceProvider = context.HttpContext.RequestServices;
-            var session = serviceProvider.GetRequiredService<ISession>();
-
             var claims = context.HttpContext.User;
 
             if (claims.HasClaim(c => c.Type == ClaimTypes.NameIdentifier))
@@ -31,7 +38,7 @@ namespace WebApi.Filters
                 var userRoles = claims.FindAll(c => c.Type == ClaimTypes.Role)
                     .Select(c => c.Value);
 
-                session.Initialize(userId, userRoles);
+                _session.Initialize(userId, userRoles);
             }
 
             await next();
